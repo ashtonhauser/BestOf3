@@ -1,5 +1,11 @@
 extends layout
-
+  
 block content
-  h1= title
-  p Welcome to #{title}
+  link(rel='stylesheet', href='/stylesheets/index.css')
+  body
+    div
+      h1(class='display-1')='BestOf3'
+    br
+    div(class='button-container')
+      button(type='button', class= 'btn btn-primary') Single Player
+      button(type='button', class= 'btn btn-primary') Multiplayer

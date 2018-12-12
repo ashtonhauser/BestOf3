@@ -1,0 +1,30 @@
+button.btn-primary{
+  margin: 5px;
+  background-color: rgb(223,181,73);
+  border-color: rgb(223,181,73);
+  border-width: 3px;
+}
+
+button.btn-primary:hover{
+  background-color: rgb(215,59,37);
+  border-color: rgb(202,29,38);
+}
+
+h1{
+  display: inline-block;
+  margin: 25vh 38.5% 5%;
+  background: -webkit-linear-gradient(
+    left,
+    #dfb549 0%,
+    #d73b25 25%,
+    #ca1d26 50%,
+    #971a39 75%,
+    #620f36 100%
+    );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+div{
+  text-align: center;
+}
