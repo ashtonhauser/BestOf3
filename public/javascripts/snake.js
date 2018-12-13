@@ -16,11 +16,12 @@ var scoreElem;
 
 function setup() {
   scoreElem = createDiv('Score = 0');
-  scoreElem.position(20, 20);
   scoreElem.id = 'score';
-  scoreElem.style('color', 'white');
+  scoreElem.style('color', 'black');
+  scoreElem.parent('myContainer')
 
-  createCanvas(500, 500);
+  var myCanvas = createCanvas(500, 500);
+  myCanvas.parent('myContainer')
   frameRate(15);
   stroke(255);
   strokeWeight(10);

@@ -11,3 +11,8 @@ h1.bo3{
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+#myContainer {
+  margin-top: 30px;
+  text-align: center
+}

@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('./app');
 var debug = require('debug')('bestof3:server');
 var http = require('http');
 
