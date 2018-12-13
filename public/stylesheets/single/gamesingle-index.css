@@ -1,15 +1,17 @@
-div.game-container{
+div.container{
   margin: 0% 10% 5%;
-  height: 75vh;
+  height: 60vh;
   background: #e9ecef;
   border: 10px solid;
   border-radius: 20px;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-evenly;
+  display: inline-block;
 }
 
-div.game{
+body{
+  text-align: center;
+}
+
+div.col-sm{
   background-color: green;
   width: 300px;
   margin: 10px;
