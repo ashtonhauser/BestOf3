@@ -1,0 +1,13 @@
+h1.bo3{
+  display: inline-block;
+  background: -webkit-linear-gradient(
+    left,
+    #dfb549 0%,
+    #d73b25 25%,
+    #ca1d26 50%,
+    #971a39 75%,
+    #620f36 100%
+    );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
