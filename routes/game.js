@@ -6,8 +6,9 @@ router.get('/single', function(req, res) {
   res.render('game/single');
 });
 
-router.get('/single/:id', function(req, res) {
-  res.send('this is a single game')
+router.get('/single/:game_name', function(req, res) {
+  name = req.params.game_name
+  res.render(`game/${name}`)
 });
 
 // LOCAL MULTI ROUTES
