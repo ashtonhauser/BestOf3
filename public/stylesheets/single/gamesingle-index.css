@@ -1,10 +1,33 @@
 div.container{
   margin: 0% 10% 5%;
-  height: 60vh;
+  height: 72vh;
   background: #e9ecef;
   border: 10px solid;
   border-radius: 20px;
   display: inline-block;
+}
+
+h2{
+  margin-top: 1%;
+}
+
+img.static{
+  position: absolute;
+  margin-top: 1vh;
+  height: 25vh;
+  width: 14vw;
+}
+
+img.gif{
+  position: relative;
+  margin-top: 1vh;
+  height: 25vh;
+  width: 14vw;
+  z-index: -1;
+}
+
+img.static:hover{
+  opacity: 0;
 }
 
 body{
@@ -13,7 +36,8 @@ body{
 
 div.col-sm{
   background-color: green;
-  width: 300px;
-  margin: 10px;
-  height: 300px;
+  width: 5vw;
+  margin: 1em;
+  height: 30vh;
+  z-index: 0;
 }
