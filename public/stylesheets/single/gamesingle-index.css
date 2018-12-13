@@ -1,0 +1,17 @@
+div.game-container{
+  margin: 0% 10% 5%;
+  height: 75vh;
+  background: #e9ecef;
+  border: 10px solid;
+  border-radius: 20px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+}
+
+div.game{
+  background-color: green;
+  width: 300px;
+  margin: 10px;
+  height: 300px;
+}
