@@ -2,10 +2,13 @@ extends layout
   
 block content
   link(rel='stylesheet', href='/stylesheets/index.css')
+  
   body
     div
-      h1(class='display-1')='BestOf3'
+      h1.bo3.display-1#indextitle='BestOf3'
     br
-    div(class='button-container')
-      button(type='button', class= 'btn btn-primary', href='/game/single') Single Player
-      button(type='button', class= 'btn btn-primary', href='/game/multi') Multiplayer
+    div.button-container
+      a(href='/game/single')
+        button(id= 'single', type='button', class= 'btn btn-primary') Single Player
+      a(href='/game/multi')
+        button(id= 'multi', type='button', class= 'btn btn-primary') Multiplayer

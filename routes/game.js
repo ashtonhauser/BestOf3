@@ -3,7 +3,7 @@ var router = express.Router();
 
 // SINGLE ROUTES
 router.get('/single', function(req, res) {
-  res.send('this is single player games');
+  res.render('game/single');
 });
 
 router.get('/single/:id', function(req, res) {

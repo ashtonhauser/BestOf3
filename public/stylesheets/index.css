@@ -10,19 +10,15 @@ button.btn-primary:hover{
   border-color: rgb(202,29,38);
 }
 
-h1{
-  display: inline-block;
-  margin: 25vh 38.5% 5%;
-  background: -webkit-linear-gradient(
-    left,
-    #dfb549 0%,
-    #d73b25 25%,
-    #ca1d26 50%,
-    #971a39 75%,
-    #620f36 100%
-    );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+#single:focus, #multi:focus{
+  background-color: rgb(151,26,57);
+  border-color: rgb(98,15,54);
+  outline: 0 none;
+}
+
+#indextitle{
+  margin: 25vh auto 5%;
+  font-weight: bold;
 }
 
 div{
