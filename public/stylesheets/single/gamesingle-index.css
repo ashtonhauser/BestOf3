@@ -1,0 +1,19 @@
+div.container{
+  margin: 0% 10% 5%;
+  height: 60vh;
+  background: #e9ecef;
+  border: 10px solid;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+body{
+  text-align: center;
+}
+
+div.col-sm{
+  background-color: green;
+  width: 300px;
+  margin: 10px;
+  height: 300px;
+}
