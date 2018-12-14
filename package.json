@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "db:reset": "node db/migrations/tabledeletion.js",
+    "db:migrate": "node db/migrations/tablecreation.js",
+    "db:seed": "node db/seeds/creation.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -11,6 +14,7 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
+    "pg": "^7.7.1",
     "pug": "2.0.0-beta11"
   },
   "devDependencies": {
