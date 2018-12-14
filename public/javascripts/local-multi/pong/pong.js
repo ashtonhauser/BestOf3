@@ -1,15 +1,28 @@
 var pong = function(p){
   p.setup = function(){
-    p.createCanvas(500, 500);
-    p.score = createDiv('Goodluck!');
+    p.keyArray = [];
+    p.score = p.createDiv('Goodluck!');
     p.score.id = 'score';
     p.score.style('color', 'black');
     p.score.parent('scorecontainer');
+    p.createCanvas(500, 500);
+    p.xspeedval = Math.round(Math.random());
+    if (p.xspeedval === 1) {
+      p.xspeedval = Number(Math.random() * 5);
+      if (p.xspeedval < 1) {
+        p.xspeedval = 1;
+      }
+    } else if (p.xspeedval === 0) {
+      p.xspeedval = Number(Math.random() * -5);
+      if (p.xspeedval > -1) {
+        p.xspeedval = -1;
+      }
+    }
     p.Puck = {
       x: p.width/2,
       y: p.height/2,
-      xspeed: 5,
-      yspeed: 1,
+      xspeed: p.xspeedval,
+      yspeed: 5,
       r: 12,
       gameover: false,
 
@@ -22,11 +35,11 @@ var pong = function(p){
         if (this.x + this.r >= p.PaddleRight.x - p.PaddleRight.w/2 &&
             this.y > p.PaddleRight.y - p.PaddleRight.h/2 &&
             this.y < p.PaddleRight.y + p.PaddleRight.h/2) {
-          this.xspeed *= -1;
+          this.xspeed *= -1.1;
         } else if (this.x - this.r <= p.PaddleLeft.x + p.PaddleLeft.w/2 &&
                    this.y > p.PaddleLeft.y - p.PaddleLeft.h/2 &&
                    this.y < p.PaddleLeft.y + p.PaddleLeft.h/2) {
-          this.xspeed *= -1;
+          this.xspeed *= -1.1;
         } else if (this.x + this.r > p.PaddleRight.x - p.PaddleRight.w/2) {
           this.gameover = 'leftwin';
         } else if (this.x - this.r < p.PaddleLeft.x + p.PaddleLeft.w/2){
@@ -118,42 +131,52 @@ var pong = function(p){
       p.background(0);
       p.left = p.PaddleLeft;
       p.right = p.PaddleRight;
+      if (p.Puck.gameover === 'leftwin') {
+        p.score.html('Left Wins!');
+        return;
+      } else if (p.Puck.gameover === 'rightwin') {
+        p.score.html('Right Wins!');
+        return;
+      }
       p.left.createPaddle(true);
       p.right.createPaddle(false);
       p.left.show();
       p.right.show();
       p.left.update();
       p.right.update();
+      p.Puck.checkPaddle();
+      p.Puck.show();
+      p.Puck.update();
+      p.Puck.edges();
+      p.keyArray.map(function(key) {
+        if (key == 75) {
+          p.right.move(-10);
+        } else if (key == 77) {
+          p.right.move(10);
+        } else if (key == 65) {
+          p.left.move(-10);
+        } else if (key == 90) {
+          p.left.move(10);
+        } else if (key == 's75'){
+          p.right.move(0);
+        } else if (key == 's77') {
+          p.right.move(0);
+        } else if (key == 's65'){
+          p.left.move(0);
+        } else if (key == 's90') {
+          p.left.move(0);
+        }
+      });
 
-      if (p.Puck.gameover === 'leftwin') {
-        p.score.html('Left Wins!');
-      } else if (p.Puck.gameover === 'rightwin') {
-        p.score.html('Right Wins!');
-      } else {
-        p.Puck.checkPaddle();
-        p.Puck.show();
-        p.Puck.update();
-        p.Puck.edges();
-      }
-    };
+      p.keyReleased = function() {
+        p.keyArray.push('s'+p.keyCode);
+      };
 
-    p.keyReleased = function() {
-      p.left.move(0);
-      p.right.move(0);
-    };
-
-    p.keyPressed = function(){
-      if (p.keyCode == 75) {
-        p.right.move(-10);
-      } else if (p.keyCode == 77) {
-        p.right.move(10);
-      } else if (p.keyCode == 65) {
-        p.left.move(-10);
-      } else if (p.keyCode == 90) {
-        p.left.move(10);
-      }
+      p.keyPressed = function(){
+        p.keyArray.push(p.keyCode);
+      };
     };
   };
 };
 
-var pongGame = new p5(pong);
+var pongGame = new p5(pong, 'scorecontainer');

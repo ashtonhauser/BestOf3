@@ -12,6 +12,29 @@ h1.bo3{
   -webkit-text-fill-color: transparent;
 }
 
+button.btn-primary{
+  margin: 5px;
+  background-color: rgb(223,181,73);
+  border-color: rgb(223,181,73);
+  border-width: 3px;
+}
+
+button.btn-primary:hover{
+  background-color: rgb(215,59,37);
+  border-color: rgb(202,29,38);
+}
+
+#playagain:focus, #single:focus, #multi:focus{
+  background-color: rgb(151,26,57);
+  border-color: rgb(98,15,54);
+  outline: 0 none;
+}
+
+#scorecontainer{
+  margin-top: 30px;
+  text-align: center;
+}
+
 #myContainer {
   margin-top: 30px;
   text-align: center
