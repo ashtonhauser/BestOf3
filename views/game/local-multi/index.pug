@@ -1,13 +1,13 @@
-extends ../layout
+extends ../../layout
 
 block content
   link(rel='stylesheet', href='/stylesheets/single/gamesingle-index.css')
-  
-  include ../nav.pug
+
+  include ../../nav.pug
   div.container
     div.row
       div.game.col-sm
-        a(href='/game/single/snake')
+        a(href='/game/multi/local/snake')
           img.static(src="/images/snake_static.png")
         img.gif(src="/images/snake.gif")
         h2.game-name Snake
@@ -19,4 +19,3 @@ block content
       div.game.col-sm
       div.game.col-sm
       div.game.col-sm
-      
