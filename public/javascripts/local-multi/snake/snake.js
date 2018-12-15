@@ -27,12 +27,10 @@ var sketch = function(s) {
   var scoreElemR;
 
   s.setup = function() {
-    scoreElemL = s.createDiv('p1');
-    scoreElemL.id = 'Lscore';
+    scoreElemL = s.createDiv('p1').addClass('Lscore container');
     scoreElemL.style('color', 'black');
 
-    scoreElemR = s.createDiv('p2');
-    scoreElemR.id = 'Rscore';
+    scoreElemR = s.createDiv('p2').addClass('Rscore container');
     scoreElemR.style('color', 'black');
 
     s.createCanvas(1000, 500);
@@ -140,6 +138,7 @@ var sketch = function(s) {
       s.noLoop();
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
+      s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/local/snake'`)
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
         xCorR[xCorR.length - 1] < 0 ||
@@ -149,6 +148,7 @@ var sketch = function(s) {
       s.noLoop();
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
+      s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/local/snake'`)
     }
   }
 
@@ -254,6 +254,6 @@ var sketch = function(s) {
   }
 };
 
-var snakeGame = new p5(sketch)
+var snakeGame = new p5(sketch, 'snakeContainer')
 
 

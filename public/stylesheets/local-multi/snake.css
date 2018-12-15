@@ -1,0 +1,21 @@
+#snakeContainer{
+  text-align: center;
+}
+
+.Lscore{
+  float: left;
+  margin-left: 25px;
+  display: inline-block;
+  width: auto;
+}
+
+.Rscore{
+  float: right;
+  margin-right: 25px;
+  display: inline-block;
+  width: auto;
+}
+
+.rematch{
+  /*text-align: center;*/
+}

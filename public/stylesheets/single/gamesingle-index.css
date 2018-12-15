@@ -1,29 +1,32 @@
 div.container{
-  margin: 0% 10% 5%;
-  height: 72vh;
-  background: #e9ecef;
-  border: 10px solid;
-  border-radius: 20px;
-  display: inline-block;
+  position: static;
+  padding: 0;
+}
+div.container::after{
+  border-style: none;
 }
 
-h2{
+h2.gameName{
   margin-top: 1%;
+  color: black;
 }
 
 img.static{
   position: absolute;
   margin-top: 1vh;
-  height: 25vh;
-  width: 14vw;
+  height: 22vh;
+  min-width: 200px;
+  width: 18vw;
+  z-index: 2;
 }
 
 img.gif{
   position: relative;
   margin-top: 1vh;
-  height: 25vh;
-  width: 14vw;
-  z-index: -1;
+  height: 22vh;
+  min-width: 200px;
+  width: 18vw;
+  z-index: 1;
 }
 
 img.static:hover{
@@ -35,9 +38,9 @@ body{
 }
 
 div.col-sm{
-  background-color: green;
-  width: 5vw;
-  margin: 1em;
-  height: 30vh;
-  z-index: 0;
+
+}
+
+div.game {
+  background-color: gray;
 }
