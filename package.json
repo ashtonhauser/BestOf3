@@ -6,9 +6,10 @@
     "start": "node server.js",
     "db:reset": "node db/migrations/tabledeletion.js",
     "db:migrate": "node db/migrations/tablecreation.js",
-    "db:seed": "node db/seeds/creation.js"
+    "db:seed": "node db/seeds/gameseed.js"
   },
   "dependencies": {
+    "bcrypt": "~1.0.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
