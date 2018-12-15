@@ -1,0 +1,12 @@
+extends ../../layout
+
+block content
+  include ../../nav.pug
+  link(rel="stylesheet", href="/stylesheets/local-multi/snake.css")
+
+  script(src="/javascripts/online-multi/snake/snake.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
+
+  div#snakeContainer

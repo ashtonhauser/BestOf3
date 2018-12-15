@@ -23,7 +23,7 @@ router.get('/multi/local/:game_name', function(req, res) {
 
 // ONLINE ROUTES
 router.get('/multi/online', function(req, res) {
-  res.send('this is online games')
+  res.render(`game/online-multi/index`)
 });
 
 router.get('/multi/online/:game_name', function(req, res) {

@@ -7,6 +7,7 @@
 var app = require('./app');
 var debug = require('debug')('bestof3:server');
 var http = require('http');
+var socket = require('socket.io');
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +20,21 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
+
+// SOCKET SETUP
+var io = socket(server)
+
+io.on('connection', function(socket){
+  console.log(socket.id)
+
+  socket.on('keypress', keypressMessage)
+
+  function keypressMessage(data) {
+    socket.broadcast.emit('keypress', data);
+    console.log(`recieved ${data}`)
+  }
+})
 
 /**
  * Listen on provided port, on all network interfaces.
