@@ -3,7 +3,7 @@ var sketch = function(s) {
   var yFruit = 0;
 
   // LEFT
-  var numSegmentsL = 10;
+  var numSegmentsL = 20;
   var directionL = 'right';
   var xStartL = 10;
   var yStartL = 250;
@@ -15,7 +15,7 @@ var sketch = function(s) {
   var scoreElemL;
 
   // RIGHT
-  var numSegmentsR = 10;
+  var numSegmentsR = 20;
   var directionR = 'left';
   var xStartR = 1000;
   var yStartR = 250;
@@ -138,7 +138,9 @@ var sketch = function(s) {
       s.noLoop();
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
-      s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/local/snake'`)
+      if (!s.button) {
+        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/local/snake'`)
+      }
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
         xCorR[xCorR.length - 1] < 0 ||
@@ -148,7 +150,9 @@ var sketch = function(s) {
       s.noLoop();
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
-      s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/local/snake'`)
+      if (!s.button) {
+        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/local/snake'`)
+      }
     }
   }
 
