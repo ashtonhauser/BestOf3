@@ -1,6 +1,6 @@
 var sketch = function(s) {
-  var xFruit= 0;
-  var yFruit = 0;
+  var leftS;
+  var rightS;
 
   // LEFT
   var numSegmentsL = 10;
@@ -12,7 +12,10 @@ var sketch = function(s) {
   var xCorL = [];
   var yCorL = [];
 
+  var xFruitL= 0;
+  var yFruitL = 0;
   var scoreElemL;
+  var scoreValL = 0;
 
   // RIGHT
   var numSegmentsR = 10;
@@ -24,23 +27,30 @@ var sketch = function(s) {
   var xCorR = [];
   var yCorR = [];
 
+  var xFruitR= 0;
+  var yFruitR = 0;
   var scoreElemR;
+  var scoreValR = 0;
 
   s.setup = function() {
-    scoreElemL = s.createDiv('p1');
+    scoreElemL = s.createDiv('Score = 0');
     scoreElemL.id = 'Lscore';
     scoreElemL.style('color', 'black');
 
-    scoreElemR = s.createDiv('p2');
+    scoreElemR = s.createDiv('Score = 0');
     scoreElemR.id = 'Rscore';
     scoreElemR.style('color', 'black');
 
+
     s.createCanvas(1000, 500);
+    s.leftS = s.createGraphics(500, 500)
+    s.rightS = s.createGraphics(500, 500)
 
     s.frameRate(15);
     s.stroke(255);
     s.strokeWeight(10);
-    s.updateFruitCoordinates();
+    s.updateFruitCoordinatesL();
+    s.updateFruitCoordinatesR();
 
     for (var i = 0; i < numSegmentsL; i++) {
       xCorL.push(xStartL + (i * diffL));
@@ -53,30 +63,32 @@ var sketch = function(s) {
   }
 
   s.draw = function() {
-    s.background(0)
+    s.background(255)
 
+    s.image(s.leftS, 0, 0);
+    s.image(s.rightS, 500, 0);
     s.drawL()
     s.drawR()
   }
 
   s.drawL = function() {
-    s.stroke(100)
+    s.leftS.background(0);
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
     s.updateSnakeCoordinatesL();
-    s.checkForFruitL();
     s.checkGameStatus();
+    s.checkForFruitL();
   }
 
   s.drawR = function() {
-    s.stroke(200)
+    s.rightS.background(100);
     for (var i = 0; i < numSegmentsR - 1; i++) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
     s.updateSnakeCoordinatesR();
-    s.checkForFruitR();
     s.checkGameStatus();
+    s.checkForFruitR();
   }
 
   s.updateSnakeCoordinatesL = function() {
@@ -129,26 +141,32 @@ var sketch = function(s) {
     }
   }
 
-  // user wins when other opponent is killed
   s.checkGameStatus = function() {
     console.log("running check")
-    if (xCorL[xCorL.length - 1] > s.width ||
+    if (xCorL[xCorL.length - 1] > s.leftS.width ||
         xCorL[xCorL.length - 1] < 0 ||
         yCorL[yCorL.length - 1] > s.height ||
         yCorL[yCorL.length - 1] < 0 ||
         s.checkSnakeCollisionL()) {
+      console.log("left died")
+      console.log(scoreElemL.html())
       s.noLoop();
-      scoreElemL.html('You lost!');
-      scoreElemR.html('You won!');
+      s.scoreValL = parseInt(scoreElemL.html().replace(/[^0-9]/g, ''));
+      s.scoreValR = parseInt(scoreElemR.html().replace(/[^0-9]/g, ''));
+      scoreElemL.html('You lost! Your score was : ' + s.scoreValL);
+      scoreElemR.html('You won! Your score was : ' + s.scoreValR);
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
-        xCorR[xCorR.length - 1] < 0 ||
+        xCorR[xCorR.length - 1] < 500 ||
         yCorR[yCorR.length - 1] > s.height ||
         yCorR[yCorR.length - 1] < 0 ||
         s.checkSnakeCollisionR()) {
+      console.log("right died")
       s.noLoop();
-      scoreElemL.html('You won!');
-      scoreElemR.html('You lost!');
+      s.scoreValL = parseInt(scoreElemL.html().replace(/[^0-9]/g, ''));
+      s.scoreValR = parseInt(scoreElemR.html().replace(/[^0-9]/g, ''));
+      scoreElemL.html('You won! Your score was : ' + Number(s.scoreValL));
+      scoreElemR.html('You lost! Your score was : ' + Number(s.scoreValR));
     }
   }
 
@@ -160,12 +178,6 @@ var sketch = function(s) {
         return true;
       }
     }
-    for (var o = 0; o < yCorL.length - 1; o++) {
-      if (s.snakeHeadXL === xCorR[o] && s.snakeHeadYL === yCorR[o]) {
-        return true;
-      }
-    }
-  }
 
   s.checkSnakeCollisionR = function() {
     s.snakeHeadXR = xCorR[xCorR.length - 1];
@@ -175,42 +187,41 @@ var sketch = function(s) {
         return true;
       }
     }
-    for (var o = 0; o < yCorR.length - 1; o++) {
-      if (s.snakeHeadXR === xCorL[o] && s.snakeHeadYR === yCorL[o]) {
-        return true;
-      }
-    }
+  }
   }
 
-
   s.checkForFruitL = function() {
-    s.point(xFruit, yFruit);
-    if (xCorL[xCorL.length - 1] === xFruit && yCorL[yCorL.length - 1] === yFruit) {
+    s.point(xFruitL, yFruitL);
+    if (xCorL[xCorL.length - 1] === xFruitL && yCorL[yCorL.length - 1] === yFruitL) {
       s.prevScoreL = parseInt(scoreElemL.html().substring(8));
       scoreElemL.html('Score = ' + (s.prevScoreL + 1));
       xCorL.unshift(xCorL[0]);
       yCorL.unshift(yCorL[0]);
       numSegmentsL++;
-      s.updateFruitCoordinates();
+      s.updateFruitCoordinatesL();
     }
   }
 
   s.checkForFruitR = function() {
-    s.point(xFruit, yFruit);
-    if (xCorR[xCorR.length - 1] === xFruit && yCorR[yCorR.length - 1] === yFruit) {
+    s.point(xFruitR, yFruitR);
+    if (xCorR[xCorR.length - 1] === xFruitR && yCorR[yCorR.length - 1] === yFruitR) {
       s.prevScoreR = parseInt(scoreElemR.html().substring(8));
       scoreElemR.html('Score = ' + (s.prevScoreR + 1));
       xCorR.unshift(xCorR[0]);
       yCorR.unshift(yCorR[0]);
       numSegmentsR++;
-      s.updateFruitCoordinates();
+      s.updateFruitCoordinatesR();
     }
   }
 
-  // create one fruit spawn which both snakes can consume
-  s.updateFruitCoordinates = function() {
-    xFruit = s.floor(s.random(10, (s.width - 100) / 10)) * 10;
-    yFruit = s.floor(s.random(10, (s.height - 100) / 10)) * 10;
+  s.updateFruitCoordinatesL = function() {
+    xFruitL = s.floor(s.random(10, (s.leftS.width - 100) / 10)) * 10;
+    yFruitL = s.floor(s.random(10, (s.leftS.height - 100) / 10)) * 10;
+  }
+
+  s.updateFruitCoordinatesR = function() {
+    xFruitR = s.floor(s.random(10, (s.rightS.width - 100) / 10)) * 10 + 500;
+    yFruitR = s.floor(s.random(10, (s.rightS.height - 100) / 10)) * 10;
   }
 
   s.keyPressed = function() {
