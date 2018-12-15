@@ -1,5 +1,5 @@
 body{
-  background-color: rgb(52,58,64);
+background-color: rgb(114,99,85);
 }
 button.btn-primary{
   margin: 5px;
@@ -21,9 +21,13 @@ button.btn-primary:hover{
 
 #indextitle{
   margin: 25vh auto 5%;
-  font-weight: bold;
+  font-family: 'Prisma', sans-serif
 }
 
 div{
   text-align: center;
+}
+@font-face {
+  font-family: "Prisma";
+  src: url(fonts/prisma/Prisma.ttf);
 }

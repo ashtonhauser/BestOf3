@@ -1,8 +1,15 @@
-nav{
+nav {
   text-align: center;
+  background-color: rgb(114,99,85);
+  font-family: 'Prisma', sans-serif;
 }
 
-h1.bo3{
-  font-size: 7.5vw;
-  font-weight: bold;
+@font-face {
+  font-family: "Prisma";
+  src: url(fonts/prisma/Prisma.ttf);
+}
+
+a.bo3{
+  font-size: 3vw;
+  padding: 0;
 }
