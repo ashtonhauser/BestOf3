@@ -1,3 +1,6 @@
+body{
+  background-color: gray;
+}
 div.container{
   position: static;
   padding: 0;
