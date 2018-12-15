@@ -1,0 +1,49 @@
+body{
+  background-color: gray;
+}
+div.container{
+  position: static;
+  padding: 0;
+}
+div.container::after{
+  border-style: none;
+}
+
+h2.gameName{
+  margin-top: 1%;
+  color: black;
+}
+
+img.static{
+  position: absolute;
+  margin-top: 1vh;
+  height: 22vh;
+  min-width: 200px;
+  width: 18vw;
+  z-index: 2;
+}
+
+img.gif{
+  position: relative;
+  margin-top: 1vh;
+  height: 22vh;
+  min-width: 200px;
+  width: 18vw;
+  z-index: 1;
+}
+
+img.static:hover{
+  opacity: 0;
+}
+
+body{
+  text-align: center;
+}
+
+div.col-sm{
+
+}
+
+div.game {
+  background-color: gray;
+}
