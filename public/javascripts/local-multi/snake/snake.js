@@ -5,7 +5,7 @@ var sketch = function(s) {
   // LEFT
   var numSegmentsL = 10;
   var directionL = 'right';
-  var xStartL = 0;
+  var xStartL = 10;
   var yStartL = 250;
   var diffL = 10;
 
@@ -16,8 +16,8 @@ var sketch = function(s) {
 
   // RIGHT
   var numSegmentsR = 10;
-  var directionR = 'right';
-  var xStartR = 500;
+  var directionR = 'left';
+  var xStartR = 1000;
   var yStartR = 250;
   var diffR = 10;
 
@@ -47,7 +47,7 @@ var sketch = function(s) {
       yCorL.push(yStartL);
     }
     for (var o = 0; o < numSegmentsR; o++) {
-      xCorR.push(xStartR + (o * diffR));
+      xCorR.push(xStartR - (o * diffR));
       yCorR.push(yStartR);
     }
   }
@@ -186,8 +186,6 @@ var sketch = function(s) {
   s.checkForFruitL = function() {
     s.point(xFruit, yFruit);
     if (xCorL[xCorL.length - 1] === xFruit && yCorL[yCorL.length - 1] === yFruit) {
-      s.prevScoreL = parseInt(scoreElemL.html().substring(8));
-      scoreElemL.html('Score = ' + (s.prevScoreL + 1));
       xCorL.unshift(xCorL[0]);
       yCorL.unshift(yCorL[0]);
       numSegmentsL++;
@@ -198,8 +196,6 @@ var sketch = function(s) {
   s.checkForFruitR = function() {
     s.point(xFruit, yFruit);
     if (xCorR[xCorR.length - 1] === xFruit && yCorR[yCorR.length - 1] === yFruit) {
-      s.prevScoreR = parseInt(scoreElemR.html().substring(8));
-      scoreElemR.html('Score = ' + (s.prevScoreR + 1));
       xCorR.unshift(xCorR[0]);
       yCorR.unshift(yCorR[0]);
       numSegmentsR++;
