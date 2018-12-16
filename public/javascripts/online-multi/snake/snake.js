@@ -118,9 +118,9 @@ var sketch = function(s) {
     if (clientCount >= 2) {
       s.drawL()
       s.drawR()
+    }
+    if (clientCount >= 2) {
       waitingDiv.style('display', 'none')
-    } else {
-      waitingDiv.style('display', 'inline')
     }
   }
 
