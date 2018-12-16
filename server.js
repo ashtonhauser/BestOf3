@@ -23,18 +23,36 @@ app.set('port', port);
 const server = http.createServer(app);
 
 // SOCKET SETUP
+
 var io = socket(server)
+var clientCounter = 0;
 
-io.on('connection', function(socket){
-  console.log(socket.id)
+io.on('connection', function(socket) {
+  console.log("client connected")
 
+  // ADDS NEW IP AND EMITS USER COUNT TO ALL USERS
+  clientCounter++;
+  console.log(clientCounter)
+  io.emit('counter', {count: clientCounter})
+
+  // ON RECIEVING KEYPRESS BROADCAST TO OTHER USER
   socket.on('keypress', keypressMessage)
-
   function keypressMessage(data) {
     socket.broadcast.emit('keypress', data);
-    console.log(`recieved ${data}`)
   }
-})
+
+  //
+
+  // DELETES USER COUNT
+  socket.on('disconnect', function() {
+    console.log('client dissconected')
+
+    clientCounter--;
+    io.emit('counter', {count: clientCounter});
+    console.log(clientCounter)
+  })
+});
+
 
 /**
  * Listen on provided port, on all network interfaces.

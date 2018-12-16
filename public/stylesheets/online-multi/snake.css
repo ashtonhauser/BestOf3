@@ -1,0 +1,41 @@
+body{
+ background-color: rgb(79,55,44)
+}
+
+#snakeContainer{
+  text-align: center;
+  max-width: 1000px;
+}
+
+#matching {
+  text-align: center;
+}
+.searching {
+  margin-top: 3vh;
+  color: black;
+}
+
+#countContainer {
+text-align: center;
+}
+.count {
+  color: black;
+}
+
+.Lscore{
+  float: left;
+  margin-left: 25px;
+  display: inline-block;
+  width: auto;
+}
+
+.Rscore{
+  float: right;
+  margin-right: 25px;
+  display: inline-block;
+  width: auto;
+}
+
+button.rematch{
+  text-align: center;
+}

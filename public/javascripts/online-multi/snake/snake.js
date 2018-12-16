@@ -1,6 +1,14 @@
 var sketch = function(s) {
+  var socket = io.connect('http://localhost:3000')
+  socket.on('counter', function (data) {
+
+  });
+
   var xFruit= 0;
   var yFruit = 0;
+  // var socket;
+  var data;
+  var clientCount;
 
   // LEFT
   var numSegmentsL = 20;
@@ -25,12 +33,10 @@ var sketch = function(s) {
   var yCorR = [];
 
   var scoreElemR;
-  var socket;
-  var data;
 
   s.setup = function() {
-    socket = io.connect('http://localhost:3000')
     socket.on('keypress', s.newKey)
+
 
     scoreElemL = s.createDiv('p1').addClass('Lscore container');
     scoreElemL.style('color', 'black');
@@ -255,7 +261,7 @@ var sketch = function(s) {
     }
   }
 
-  // create one fruit spawn which both snakes can consume
+  // setup to spawn both fruits consistently through clients
   s.updateFruitCoordinates = function() {
     xFruit = s.floor(s.random(10, (s.width - 100) / 10)) * 10;
     yFruit = s.floor(s.random(10, (s.height - 100) / 10)) * 10;
@@ -309,6 +315,8 @@ var sketch = function(s) {
   }
 };
 
-var snakeGame = new p5(sketch, 'snakeContainer')
+if (true) {
+  var snakeGame = new p5(sketch, 'snakeContainer')
+}
 
 
