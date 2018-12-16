@@ -1,14 +1,17 @@
-var sketch = function(s) {
-  var socket = io.connect('http://localhost:3000')
-  socket.on('counter', function (data) {
+var clientCount;
+var socket = io.connect('http://localhost:3000')
+socket.on('counter', function (data) {
+  $("#counter").text(data.count);
+  clientCount = data.count;
+  console.log(clientCount)
+});
 
-  });
+var sketch = function(s) {
 
   var xFruit= 0;
   var yFruit = 0;
-  // var socket;
   var data;
-  var clientCount;
+  var waitingDiv;
 
   // LEFT
   var numSegmentsL = 20;
@@ -34,9 +37,9 @@ var sketch = function(s) {
 
   var scoreElemR;
 
+
   s.setup = function() {
     socket.on('keypress', s.newKey)
-
 
     scoreElemL = s.createDiv('p1').addClass('Lscore container');
     scoreElemL.style('color', 'black');
@@ -58,6 +61,10 @@ var sketch = function(s) {
     for (var o = 0; o < numSegmentsR; o++) {
       xCorR.push(xStartR - (o * diffR));
       yCorR.push(yStartR);
+    }
+
+    if (clientCount < 2){
+      waitingDiv = s.createDiv('Waiting for second player...').id('matching')
     }
   }
 
@@ -108,8 +115,13 @@ var sketch = function(s) {
   s.draw = function() {
     s.background(0)
 
-    s.drawL()
-    s.drawR()
+    if (clientCount >= 2) {
+      s.drawL()
+      s.drawR()
+      waitingDiv.style('display', 'none')
+    } else {
+      waitingDiv.style('display', 'inline')
+    }
   }
 
   s.drawL = function() {
@@ -315,8 +327,6 @@ var sketch = function(s) {
   }
 };
 
-if (true) {
-  var snakeGame = new p5(sketch, 'snakeContainer')
-}
+var snakeGame = new p5(sketch, 'snakeContainer');
 
 
