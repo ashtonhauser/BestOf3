@@ -1,45 +1,47 @@
 var createError = require('http-errors');
 var express = require('express');
-const session = require('express-session')
 var path = require('path');
-var cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 var logger = require('morgan');
+const uuid = require('uuid/v4');
+const session = require('express-session');
 
 var app = express();
 
 var indexRouter = require('./routes/index');
 var gameRouter = require('./routes/game')
+const dbUtils = require('./db/utils/dbcreator.js');
 
 // VIEWS:
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'kayla',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-  key: 'user_id',
-  secret: 'comeatmebro',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    expires: 600000
-  }
-}));
-app.use((req, res, next) => {
-  if (req.cookies.user_id && !req.session.user) {
-    res.clearCookie('user_id');
-  }
-  next();
-});
 
 
 // views referencing (reference required router variable)
+// puts currentUser on req
+app.use(function(req, res, next) {
+  if (!req.session.userId) return next();
+  return dbUtils.grabUserId(req.session.userId).then((response) => {
+    if (!response || !response[0]) return next();
+    req.currentUser = response[0];
+    return next();
+  });
+});
 app.use('/', indexRouter);
-app.use('/game', gameRouter)
+app.use('/game', gameRouter);
 
 // ERROR HANDLING:
 // catch 404 and forward to error handler

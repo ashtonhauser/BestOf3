@@ -8,16 +8,27 @@ const client = new pg.Client({
   port: 5432
 });
 client.connect();
+
+const parseResult = (result) => result.rows;
+
 module.exports = {
 
-  setEmailAndPassword: function(email, password){
-    return client.query("INSERT INTO users (email, password, exp) VALUES ('" + email + "', " + "'" + password + "', 0);"
-  ).catch(e => console.error(e));
+  setEmailandPassword: function(email, password){
+    return client.query(`INSERT INTO users (email, password) VALUES ('${email}', '${password}') RETURNING *;`
+  ).then(parseResult).catch(e => console.error('setEmailandPassword', e));
   },
 
-  grabPasswordByEmail: function(email){
-    return client.query("SELECT password FROM users WHERE email= '" + email + "';"
-    ).catch(e => console.error(e));
+  grabUserByEmail: async function(email){
+    return client.query("SELECT * FROM users WHERE email= '" + email + "';"
+  )
+  .then(parseResult)
+  .catch(e => console.error(e));
+  },
+
+  grabUserId: async function(id){
+    return client.query(`SELECT * FROM users WHERE id= '${Number(id)}';`
+    )
+    .then(parseResult).catch(e => console.error(e));
   }
 
 }

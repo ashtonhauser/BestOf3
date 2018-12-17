@@ -1,35 +1,53 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const uuid = require('uuid/v4');
 const saltRounds = 10;
 const dbUtils = require('../db/utils/dbcreator.js');
-const hashes = {};
+const salt = bcrypt.genSaltSync(saltRounds);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  console.log('USER', req.currentUser)
   res.render('index');
 });
 
 router.get('/register', function(req, res) {
+  if (req.currentUser) return res.redirect('/')
   res.render('register');
 });
 
 router.post('/register', function(req, res) {
-  const salt = bcrypt.genSaltSync(saltRounds);
-  hashes[req.body.email] = bcrypt.hashSync(req.body.password, salt);
-  dbUtils.setEmailAndPassword(req.body.username, hashes[req.body.email]);
-
-  res.render('index');
+  dbUtils.setEmailandPassword(
+    req.body.email,
+    bcrypt.hashSync(req.body.password, salt)
+  ).then((response) => {
+    const user = response[0];
+    if (user) {
+      req.session.userId = user.id;
+      res.redirect('/');
+    } else {
+      res.render('register');
+    }
+  });
 });
 
 router.get('/login', function(req, res) {
+  if (req.currentUser) return res.redirect('/');
   res.render('login');
-})
+});
 
 router.post('/login', function(req, res) {
-  if (bcrypt.compareSync(req.body.password, hashes[req.body.email])) {
-    res.render('index');
-  }
-})
+  dbUtils.grabUserByEmail(req.body.email).then((response) => {
+    const user = response[0];
+    if (bcrypt.compareSync(req.body.password, user.password)) {
+      req.session.userId = user.id;
+      res.redirect('/');
+    } else {
+      res.render('login');
+    }
+  });
+});
+
 
 module.exports = router;

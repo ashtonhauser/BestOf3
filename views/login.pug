@@ -2,17 +2,19 @@ extends layout
 
 block content
   link(rel='stylesheet', href='/stylesheets/index.css')
+  script(src="/javascripts/login.js")
   
   include nav.pug
   
   body
     div
       h1 Login
-      form(action="/login" method="POST")
+      form(action="/login" method="POST" id='loginform')
         label(for="email") Email:
-          input(type="email", name="username", placeholder="")
+          input(type="email", name="email", placeholder="")
         br
         label(for="password") Password:
           input(type="password", name="password", placeholder="")
         br
         button.btn.btn-primary(type="submit") Login
+    
