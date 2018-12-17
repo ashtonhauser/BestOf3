@@ -1,6 +1,73 @@
-body{
-background-color: rgb(114,99,85);
+body, html{
+  height: 100%;
+  margin: 0;
 }
+
+.pimg1, .pimg2, .pimg3 {
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.pimg1{
+  background-image: url('../images/arcade-3.jpg');
+  min-height: 100%;
+  position: relative;
+}
+
+.pimg2 {
+  background-image: url('../images/arcade-2.jpg');
+  min-height: 400px;
+}
+
+.pimg3 {
+  background-image: url('../images/arcade-4.jpg');
+  min-height: 400px;
+}
+
+.section{
+  text-align: center;
+  padding:50px 80px;
+  background-color: #523c4b;
+  color: black;
+  height: 250px;
+}
+
+.ptext{
+  top: 25%;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.description{
+  display: inline-block;
+  color: #46ae73;
+  top: 100%;
+  width: 80%;
+  font-size: 20px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  padding: 15px;
+  padding-right: 5px;
+  border-radius: 6px;
+  background-color: #2c2355;
+}
+
+
+#indextitle{
+  padding: 0;
+  font-size: 100px;
+  display: inline-block;
+  font-family: 'alien', sans-serif;
+  color: #46ae73;
+  background-color: #2c2355;
+  border-radius: 5px;
+}
+
 button.btn-primary{
   margin: 5px;
   background-color: rgb(223,181,73);
@@ -19,15 +86,10 @@ button.btn-primary:hover{
   outline: 0 none;
 }
 
-#indextitle{
-  margin: 25vh auto 5%;
-  font-family: 'Prisma', sans-serif
-}
 
-div{
-  text-align: center;
-}
 @font-face {
-  font-family: "Prisma";
-  src: url(fonts/prisma/Prisma.ttf);
+/*  font-family: "Prisma";
+  src: url(fonts/prisma/Prisma.ttf);*/
+  font-family: "alien";
+  src: url(fonts/alien/SFAlienEncounters.ttf);
 }

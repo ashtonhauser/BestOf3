@@ -4,6 +4,7 @@ body{
 div.container{
   position: static;
   padding: 0;
+  margin-top: 40px;
 }
 div.container::after{
   border-style: none;

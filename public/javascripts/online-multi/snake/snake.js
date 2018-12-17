@@ -119,8 +119,8 @@ var sketch = function(s) {
       s.drawL()
       s.drawR()
     }
-    if (clientCount >= 2) {
-      waitingDiv.style('display', 'none')
+    if (clientCount >= 2 && waitingDiv) {
+      waitingDiv.hide()
     }
   }
 
@@ -205,7 +205,8 @@ var sketch = function(s) {
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
       if (!s.button) {
-        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/online/snake'`)
+        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning')
+        s.button.mousePressed(s.resetSketch)
       }
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
@@ -217,9 +218,14 @@ var sketch = function(s) {
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
       if (!s.button) {
-        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/online/snake'`)
+        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning')
+        s.button.mousePressed(s.resetSketch);
       }
     }
+  }
+
+  s.resetSketch = function() {
+
   }
 
   s.checkSnakeCollisionL = function() {
