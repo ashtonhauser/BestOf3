@@ -1,4 +1,5 @@
 var clientCount;
+console.log("run scirpt")
 var socket = io.connect('http://localhost:3000')
 socket.on('counter', function (data) {
   $("#counter").text(data.count);
