@@ -88,8 +88,6 @@ button.btn-primary:hover{
 
 
 @font-face {
-/*  font-family: "Prisma";
-  src: url(fonts/prisma/Prisma.ttf);*/
   font-family: "alien";
   src: url(fonts/alien/SFAlienEncounters.ttf);
 }

@@ -1,5 +1,4 @@
 var clientCount;
-console.log("run scirpt")
 var socket = io.connect('http://localhost:3000')
 socket.on('counter', function (data) {
   $("#counter").text(data.count);
@@ -11,6 +10,7 @@ var sketch = function(s) {
 
   var xFruit= 0;
   var yFruit = 0;
+  var button;
   var data;
   var waitingDiv;
 
@@ -42,18 +42,20 @@ var sketch = function(s) {
   s.setup = function() {
     socket.on('keypress', s.newKey)
 
+    s.createCanvas(1000, 500);
+    s.frameRate(15);
+    s.stroke(255);
+    s.strokeWeight(10);
+    s.updateFruitCoordinates();
+
     scoreElemL = s.createDiv('p1').addClass('Lscore container');
     scoreElemL.style('color', 'black');
 
     scoreElemR = s.createDiv('p2').addClass('Rscore container');
     scoreElemR.style('color', 'black');
 
-    s.createCanvas(1000, 500);
-
-    s.frameRate(15);
-    s.stroke(255);
-    s.strokeWeight(10);
-    s.updateFruitCoordinates();
+    button = s.createButton('Rematch?').addClass('rematch btn is-warning')
+    button.style('display', 'none')
 
     for (var i = 0; i < numSegmentsL; i++) {
       xCorL.push(xStartL + (i * diffL));
@@ -67,6 +69,47 @@ var sketch = function(s) {
     if (clientCount < 2){
       waitingDiv = s.createDiv('Waiting for second player...').id('matching')
     }
+  }
+
+  s.resetSketch = function() {
+    xFruit= 0;
+    yFruit = 0;
+
+    // LEFT
+    numSegmentsL = 20;
+    directionL = 'right';
+    xStartL = 10;
+    yStartL = 250;
+    diffL = 10;
+
+    xCorL = [];
+    yCorL = [];
+
+
+    // RIGHT
+    numSegmentsR = 20;
+    directionR = 'left';
+    xStartR = 1000;
+    yStartR = 250;
+    diffR = 10;
+
+    xCorR = [];
+    yCorR = [];
+
+    s.updateFruitCoordinates();
+    for (var i = 0; i < numSegmentsL; i++) {
+      xCorL.push(xStartL + (i * diffL));
+      yCorL.push(yStartL);
+    }
+    for (var o = 0; o < numSegmentsR; o++) {
+      xCorR.push(xStartR - (o * diffR));
+      yCorR.push(yStartR);
+    }
+    s.draw()
+    s.loop()
+    scoreElemR.html('p2')
+    scoreElemL.html('p1')
+    button.style('display', 'none')
   }
 
   s.newKey = function(data) {
@@ -223,10 +266,6 @@ var sketch = function(s) {
         s.button.mousePressed(s.resetSketch);
       }
     }
-  }
-
-  s.resetSketch = function() {
-
   }
 
   s.checkSnakeCollisionL = function() {
