@@ -1,24 +1,23 @@
 body{
-  background-color: gray;
+  background-color: #eaeaea;
 }
 #snakeContainer{
+  margin-top: 20px;
   text-align: center;
 }
 
 .Lscore{
-  float: left;
-  margin-left: 25px;
+  position absolute;
   display: inline-block;
   width: auto;
 }
 
 .Rscore{
-  float: right;
-  margin-right: 25px;
+  position: absolute;
   display: inline-block;
   width: auto;
 }
 
 .rematch{
-  /*text-align: center;*/
+  margin: 0 auto;
 }

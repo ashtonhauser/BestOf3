@@ -1,5 +1,5 @@
 body{
-  background-color: rgb(79,55,44);
+  background-color: #eaeaea;
   text-align: center;
 }
 div.container{
@@ -43,5 +43,5 @@ div.col-sm{
 }
 
 div.game {
-  background-color: rgb(79,55,44);
+  background-color: #eaeaea;
 }

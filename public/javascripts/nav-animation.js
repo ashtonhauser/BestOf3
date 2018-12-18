@@ -9,3 +9,5 @@ function closeSlideMenu(){
   document.getElementById('actual-body').style.marginLeft = '0';
   document.getElementById('hamburger').style.visibility = 'visible';
 }
+
+
