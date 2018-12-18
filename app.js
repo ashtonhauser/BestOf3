@@ -37,6 +37,7 @@ app.use(function(req, res, next) {
   return dbUtils.grabUserId(req.session.userId).then((response) => {
     if (!response || !response[0]) return next();
     req.currentUser = response[0];
+    document.getElementById('login-button').style.visibility = 'hidden';
     return next();
   });
 });

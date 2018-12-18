@@ -1,3 +1,15 @@
 block content
+  script(src="/javascripts/nav-animation.js")
   nav.navbar
-    a.bo3.navbar-brand(href= '/') BestOf3
+    span
+      a.open-slide(href="#", onclick="openSlideMenu()")
+        svg#hamburger(width="30", height="30")
+          path(d="M0,5 30,5", stroke="#fff", stroke-width="5")
+          path(d="M0,14 30,14", stroke="#fff", stroke-width="5")
+          path(d="M0,23 30,23", stroke="#fff", stroke-width="5")
+  div#side-menu.side-nav
+    a.btn-close(href="#", onclick="closeSlideMenu()") &times;
+    a#nav-button(href="/") Home
+    a#login-button(href="#") Login
+    a#register-button(href="#") Register
+    a#logout-button(href="#") Logout

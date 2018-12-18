@@ -1,0 +1,16 @@
+extends ../../layout
+
+block content
+  link(rel="stylesheet", href="/stylesheets/online-multi/snake.css")
+  script(src="/javascripts/online-multi/snake/snake.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
+
+  body
+    div#actual-body
+      include ../../nav.pug
+      div#snakeContainer
+      div#countContainer
+        h2.count User count:
+          span#counter

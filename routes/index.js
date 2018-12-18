@@ -8,12 +8,10 @@ const salt = bcrypt.genSaltSync(saltRounds);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('USER', req.currentUser)
   res.render('index');
 });
 
 router.get('/register', function(req, res) {
-  if (req.currentUser) return res.redirect('/')
   res.render('register');
 });
 

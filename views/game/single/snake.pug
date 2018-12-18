@@ -1,10 +1,12 @@
 extends ../../layout
 
 block content
-  include ../../nav.pug
   link(rel="stylesheet", href="/stylesheets/single/snake.css")
   script(src="/javascripts/single/snake.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
 
-  div#myContainer
+  body
+    div#actual-body
+      include ../../nav.pug
+      div#myContainer

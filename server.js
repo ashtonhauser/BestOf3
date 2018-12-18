@@ -7,6 +7,7 @@
 var app = require('./app');
 var debug = require('debug')('bestof3:server');
 var http = require('http');
+var socket = require('socket.io');
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +20,39 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
+
+// SOCKET SETUP
+
+var io = socket(server)
+var clientCounter = 0;
+
+io.on('connection', function(socket) {
+  console.log("client connected")
+
+  // ADDS NEW IP AND EMITS USER COUNT TO ALL USERS
+  clientCounter++;
+  console.log(clientCounter)
+  io.emit('counter', {count: clientCounter})
+
+  // ON RECIEVING KEYPRESS BROADCAST TO OTHER USER
+  socket.on('keypress', keypressMessage)
+  function keypressMessage(data) {
+    socket.broadcast.emit('keypress', data);
+  }
+
+  //
+
+  // DELETES USER COUNT
+  socket.on('disconnect', function() {
+    console.log('client dissconected')
+
+    clientCounter--;
+    io.emit('counter', {count: clientCounter});
+    console.log(clientCounter)
+  })
+});
+
 
 /**
  * Listen on provided port, on all network interfaces.

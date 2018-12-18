@@ -1,9 +1,11 @@
 body{
   background-color: rgb(79,55,44);
+  text-align: center;
 }
 div.container{
   position: static;
   padding: 0;
+  margin-top: 40px;
 }
 div.container::after{
   border-style: none;
@@ -34,10 +36,6 @@ img.gif{
 
 img.static:hover{
   opacity: 0;
-}
-
-body{
-  text-align: center;
 }
 
 div.col-sm{

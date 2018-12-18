@@ -1,0 +1,33 @@
+body{
+  background-color: #2c2355;
+}
+
+div{
+  text-align: center;
+  margin-top: 5vh;
+}
+
+#title{
+  font-size: 60px;
+  color: #256169;
+  font-family: 'alien', sans-serif;
+}
+
+.alien{
+  color: #256169;
+  font-family: 'alien', sans-serif;
+  font-size: 30px;
+}
+
+input{
+  border-radius: 10px;
+}
+
+h2{
+  margin-top: 5vh;
+}
+
+@font-face {
+  font-family: "alien";
+  src: url(fonts/alien/SFAlienEncounters.ttf);
+}

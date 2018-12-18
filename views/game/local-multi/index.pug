@@ -4,23 +4,25 @@ block content
   link(rel='stylesheet', href='/stylesheets/game-index.css')
 
 
-  include ../../nav.pug
-  div.container
-    div.row
-      div.game.col
-        a(href='/game/multi/local/snake')
-          img.static(src="/images/snake_static.png")
-        img.gif(src="/images/snake.gif")
-        h2.gameName Snake
-      div.game.col
-        a(href='/game/multi/local/pong')
-          img.static(src="/images/pong_static.png")
-        img.gif(src="/images/pong.gif")
-        h2.gameName Pong
-      div.game.col
-      div.game.col
-      div.w-100
-      div.game.col
-      div.game.col
-      div.game.col
-      div.game.col
+  body
+    include ../../nav.pug
+    div#actual-body
+      div.container
+        div.row
+          div.game.col
+            a(href='/game/multi/local/snake')
+              img.static(src="/images/snake_static.png")
+            img.gif(src="/images/snake.gif")
+            h2.gameName Snake
+          div.game.col
+            a(href='/game/multi/local/pong')
+              img.static(src="/images/pong_static.png")
+            img.gif(src="/images/pong.gif")
+            h2.gameName Pong
+          div.game.col
+          div.game.col
+          div.w-100
+          div.game.col
+          div.game.col
+          div.game.col
+          div.game.col

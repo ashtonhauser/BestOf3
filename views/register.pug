@@ -1,18 +1,16 @@
 extends layout
 
 block content
-  link(rel='stylesheet', href='/stylesheets/index.css')
-  
-  include nav.pug
+  link(rel="stylesheet", href="/stylesheets/login-register.css")
   
   body
     div
-      h1 Register
+      h1#title REGISTER
       form(action="/register" method="POST")
-        label(for="email") Email:
+        label.alien(for="email") Email:
           input(type="email", name="email", placeholder="")
         br
-        label(for="password") Password:
+        label.alien(for="password") Password:
           input(type="password", name="password", placeholder="")
         br
         button.btn.btn-primary(type="submit") Submit

@@ -4,11 +4,31 @@ block content
   link(rel='stylesheet', href='/stylesheets/index.css')
 
   body
-    div
-      h1.bo3.display-1#indextitle='BestOf3'
-    br
-    div.button-container
+    div.pimg1
+      div.ptext
+        h1#indextitle BestOf3
+        p.description Welcome to best of 3, the online retro arcade utilizing only p5.js and socket.io. These simple games aim to provide a modern flashback of the arcade era and create a fun user experience!
+
+
+    section.section
+      h2.section1 play single player
+      p djnanfsdkjnl
       a(href='/game/single')
         button(id= 'single', type='button', class= 'btn btn-primary') Single Player
+
+
+    div.pimg2
+
+    section.section
+      h2 local multi
+      p desctirgnankfadsnfdklsanf kldasnkln
       a(href='/game/multi/local')
         button(id= 'multi', type='button', class= 'btn btn-primary') Local Multiplayer
+
+    div.pimg3
+
+    section.section
+      h2 online multi
+      p asnjdfnadskljnf
+      a(href='/game/multi/online')
+        button(id= 'multi', type='button', class= 'btn btn-primary') Online Multiplayer

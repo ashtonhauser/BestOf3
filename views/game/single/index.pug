@@ -3,19 +3,21 @@ extends ../../layout
 block content
   link(rel='stylesheet', href='/stylesheets/game-index.css')
 
-  include ../../nav.pug
-  div.container
-    div.row
-      div.game.col-sm
-        a(href='/game/single/snake')
-          img.static(src="/images/snake_static.png")
-        img.gif(src="/images/snake.gif")
-        h2.game-name Snake
-      div.game.col-sm
-      div.game.col-sm
-      div.game.col-sm
-      div.w-100
-      div.game.col-sm
-      div.game.col-sm
-      div.game.col-sm
-      div.game.col-sm
+  body
+    include ../../nav.pug
+    div#actual-body
+      div.container
+        div.row
+          div.game.col-sm
+            a(href='/game/single/snake')
+              img.static(src="/images/snake_static.png")
+            img.gif(src="/images/snake.gif")
+            h2.game-name Snake
+          div.game.col-sm
+          div.game.col-sm
+          div.game.col-sm
+          div.w-100
+          div.game.col-sm
+          div.game.col-sm
+          div.game.col-sm
+          div.game.col-sm
