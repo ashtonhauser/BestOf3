@@ -137,7 +137,7 @@ var sketch = function(s) {
   }
 
   s.drawL = function() {
-    s.stroke(100)
+    s.stroke(44,35,85)
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
@@ -147,7 +147,7 @@ var sketch = function(s) {
   }
 
   s.drawR = function() {
-    s.stroke(200)
+    s.stroke(37,97,105)
     for (var i = 0; i < numSegmentsR - 1; i++) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
@@ -260,7 +260,7 @@ var sketch = function(s) {
       s.noLoop();
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
-      if (!button) {
+      if (!s.button) {
         button.style('display', 'block')
         button.mousePressed(s.resetSketch)
       }
@@ -273,7 +273,7 @@ var sketch = function(s) {
       s.noLoop();
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
-      if (!button) {
+      if (!s.button) {
         button.style('display', 'block')
         button.mousePressed(s.resetSketch);
       }
