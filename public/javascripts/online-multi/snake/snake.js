@@ -13,6 +13,7 @@ var sketch = function(s) {
   var button;
   var data;
   var waitingDiv;
+  var ready = $('.inputGroup');
 
   // LEFT
   var numSegmentsL = 20;
@@ -46,7 +47,6 @@ var sketch = function(s) {
     s.frameRate(15);
     s.stroke(255);
     s.strokeWeight(10);
-    s.updateFruitCoordinates();
 
     scoreElemL = s.createDiv('p1').addClass('Lscore container');
     scoreElemL.style('color', 'black');
@@ -57,18 +57,11 @@ var sketch = function(s) {
     button = s.createButton('Rematch?').addClass('rematch btn is-warning')
     button.style('display', 'none')
 
-    for (var i = 0; i < numSegmentsL; i++) {
-      xCorL.push(xStartL + (i * diffL));
-      yCorL.push(yStartL);
-    }
-    for (var o = 0; o < numSegmentsR; o++) {
-      xCorR.push(xStartR - (o * diffR));
-      yCorR.push(yStartR);
-    }
+    s.resetSketch()
+  }
 
-    if (clientCount < 2){
-      waitingDiv = s.createDiv('Waiting for second player...').id('matching')
-    }
+  s.myCheckedEvent = function() {
+    if (this.checked()) return true;
   }
 
   s.resetSketch = function() {
@@ -97,6 +90,7 @@ var sketch = function(s) {
     yCorR = [];
 
     s.updateFruitCoordinates();
+
     for (var i = 0; i < numSegmentsL; i++) {
       xCorL.push(xStartL + (i * diffL));
       yCorL.push(yStartL);
@@ -105,6 +99,17 @@ var sketch = function(s) {
       xCorR.push(xStartR - (o * diffR));
       yCorR.push(yStartR);
     }
+
+    if (clientCount < 2){
+      waitingDiv = s.createDiv('Waiting for second player...').id('matching')
+    }
+
+    // if (clientCount = 2) {
+    //   ready.css('visibility: visible')
+    // } else {
+    //   ready.css('visibility: hidden')
+    // }
+
     s.draw()
     s.loop()
     scoreElemR.html('p2')
@@ -249,8 +254,8 @@ var sketch = function(s) {
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
       if (!s.button) {
-        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning')
-        s.button.mousePressed(s.resetSketch)
+        button.style('display', 'block')
+        button.mousePressed(s.resetSketch)
       }
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
@@ -262,7 +267,7 @@ var sketch = function(s) {
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
       if (!s.button) {
-        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning')
+        button.style('display', 'block')
         s.button.mousePressed(s.resetSketch);
       }
     }
