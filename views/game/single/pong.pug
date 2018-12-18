@@ -1,0 +1,14 @@
+extends ../../layout.pug
+
+block content
+  link(rel="stylesheet", href="/stylesheets/single/pong.css")
+  script(src="/javascripts/single/pong.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
+  
+  body
+    include ../../nav.pug
+    div#actual-body
+      //- a(href='/game/multi/local/pong')
+      //-   button.btn.btn-primary#playagain Play Again
+      div#scorecontainer

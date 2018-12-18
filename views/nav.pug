@@ -10,6 +10,10 @@ block content
   div#side-menu.side-nav
     a.btn-close(href="#", onclick="closeSlideMenu()") &times;
     a#nav-button(href="/") Home
+    
+    - if (!user) {
     a#login-button(href="#") Login
     a#register-button(href="#") Register
+    - } else {
     a#logout-button(href="#") Logout
+    - }
