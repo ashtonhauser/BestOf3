@@ -5,6 +5,8 @@ socket.on('counter', function (data) {
   clientCount = data.count;
   console.log(clientCount)
 });
+var form = document.getElementsByClassName('.formm');
+var ready = document.getElementById('#option1')
 
 var sketch = function(s) {
 
@@ -13,7 +15,7 @@ var sketch = function(s) {
   var button;
   var data;
   var waitingDiv;
-  var ready = $('.inputGroup');
+  var timer;
 
   // LEFT
   var numSegmentsL = 20;
@@ -41,6 +43,8 @@ var sketch = function(s) {
 
 
   s.setup = function() {
+    console.log(ready)
+    console.log(form)
     socket.on('keypress', s.newKey)
 
     s.createCanvas(1000, 500);
@@ -60,11 +64,8 @@ var sketch = function(s) {
     s.resetSketch()
   }
 
-  s.myCheckedEvent = function() {
-    if (this.checked()) return true;
-  }
-
   s.resetSketch = function() {
+    timer = 5;
     xFruit= 0;
     yFruit = 0;
 
@@ -77,7 +78,6 @@ var sketch = function(s) {
 
     xCorL = [];
     yCorL = [];
-
 
     // RIGHT
     numSegmentsR = 20;
@@ -104,17 +104,56 @@ var sketch = function(s) {
       waitingDiv = s.createDiv('Waiting for second player...').id('matching')
     }
 
-    // if (clientCount = 2) {
-    //   ready.css('visibility: visible')
-    // } else {
-    //   ready.css('visibility: hidden')
-    // }
-
     s.draw()
     s.loop()
     scoreElemR.html('p2')
     scoreElemL.html('p1')
     button.style('display', 'none')
+  }
+
+
+  s.draw = function() {
+    s.background(0)
+    s.textAlign(s.CENTER, s.CENTER);
+    s.textSize(100);
+    s.text(timer, s.width/2, s.height/2);
+
+    if (clientCount == 2) {
+      if (s.frameCount % 15 == 0 && timer > 0) {
+        timer --;
+      }
+    }
+
+    if (clientCount == 2 && waitingDiv) {
+      waitingDiv.hide();
+    } else if (clientCount < 2 && !waitingDiv){
+      waitingDiv.show();
+    }
+
+    if (timer == 0 && clientCount == 2) {
+      s.drawL()
+      s.drawR()
+    }
+  }
+
+  s.drawL = function() {
+    s.stroke(100)
+    for (var i = 0; i < numSegmentsL - 1; i++) {
+      s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
+    }
+    s.updateSnakeCoordinatesL();
+    s.checkForFruitL();
+    s.checkGameStatus();
+  }
+
+  s.drawR = function() {
+    s.stroke(200)
+    for (var i = 0; i < numSegmentsR - 1; i++) {
+      s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
+    }
+    s.updateSnakeCoordinatesR();
+    s.checkForFruitR();
+    s.checkGameStatus();
   }
 
   s.newKey = function(data) {
@@ -159,38 +198,6 @@ var sketch = function(s) {
           directionL = 'down';
         }
     }
-  }
-
-  s.draw = function() {
-    s.background(0)
-
-    if (clientCount >= 2) {
-      s.drawL()
-      s.drawR()
-    }
-    if (clientCount >= 2 && waitingDiv) {
-      waitingDiv.hide()
-    }
-  }
-
-  s.drawL = function() {
-    s.stroke(100)
-    for (var i = 0; i < numSegmentsL - 1; i++) {
-      s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
-    }
-    s.updateSnakeCoordinatesL();
-    s.checkForFruitL();
-    s.checkGameStatus();
-  }
-
-  s.drawR = function() {
-    s.stroke(200)
-    for (var i = 0; i < numSegmentsR - 1; i++) {
-      s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
-    }
-    s.updateSnakeCoordinatesR();
-    s.checkForFruitR();
-    s.checkGameStatus();
   }
 
   s.updateSnakeCoordinatesL = function() {
@@ -253,7 +260,7 @@ var sketch = function(s) {
       s.noLoop();
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
-      if (!s.button) {
+      if (!button) {
         button.style('display', 'block')
         button.mousePressed(s.resetSketch)
       }
@@ -266,9 +273,9 @@ var sketch = function(s) {
       s.noLoop();
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
-      if (!s.button) {
+      if (!button) {
         button.style('display', 'block')
-        s.button.mousePressed(s.resetSketch);
+        button.mousePressed(s.resetSketch);
       }
     }
   }

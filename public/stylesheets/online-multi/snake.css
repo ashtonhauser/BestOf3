@@ -41,8 +41,11 @@ button.rematch{
   text-align: center;
 }
 
+.formm {
+  display: none;
+}
+
 .inputGroup {
-  visibility: visible;
   width: 250px;
   background-color: #eaeaea;
   display: block;
