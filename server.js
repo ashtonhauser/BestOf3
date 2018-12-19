@@ -27,31 +27,65 @@ const server = http.createServer(app);
 var io = socket(server)
 var clientCounter = 0;
 
-io.on('connection', function(socket) {
-  console.log("client connected")
+// io.on('connection', function(socket) {
+//   let clientId = socket.id;
 
-  // ADDS NEW IP AND EMITS USER COUNT TO ALL USERS
-  clientCounter++;
+//   // ADDS NEW IP AND EMITS USER COUNT TO ALL USERS
+//   clientCounter++;
+//   console.log(clientCounter)
+//   io.emit('counter', {count: clientCounter})
+
+//   // ON RECIEVING KEYPRESS BROADCAST TO OTHER USER
+//   socket.on('keypress', keypressMessage)
+//   function keypressMessage(data) {
+//     socket.broadcast.emit('keypress', data);
+//   }
+
+//   //
+
+//   // DELETES USER COUNT
+//   socket.on('disconnect', function() {
+//     console.log('client dissconected')
+
+//     clientCounter--;
+//     io.emit('counter', {count: clientCounter});
+//     console.log(clientCounter)
+//   })
+// });
+
+io.on('connection', function(socket) {
+  console.log('user connected');
+  let roomName;
+
+  socket.on('room', function(room) {
+    console.log('adfnaksdjnfka')
+    socket.join(room);
+    roomName = room;
+    clientCounter++;
+  })
   console.log(clientCounter)
-  io.emit('counter', {count: clientCounter})
+
+  roomName = '1';
+
+  //  EMITS USER COUNT TO ALL USERS
+  io.in(roomName).emit('counter', {count: clientCounter})
 
   // ON RECIEVING KEYPRESS BROADCAST TO OTHER USER
-  socket.on('keypress', keypressMessage)
+  io.in(roomName).on('keypress', keypressMessage)
   function keypressMessage(data) {
-    socket.broadcast.emit('keypress', data);
+    socket.to(roomName).emit('keypress', data);
   }
 
-  //
-
   // DELETES USER COUNT
-  socket.on('disconnect', function() {
+  io.in(roomName).on('disconnect', function() {
     console.log('client dissconected')
 
     clientCounter--;
-    io.emit('counter', {count: clientCounter});
+    io.in(roomName).emit('counter', {count: clientCounter});
     console.log(clientCounter)
   })
 });
+
 
 
 /**

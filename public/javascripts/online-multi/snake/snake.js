@@ -1,12 +1,31 @@
+var form = document.getElementsByClassName('.formm');
+var ready = document.getElementById('#option1')
 var clientCount;
-var socket = io.connect('http://localhost:3000')
+var socket = io.connect('http://localhost:3000/snake')
+var socketId = socket.id
+// dynamic render this thing v
+var room = '1';
+
+socket.on('connect', function() {
+  socket.emit('room', room)
+})
+
 socket.on('counter', function (data) {
   $("#counter").text(data.count);
   clientCount = data.count;
   console.log(clientCount)
 });
-var form = document.getElementsByClassName('.formm');
-var ready = document.getElementById('#option1')
+
+
+/*
+  could make an array that acts as a queue for each client that joins.
+  index 0 is p1 index 2 is p2
+  on connection if clientCount >= 1 emit to that client p2 = true
+  if p1(has set id) true then use function newkeyL
+  else use function newkeyR
+*/
+
+
 
 var sketch = function(s) {
 
@@ -43,8 +62,6 @@ var sketch = function(s) {
 
 
   s.setup = function() {
-    console.log(ready)
-    console.log(form)
     socket.on('keypress', s.newKey)
 
     s.createCanvas(1000, 500);
