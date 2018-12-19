@@ -4,10 +4,6 @@ var clientCount;
 var socket = io.connect('http://localhost:3000/snake')
 var socketId = socket.id
 
-socket.on('welcome', function(data) {
-  console.log(data)
-})
-
 socket.on('counter', function (data) {
   $("#counter").text(data.count);
   clientCount = data.count;

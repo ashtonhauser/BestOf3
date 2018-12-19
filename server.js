@@ -31,21 +31,19 @@ var snake = io.of('/snake')
 snake.on('connection', function(socket) {
   console.log("connected to snake socket")
   clientCounter++;
-  snake.emit('welcome', "HI");
 
+  // emitts client count on connect
   snake.emit('counter', {count: clientCounter})
 
-  socket.on('keypress', keypressMessage)
-  function keypressMessage(data) {
+  //
+  socket.on('keypress', function(data) {
     snake.emit('keypress', data);
-  }
+  })
 
   socket.on('disconnect', function() {
     console.log('client dissconected')
-
     clientCounter--;
     snake.emit('counter', {count: clientCounter});
-    console.log(clientCounter)
   })
 
 })
