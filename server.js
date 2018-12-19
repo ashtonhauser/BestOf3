@@ -25,9 +25,13 @@ const server = http.createServer(app);
 // SOCKET SETUP
 
 var io = socket(server)
-var clientCounter = 0;
+var snakeCounter = 0;
+let pongCounter = 0;
+let pongKeys = [];
 
 var snake = io.of('/snake')
+const pong = io.of('/pong');
+
 snake.on('connection', function(socket) {
   console.log("connected to snake socket")
   clientCounter++;
@@ -43,10 +47,36 @@ snake.on('connection', function(socket) {
   socket.on('disconnect', function() {
     console.log('client dissconected')
     clientCounter--;
-    snake.emit('counter', {count: clientCounter});
+    snake.emit('counter', {count: snakeCounter});
   })
-
 })
+
+//connects to pong socket
+pong.on('connection', function(socket) {
+  console.log('pong socket connected');
+  pongCounter++;
+
+  //sends client counter to client
+  pong.emit('counter', {count: pongCounter});
+
+  pong.emit('pongKeys', {keys: pongKeys});
+
+  socket.on('keyup', function(data) {
+    pongKeys.push(data);
+    pong.emit('pongKeys', {keys: pongKeys});
+  });
+
+  socket.on('keydown', function(data) {
+    pongKeys.push(data);
+    pong.emit('pongKeys', {keys: pongKeys});
+  });
+
+  socket.on('disconnect', function() {
+    console.log('pong socket disconnected');
+    pongCounter--;
+    pong.emit('counter', {count: pongCounter});
+  });
+});
 
 
 /**
