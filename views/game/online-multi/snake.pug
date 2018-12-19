@@ -1,6 +1,8 @@
 extends ../../layout
 
 block content
+  include ../../nav.pug
+  link(href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet")
   link(rel="stylesheet", href="/stylesheets/online-multi/snake.css")
   script(src="/javascripts/online-multi/snake/snake.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
@@ -8,9 +10,13 @@ block content
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
 
   body
-    div#actual-body
-      include ../../nav.pug
-      div#snakeContainer
-      div#countContainer
-        h2.count User count:
-          span#counter
+    div#snakeContainer
+    form.formm
+      div.inputGroup
+        input#option1(name="option1", type="checkbox")
+        label(for="option1") Ready?
+    div#countContainer
+      h2.count User count:
+        span#counter
+
+

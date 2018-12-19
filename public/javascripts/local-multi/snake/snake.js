@@ -1,45 +1,79 @@
 var sketch = function(s) {
-  var xFruit= 0;
-  var yFruit = 0;
+  var xFruit;
+  var yFruit;
+  var button;
 
   // LEFT
-  var numSegmentsL = 20;
-  var directionL = 'right';
-  var xStartL = 10;
-  var yStartL = 250;
-  var diffL = 10;
+  var numSegmentsL;
+  var directionL;
+  var xStartL;
+  var yStartL;
+  var diffL;
 
-  var xCorL = [];
-  var yCorL = [];
+  var xCorL;
+  var yCorL;
 
   var scoreElemL;
 
   // RIGHT
-  var numSegmentsR = 20;
-  var directionR = 'left';
-  var xStartR = 1000;
-  var yStartR = 250;
-  var diffR = 10;
+  var numSegmentsR;
+  var directionR;
+  var xStartR;
+  var yStartR;
+  var diffR;
 
-  var xCorR = [];
-  var yCorR = [];
+  var xCorR;
+  var yCorR;
 
   var scoreElemR;
 
   s.setup = function() {
+    s.createCanvas(1000, 500);
+
+    s.frameRate(15);
+    s.stroke(255);
+    s.strokeWeight(10);
+
     scoreElemL = s.createDiv('p1').addClass('Lscore container');
     scoreElemL.style('color', 'black');
 
     scoreElemR = s.createDiv('p2').addClass('Rscore container');
     scoreElemR.style('color', 'black');
 
-    s.createCanvas(1000, 500);
+    button = s.createButton('Rematch?').addClass('rematch btn is-warning')
+    button.style('display', 'none')
 
-    s.frameRate(15);
-    s.stroke(255);
-    s.strokeWeight(10);
+    s.resetSketch()
+
+  }
+
+
+  s.resetSketch = function() {
+    xFruit= 0;
+    yFruit = 0;
+
+    // LEFT
+    numSegmentsL = 20;
+    directionL = 'right';
+    xStartL = 10;
+    yStartL = 250;
+    diffL = 10;
+
+    xCorL = [];
+    yCorL = [];
+
+
+    // RIGHT
+    numSegmentsR = 20;
+    directionR = 'left';
+    xStartR = 1000;
+    yStartR = 250;
+    diffR = 10;
+
+    xCorR = [];
+    yCorR = [];
+
     s.updateFruitCoordinates();
-
     for (var i = 0; i < numSegmentsL; i++) {
       xCorL.push(xStartL + (i * diffL));
       yCorL.push(yStartL);
@@ -48,6 +82,11 @@ var sketch = function(s) {
       xCorR.push(xStartR - (o * diffR));
       yCorR.push(yStartR);
     }
+    s.draw()
+    s.loop()
+    scoreElemR.html('p2')
+    scoreElemL.html('p1')
+    button.style('display', 'none')
   }
 
   s.draw = function() {
@@ -129,7 +168,6 @@ var sketch = function(s) {
 
   // user wins when other opponent is killed
   s.checkGameStatus = function() {
-    console.log("running check")
     if (xCorL[xCorL.length - 1] > s.width ||
         xCorL[xCorL.length - 1] < 0 ||
         yCorL[yCorL.length - 1] > s.height ||
@@ -139,7 +177,8 @@ var sketch = function(s) {
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
       if (!s.button) {
-        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/local/snake'`)
+        button.style('display', 'block')
+        button.mousePressed(s.resetSketch);
       }
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
@@ -151,7 +190,8 @@ var sketch = function(s) {
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
       if (!s.button) {
-        s.button = s.createButton('Rematch?').addClass('rematch btn is-warning').attribute('onclick', `window.location.href='http://localhost:3000/game/multi/local/snake'`)
+        button.style('display', 'block')
+        button.mousePressed(s.resetSketch);
       }
     }
   }
