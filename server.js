@@ -27,31 +27,68 @@ const server = http.createServer(app);
 var io = socket(server)
 var clientCounter = 0;
 
-io.on('connection', function(socket) {
-  console.log("client connected")
-
-  // ADDS NEW IP AND EMITS USER COUNT TO ALL USERS
+var snake = io.of('/snake')
+snake.on('connection', function(socket) {
+  console.log("connected to snake socket")
   clientCounter++;
-  console.log(clientCounter)
-  io.emit('counter', {count: clientCounter})
+  snake.emit('welcome', "HI");
 
-  // ON RECIEVING KEYPRESS BROADCAST TO OTHER USER
+  snake.emit('counter', {count: clientCounter})
+
   socket.on('keypress', keypressMessage)
   function keypressMessage(data) {
-    socket.broadcast.emit('keypress', data);
+    snake.emit('keypress', data);
   }
 
-  //
-
-  // DELETES USER COUNT
   socket.on('disconnect', function() {
     console.log('client dissconected')
 
     clientCounter--;
-    io.emit('counter', {count: clientCounter});
+    snake.emit('counter', {count: clientCounter});
     console.log(clientCounter)
   })
-});
+
+})
+
+// io.on('connection', function(socket) {
+//   console.log("user connected")
+// });
+
+
+
+
+
+
+
+
+
+// io.on('connection', function(socket) {
+//   let clientId = socket.id;
+
+//   // ADDS NEW IP AND EMITS USER COUNT TO ALL USERS
+//   clientCounter++;
+//   console.log(clientCounter)
+//   io.emit('counter', {count: clientCounter})
+
+//   // ON RECIEVING KEYPRESS BROADCAST TO OTHER USER
+//   socket.on('keypress', keypressMessage)
+//   function keypressMessage(data) {
+//     socket.broadcast.emit('keypress', data);
+//   }
+
+//   //
+
+//   // DELETES USER COUNT
+//   socket.on('disconnect', function() {
+//     console.log('client dissconected')
+
+//     clientCounter--;
+//     io.emit('counter', {count: clientCounter});
+//     console.log(clientCounter)
+//   })
+// });
+
+
 
 
 /**
