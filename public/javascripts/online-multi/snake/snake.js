@@ -3,11 +3,9 @@ var ready = document.getElementById('#option1')
 var clientCount;
 var socket = io.connect('http://localhost:3000/snake')
 var socketId = socket.id
-// dynamic render this thing v
-var room = '1';
 
-socket.on('connect', function() {
-  socket.emit('room', room)
+socket.on('welcome', function(data) {
+  console.log(data)
 })
 
 socket.on('counter', function (data) {
