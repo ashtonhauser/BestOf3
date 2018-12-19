@@ -1,5 +1,6 @@
 var pong = function(p){
   let aiNum = 50;
+  let distance = 400;
   p.setup = function(){
     p.keyArray = [];
     p.score = p.createDiv('Goodluck!');
@@ -32,16 +33,10 @@ var pong = function(p){
         p.ellipse(this.x, this.y, this.r*2, this.r*2);
       },
 
-      //4 possibilities
-      //~85% perfect
-      //~5% on top half
-      //~5% on bottom half
-      //~5% completely off
-
       handleAiReaction: function(){
           let puckXRounded = Math.round(this.x);
           aiNum = Math.round(Math.random() * 100);
-          console.log("aiNum:" , aiNum);
+          distance = (p.PaddleRight.x - p.PaddleRight.w/2) - (p.Puck.x);
         },
 
       checkPaddle: function(){
@@ -143,20 +138,31 @@ var pong = function(p){
 
     p.draw = function(){
 
+      //4 possibilities
+      //~70% perfect
+      //~10% on top half
+      //~10% on bottom half
+      //~10% completely off
+
       p.checkAiFailure = function(){
         if (aiNum < 70) {
           return p.Puck.y;
         } else if (aiNum  < 80){
-          return p.Puck.y + 30;
+          return p.Puck.y + p.getAiPaddleGradualAni(30);
         } else if (aiNum  < 90) {
-          return p.Puck.y - 30;
+          return p.Puck.y - p.getAiPaddleGradualAni(30);
         } else if (aiNum <= 100) {
           if (aiNum < 97) {
-            return p.Puck.y - 50;
+            return p.Puck.y - p.getAiPaddleGradualAni(60);
           } else {
-            return p.Puck.y + 50;
+            return p.Puck.y + p.getAiPaddleGradualAni(60);
           }
         }
+      };
+
+      p.getAiPaddleGradualAni = function(endpoint){
+        let result = (p.Puck.x/distance) * endpoint;
+        return result;
       };
 
       p.background(0);
@@ -190,8 +196,6 @@ var pong = function(p){
           p.left.move(0);
         }
       });
-
-      console.log('check:', p.checkAiFailure());
       p.right.move(p.checkAiFailure());
 
       p.keyReleased = function() {

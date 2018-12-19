@@ -1,12 +1,14 @@
 block content
   script(src="/javascripts/nav-animation.js")
   nav.navbar
-    span
+    span.menu-and-title
       a.open-slide(href="#", onclick="openSlideMenu()")
         svg#hamburger(width="30", height="30")
           path(d="M0,5 30,5", stroke="#353232", stroke-width="5")
           path(d="M0,14 30,14", stroke="#353232", stroke-width="5")
           path(d="M0,23 30,23", stroke="#353232", stroke-width="5")
+      a.home-button(href="/")
+        h4#nav-title.nav-title BestOf3
   div#side-menu.side-nav
     a.btn-close(href="#", onclick="closeSlideMenu()") &times;
     a#nav-button(href="/") Home
