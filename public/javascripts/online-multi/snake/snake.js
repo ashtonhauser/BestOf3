@@ -1,8 +1,13 @@
 var form = document.getElementsByClassName('.formm');
 var ready = document.getElementById('#option1')
 var clientCount;
+var clientState = 'NOT_READY';
+var clientsReady = false;
+var clientRematch;
+var stopwatch = null;
 var socket = io.connect('http://localhost:3000/snake')
-var socketId = socket.id
+var username = Math.floor(Math.random() * Math.floor(50 ))
+socket.emit('add-user', {"username": username})
 
 socket.on('counter', function (data) {
   $("#counter").text(data.count);
@@ -10,53 +15,56 @@ socket.on('counter', function (data) {
   console.log(clientCount)
 });
 
-
-/*
-  could make an array that acts as a queue for each client that joins.
-  index 0 is p1 index 2 is p2
-  on connection if clientCount >= 1 emit to that client p2 = true
-  if p1(has set id) true then use function newkeyL
-  else use function newkeyR
-*/
-
+socket.on('clientState', function(data) {
+  if (data.state == 'PLAYERS_READY') {
+    clientState = 'PLAYERS_READY';
+  }
+})
+socket.on('playersReady', function(ready) {
+  if (ready) {
+    clientState = 'PLAYERS_READY'
+  } else {
+    clientState = 'NOT_READY'
+  }
+})
 
 
 var sketch = function(s) {
-
-  var xFruit= 0;
-  var yFruit = 0;
+  socket.on('rematch', function(data) {
+    if (data) {
+      s.resetSketch()
+    }
+  })
+  var readyState;
+  var xFruit;
+  var yFruit;
   var button;
   var data;
   var waitingDiv;
   var timer;
 
-  // LEFT
-  var numSegmentsL = 20;
-  var directionL = 'right';
-  var xStartL = 10;
-  var yStartL = 250;
-  var diffL = 10;
-
-  var xCorL = [];
-  var yCorL = [];
-
+  var numSegmentsL;
+  var directionL;
+  var xStartL;
+  var yStartL;
+  var diffL;
+  var xCorL;
+  var yCorL;
   var scoreElemL;
 
-  // RIGHT
-  var numSegmentsR = 20;
-  var directionR = 'left';
-  var xStartR = 1000;
-  var yStartR = 250;
-  var diffR = 10;
-
-  var xCorR = [];
-  var yCorR = [];
-
+  var numSegmentsR;
+  var directionR;
+  var xStartR;
+  var yStartR;
+  var diffR;
+  var xCorR;
+  var yCorR;
   var scoreElemR;
 
 
   s.setup = function() {
     socket.on('keypress', s.newKey)
+
 
     s.createCanvas(1000, 500);
     s.frameRate(15);
@@ -76,6 +84,9 @@ var sketch = function(s) {
   }
 
   s.resetSketch = function() {
+    clientRematch = false;
+    readyState = {'username': username, 'state': 'NOT_READY'}
+    socket.emit('clientState', readyState)
     timer = 5;
     xFruit= 0;
     yFruit = 0;
@@ -115,13 +126,18 @@ var sketch = function(s) {
       waitingDiv = s.createDiv('Waiting for second player...').id('matching')
     }
 
-    s.draw()
-    s.loop()
-    scoreElemR.html('p2')
-    scoreElemL.html('p1')
-    button.style('display', 'none')
+    $(function() {
+      readyState = {'username': username, state: 'PLAYERS_READY'};
+      socket.emit('clientState', readyState)
+    })
+    if (clientState = 'PLAYERS_READY') {
+      s.draw()
+      s.loop()
+      scoreElemR.html('p2')
+      scoreElemL.html('p1')
+      button.style('display', 'none')
+    }
   }
-
 
   s.draw = function() {
     s.background(0)
@@ -129,9 +145,15 @@ var sketch = function(s) {
     s.textSize(100);
     s.text(timer, s.width/2, s.height/2);
 
-    if (clientCount == 2) {
-      if (s.frameCount % 15 == 0 && timer > 0) {
-        timer --;
+    if (clientCount == 2 && clientState == 'PLAYERS_READY') {
+      if (!stopwatch) {
+        stopwatch = setInterval(() => {
+          timer -= 1;
+        }, 1000)
+      }
+
+      if (timer === 0 && stopwatch) {
+        clearInterval(stopwatch)
       }
     }
 
@@ -211,6 +233,7 @@ var sketch = function(s) {
     }
   }
 
+  // LEFT
   s.updateSnakeCoordinatesL = function() {
     for (var i = 0; i < numSegmentsL - 1; i++) {
       xCorL[i] = xCorL[i + 1];
@@ -274,6 +297,7 @@ var sketch = function(s) {
       if (!s.button) {
         button.style('display', 'block')
         button.mousePressed(s.resetSketch)
+        // button.mousePressed(socket.emit('rematch', true))
       }
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
@@ -287,6 +311,7 @@ var sketch = function(s) {
       if (!s.button) {
         button.style('display', 'block')
         button.mousePressed(s.resetSketch);
+        // button.mousePressed(socket.emit('rematch', true))
       }
     }
   }
@@ -323,6 +348,7 @@ var sketch = function(s) {
 
 
   s.checkForFruitL = function() {
+    s.stroke(200)
     s.point(xFruit, yFruit);
     if (xCorL[xCorL.length - 1] === xFruit && yCorL[yCorL.length - 1] === yFruit) {
       xCorL.unshift(xCorL[0]);
@@ -333,6 +359,7 @@ var sketch = function(s) {
   }
 
   s.checkForFruitR = function() {
+    s.stroke(200)
     s.point(xFruit, yFruit);
     if (xCorR[xCorR.length - 1] === xFruit && yCorR[yCorR.length - 1] === yFruit) {
       xCorR.unshift(xCorR[0]);
