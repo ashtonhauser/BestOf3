@@ -8,7 +8,6 @@ const salt = bcrypt.genSaltSync(saltRounds);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('curruser', req.currentUser);
   res.render('index');
 });
 
@@ -41,10 +40,6 @@ router.post('/login', function(req, res) {
     const user = response[0];
     if (bcrypt.compareSync(req.body.password, user.password)) {
       req.session.userId = user.id;
-      console.log(req.session.userId);
-      // req.session.save(function(err){
-      //   console.log(err);
-      // });
       res.redirect('/');
     } else {
       res.render('login');

@@ -26,7 +26,7 @@ a.open-slide {
   height:100%;
   width:0;
   position:fixed;
-  z-index:1;
+  z-index:20;
   top:0;
   left:0;
   background-color:#111;
@@ -94,6 +94,20 @@ a.home-button{
 a.home-button:hover{
   color: #fff;
   background-color: inherit;
+}
+
+#login, #logout, #register{
+  color: black;
+}
+
+#login:hover, #logout:hover, #register:hover{
+  color: #fff;
+  background-color: inherit;
+}
+
+nav{
+  width: 75vh;
+  transition: 0.5s;
 }
 
 @media(max-width:568px){
