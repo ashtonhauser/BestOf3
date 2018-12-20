@@ -4,6 +4,7 @@ var router = express.Router();
 // SINGLE ROUTES
 router.get('/single', function(req, res) {
   res.render('game/single/index', { user: req.currentUser });
+  console.log(req.params.url);
 });
 
 router.get('/single/:game_name', function(req, res) {
@@ -23,7 +24,7 @@ router.get('/multi/local/:game_name', function(req, res) {
 
 // ONLINE ROUTES
 router.get('/multi/online', function(req, res) {
-  res.render(`game/online-multi/index`, { user: req.currentUser })
+  res.render(`game/online-multi/index`, { user: req.currentUser, cannotLogout: true })
 });
 
 router.get('/multi/online/:game_name', function(req, res) {

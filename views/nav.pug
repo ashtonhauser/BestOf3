@@ -1,21 +1,26 @@
 block content
   script(src="/javascripts/nav-animation.js")
-  nav.navbar
+  nav.navbar#nav
     span.menu-and-title
-      a.open-slide(href="#", onclick="openSlideMenu()")
-        svg#hamburger(width="30", height="30")
+      a.open-slide#hamburger(href="#", onclick="openSlideMenu()")
+        svg(width="30", height="30")
           path(d="M0,5 30,5", stroke="#353232", stroke-width="5")
           path(d="M0,14 30,14", stroke="#353232", stroke-width="5")
           path(d="M0,23 30,23", stroke="#353232", stroke-width="5")
-      a.home-button(href="/")
-        h4#nav-title.nav-title BestOf3
+    a.home-button.navbar-brand(href="/") BestOf3
+    - if (!user) {
+    span.nav-item
+      a#login.nav-link(href="/login")='Login'
+    span.nav-item
+      a#register.nav-link(href="/register")='Register'
+    - } else {
+    - if (!cannotLogout) {
+    span.nav-item
+      a#logout.nav-link(href="/logout")= 'Logout'
+    - }
+    - }
   div#side-menu.side-nav
     a.btn-close(href="#", onclick="closeSlideMenu()") &times;
-    a#nav-button(href="/") Home
-    
-    - if (!user) {
-    a#login-button(href="#") Login
-    a#register-button(href="#") Register
-    - } else {
-    a#logout-button(href="#") Logout
-    - }
+    a#nav-button(href="/game/single") Single Player
+    a#nav-button(href="/game/multi/local") Local Multi
+    a#nav-button(href="/game/multi/online") Online Multi
