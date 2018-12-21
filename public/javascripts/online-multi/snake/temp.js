@@ -2,6 +2,7 @@ var form = document.getElementsByClassName('.formm');
 var ready = document.getElementById('#option1')
 var clientCount;
 var clientState = 'NOT_READY';
+var clientRematch;
 var socket = io.connect('http://localhost:3000/snake')
 var username = Math.floor(Math.random() * Math.floor(50))
 var p1 = false;
@@ -10,23 +11,23 @@ socket.emit('add-user', {"username": username})
 
 // sets player 1 or 2
 socket.on('playerNum', function(data) {
-  if (data == 1) {
+  if (1) {
     p1 = true;
   } else {
     p2 = true;
   }
 })
-
 // user count
 socket.on('counter', function (data) {
   $("#counter").text(data.count);
   clientCount = data.count;
 });
-
 // sets client state from server
 socket.on('clientState', function(data) {
   clientState = data;
 })
+
+
 
 var sketch = function(s) {
   socket.on('rematch', function(data) {
@@ -63,6 +64,8 @@ var sketch = function(s) {
 
 
   s.setup = function() {
+    socket.on('keypress', s.newKey)
+
     s.createCanvas(1000, 500);
     s.frameRate(15);
     s.stroke(255);
@@ -123,7 +126,6 @@ var sketch = function(s) {
       waitingDiv = s.createDiv('Waiting for second player...').id('matching')
     }
 
-    // on document load + 5 seconds alert server clientstate ready
     $(function() {
       setTimeout(function() {
         readyState = {'username': username, state: 'PLAYERS_READY'};
@@ -137,16 +139,6 @@ var sketch = function(s) {
     scoreElemR.html('p2')
     scoreElemL.html('p1')
     button.style('display', 'none')
-
-    // handles movement from server
-    socket.on('move', function(dir) {
-      directionL = dir.L.directionL || directionL;
-      directionR = dir.R.directionR || directionR;
-      xCorR = dir.R.xCorR || xCorR;
-      xCorL = dir.L.xCorL || xCorL;
-      yCorR = dir.R.yCorR || yCorR;
-      yCorL = dir.L.yCorL || yCorL;
-    })
   }
 
   s.draw = function() {
@@ -154,6 +146,14 @@ var sketch = function(s) {
     s.textAlign(s.CENTER, s.CENTER);
     s.textSize(100);
     s.text(timer, s.width/2, s.height/2);
+
+    socket.on('move', function(dir) {
+      directionL = dir.L
+      directionR = dir.R
+
+      tick++
+      console.log(`x: ${xCorR}, ${xCorL} y: ${yCorR} ${yCorL} ${directionR} ${directionL}`)
+    })
 
     if (clientCount == 2 && waitingDiv) {
       waitingDiv.hide();
@@ -241,6 +241,8 @@ var sketch = function(s) {
       }
   }
 
+  // move to server
+  // user wins when other opponent is killed
   s.checkGameStatus = function() {
     if (xCorL[xCorL.length - 1] > s.width ||
         xCorL[xCorL.length - 1] < 0 ||
@@ -305,20 +307,25 @@ var sketch = function(s) {
   }
 
   s.keyPressed = function() {
-    var key = s.keyCode
-    var data = {
-      key,
-      'L': {xCorL, yCorL},
-      'R': {xCorR, yCorR}
-    }
-
-    // filters output based on player number
-    if (p1 && [65, 68, 87, 83].includes(key)) {
-      socket.emit('keypress', data)
-    } else if (p2 && [38, 39, 40, 37].includes(key)){
-      socket.emit('keypress', data)
-    }
+    // puts keys in an array and at set interval sends array to server to avoid too much input
+    // filter keys to adjust to current direction
+    // could make message type keypressR and L
+    data = s.keyCode;
+    socket.emit('keypress', data)
+    // if (p1 && data == 65 || 68 || 87 || 83) {
+    //   socket.emit('keypress', data)
+    // } else if (p2 && data == 37 || 38 || 39 || 40) {
+    //   socket.emit('keypress', data)
+    // }
   }
+
+
+
+
+
+
+
+
 
   // s.checkForFruitL = function() {
   //   s.stroke(200)

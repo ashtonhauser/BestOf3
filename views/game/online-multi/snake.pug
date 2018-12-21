@@ -4,10 +4,6 @@ block content
   include ../../nav.pug
   link(href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet")
   link(rel="stylesheet", href="/stylesheets/online-multi/snake.css")
-  script(src="/javascripts/online-multi/snake/snake.js")
-  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
-  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
-  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
 
   body
     div#snakeContainer
@@ -19,4 +15,8 @@ block content
       h2.count User count:
         span#counter
 
+    script(src="/javascripts/online-multi/snake/snake.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
 

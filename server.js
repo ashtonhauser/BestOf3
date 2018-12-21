@@ -18,26 +18,28 @@ const server = http.createServer(app);
 // SOCKET SETUP
 
 var io = socket(server);
-var clientCounter = 0;
 var clients = {};
-var snake = io.of('/snake')
 var p1R = false;
 var p2R = false;
 var snakeCounter = 0;
+var directionL = 'right'
+var directionR = 'left'
+
 let pongCounter = 0;
 let pongKeys = [];
 
 const snake = io.of('/snake')
 const pong = io.of('/pong');
 
+// SNAKE HANDLING
 snake.on('connection', function(socket) {
   console.log("connected to snake socket")
   // Kicks user if 2 connected already
-  if (clientCounter >= 2) {
+  if (snakeCounter >= 2) {
     socket.disconnect()
     console.log("booted client, max reached")
   } else {
-    clientCounter++;
+    snakeCounter++;
   }
 
   // adds username to client
@@ -49,11 +51,13 @@ snake.on('connection', function(socket) {
       }
     }
     if (p1) {
+      socket.emit('playerNum', 2)
       clients[data.username] = {
         "socket": socket.id,
         "player": 2
       }
     } else {
+      socket.emit('playerNum', 1)
       clients[data.username] = {
         "socket": socket.id,
         "player": 1
@@ -63,8 +67,8 @@ snake.on('connection', function(socket) {
   })
 
   // Checks if both players ready
-  socket.on('clientState', function(data) {
-    console.log(`recieved state from client ${data.username}, ${data.state}`)
+  socket.on('clientReady', function(data) {
+    console.log(`recieved ready status from client ${data.username}, ${data.state}`)
 
     if (clients[data.username].player == 1 && data.state == 'PLAYERS_READY') {
       p1R = true;
@@ -75,12 +79,10 @@ snake.on('connection', function(socket) {
     } else if (clients[data.username].player == 2 && data.state != 'PLAYERS_READY') {
       p2R = false;
     }
-    console.log(p1R, p2R)
-
     if (p1R && p2R) {
-      snake.emit('playersReady', true)
+      snake.emit('clientState', 'PLAYERS_READY')
     } else {
-      snake.emit('playersReady', false)
+      snake.emit('clientState', 'NOT_READY')
     }
   })
 
@@ -90,21 +92,68 @@ snake.on('connection', function(socket) {
   })
 
   // emitts client count on connect
-  snake.emit('counter', {count: clientCounter})
+  snake.emit('counter', {count: snakeCounter})
 
-  // broadcast keypresses to snake
+  // broadcast keypresses and x y cords to socket
   socket.on('keypress', function(data) {
-    snake.emit('keypress', data);
+    switch (data.key) {
+      case 37:
+        if (directionR != 'right') {
+          directionR = 'left';
+        }
+        break;
+      case 39:
+        if (directionR != 'left') {
+          directionR = 'right';
+        }
+        break;
+      case 38:
+        if (directionR != 'down') {
+          directionR = 'up';
+        }
+        break;
+      case 40:
+        if (directionR != 'up') {
+          directionR = 'down';
+        }
+        break;
+      case 65:
+        if (directionL != 'right') {
+          directionL = 'left';
+        }
+        break;
+      case 68:
+        if (directionL != 'left') {
+          directionL = 'right';
+        }
+        break;
+      case 87:
+        if (directionL != 'down') {
+          directionL = 'up';
+        }
+        break;
+      case 83:
+        if (directionL != 'up') {
+          directionL = 'down';
+        }
+    }
+    // put in let
+    position = {
+      'L': {xCorL: data.L.xCorL, yCorL: data.L.yCorL, directionL: directionL},
+      'R': {xCorR: data.R.xCorR, yCorR: data.R.yCorR, directionR: directionR}
+    }
+    snake.emit('move', position)
   })
 
   // Update counter on disconnect
   socket.on('disconnect', function() {
     console.log('client dissconected')
-    clientCounter--;
+    snakeCounter--;
     snake.emit('counter', {count: snakeCounter});
   })
 })
 
+// PONG HANDLING
 
 //connects to pong socket
 pong.on('connection', function(socket) {
