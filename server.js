@@ -148,6 +148,7 @@ snake.on('connection', function(socket) {
   })
 
   // Update counter on disconnect
+  // on discconect tell remaining client to refresh
   socket.on('disconnect', function() {
     console.log('client dissconected')
     for (var key in clients) {
@@ -158,7 +159,7 @@ snake.on('connection', function(socket) {
       if (socket.id == clients[key].socket) {
         delete clients[key];
         snakeCount = Object.keys(clients).length;
-        snake.emit('clientState', 'RESET')
+        snake.emit('clientState', 'PLAYER_LEFT')
       }
     }
     snake.emit('counter', {count: snakeCount});

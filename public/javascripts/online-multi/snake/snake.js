@@ -30,6 +30,8 @@ var sketch = function(s) {
     clientState = data;
     if (data == 'RESET') {
       s.resetSketch();
+    } else if (data == 'PLAYER_LEFT') {
+      location.reload()
     }
   })
   var readyState;
@@ -37,7 +39,8 @@ var sketch = function(s) {
   var yFruit; // defined by server
   var button;
   var waitingDiv;
-  var timer; // defined by server
+  var text; // defined by server
+  var gameOver;
 
   var numSegmentsL; // defined by server
   var directionL; // defined by server
@@ -77,12 +80,13 @@ var sketch = function(s) {
   }
 
   s.resetSketch = function() {
-    clientRematch = false;
+    clientState = 'NOT_READY'
     readyState = {'username': username, 'state': 'NOT_READY'}
     socket.emit('clientReady', readyState)
-    timer = 'loading...';
+    text = 'loading...';
     xFruit= 0;
     yFruit = 0;
+    gameOver = false;
 
     // LEFT
     numSegmentsL = 20;
@@ -119,13 +123,13 @@ var sketch = function(s) {
       waitingDiv = s.createDiv('Waiting for second player...').id('matching')
     }
 
-    // on document load + 5 seconds alert server clientstate ready
+    // on document load + 2.5 seconds alert server clientstate ready
     $(function() {
       setTimeout(function() {
         readyState = {'username': username, state: 'PLAYERS_READY'};
         socket.emit('clientReady', readyState)
-        timer = 'ready'
-      }, 5000)
+        text = 'ready'
+      }, 2500)
     })
 
     s.draw()
@@ -133,15 +137,13 @@ var sketch = function(s) {
     scoreElemR.html('p2')
     scoreElemL.html('p1')
     button.style('display', 'none')
-
-    // handles movement from server
   }
 
   s.draw = function() {
     s.background(0)
     s.textAlign(s.CENTER, s.CENTER);
     s.textSize(100);
-    s.text(timer, s.width/2, s.height/2);
+    s.text(text, s.width/2, s.height/2);
 
     if (clientCount == 2 && waitingDiv) {
       waitingDiv.hide();
@@ -150,7 +152,7 @@ var sketch = function(s) {
     }
 
     if (clientState === 'PLAYERS_READY' && clientCount == 2) {
-      timer = 'go'
+      text = 'go'
       s.drawL()
       s.drawR()
       socket.on('move', function(dir) {
@@ -243,8 +245,8 @@ var sketch = function(s) {
         yCorL[yCorL.length - 1] > s.height ||
         yCorL[yCorL.length - 1] < 0 ||
         s.checkSnakeCollisionL()) {
-      clientState = 'NOT_READY'
       s.noLoop();
+      gameOver = true;
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
       button.style('display', 'block')
@@ -256,8 +258,8 @@ var sketch = function(s) {
                 yCorR[yCorR.length - 1] > s.height ||
                 yCorR[yCorR.length - 1] < 0 ||
                 s.checkSnakeCollisionR()) {
-      clientState = 'NOT_READY'
       s.noLoop();
+      gameOver = true;
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
       button.style('display', 'block')
@@ -309,7 +311,7 @@ var sketch = function(s) {
     }
 
     // filters output based on player number
-    if (clientState == 'PLAYERS_READY') {
+    if (clientState === 'PLAYERS_READY' && gameOver === false) {
       if (p1 && [65, 68, 87, 83].includes(key)) {
         console.log("sent p1 key", key)
         socket.emit('keypress', data)
