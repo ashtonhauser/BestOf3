@@ -109,7 +109,7 @@ a.home-button:hover{
 .navbar{
   width: 100%;
   transition: 0.5s;
-  justify-content: flex-start;
+  justify-content: left;
 }
 
 .nav-item{
