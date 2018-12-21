@@ -24,22 +24,18 @@ socket.on('counter', function (data) {
 });
 
 // sets client state from server
-socket.on('clientState', function(data) {
-  clientState = data;
-})
 
 var sketch = function(s) {
-  socket.on('rematch', function(data) {
-    if (data) {
-      s.resetSketch()
+  socket.on('clientState', function(data) {
+    clientState = data;
+    if (data == 'RESET') {
+      s.resetSketch();
     }
   })
-  var tick = 1;
   var readyState;
   var xFruit; // defined by server
   var yFruit; // defined by server
   var button;
-  var data;
   var waitingDiv;
   var timer; // defined by server
 
@@ -139,14 +135,6 @@ var sketch = function(s) {
     button.style('display', 'none')
 
     // handles movement from server
-    socket.on('move', function(dir) {
-      directionL = dir.L.directionL || directionL;
-      directionR = dir.R.directionR || directionR;
-      xCorR = dir.R.xCorR || xCorR;
-      xCorL = dir.L.xCorL || xCorL;
-      yCorR = dir.R.yCorR || yCorR;
-      yCorL = dir.L.yCorL || yCorL;
-    })
   }
 
   s.draw = function() {
@@ -165,6 +153,14 @@ var sketch = function(s) {
       timer = 'go'
       s.drawL()
       s.drawR()
+      socket.on('move', function(dir) {
+        directionL = dir.L.directionL || directionL;
+        directionR = dir.R.directionR || directionR;
+        xCorR = dir.R.xCorR || xCorR;
+        xCorL = dir.L.xCorL || xCorL;
+        yCorR = dir.R.yCorR || yCorR;
+        yCorL = dir.L.yCorL || yCorL;
+      })
     }
   }
 
@@ -247,30 +243,30 @@ var sketch = function(s) {
         yCorL[yCorL.length - 1] > s.height ||
         yCorL[yCorL.length - 1] < 0 ||
         s.checkSnakeCollisionL()) {
+      clientState = 'NOT_READY'
       s.noLoop();
       scoreElemL.html('You lost!');
       scoreElemR.html('You won!');
-      if (!s.button) {
-        button.style('display', 'block')
-        button.mousePressed(s.resetSketch)
-        // button.mousePressed(socket.emit('rematch', true))
-      }
-    } else if (
-        xCorR[xCorR.length - 1] > s.width ||
-        xCorR[xCorR.length - 1] < 0 ||
-        yCorR[yCorR.length - 1] > s.height ||
-        yCorR[yCorR.length - 1] < 0 ||
-        s.checkSnakeCollisionR()) {
+      button.style('display', 'block')
+      $(".rematch").unbind().click(function() {
+        socket.emit('reset')
+      })
+    } else if ( xCorR[xCorR.length - 1] > s.width ||
+                xCorR[xCorR.length - 1] < 0 ||
+                yCorR[yCorR.length - 1] > s.height ||
+                yCorR[yCorR.length - 1] < 0 ||
+                s.checkSnakeCollisionR()) {
+      clientState = 'NOT_READY'
       s.noLoop();
       scoreElemL.html('You won!');
       scoreElemR.html('You lost!');
-      if (!s.button) {
-        button.style('display', 'block')
-        button.mousePressed(s.resetSketch);
-        // button.mousePressed(socket.emit('rematch', true))
-      }
+      button.style('display', 'block')
+      $(".rematch").unbind().click(function() {
+        socket.emit('reset')
+      })
     }
   }
+
 
   // move to server
   s.checkSnakeCollisionL = function() {
@@ -313,10 +309,14 @@ var sketch = function(s) {
     }
 
     // filters output based on player number
-    if (p1 && [65, 68, 87, 83].includes(key)) {
-      socket.emit('keypress', data)
-    } else if (p2 && [38, 39, 40, 37].includes(key)){
-      socket.emit('keypress', data)
+    if (clientState == 'PLAYERS_READY') {
+      if (p1 && [65, 68, 87, 83].includes(key)) {
+        console.log("sent p1 key", key)
+        socket.emit('keypress', data)
+      } else if (p2 && [38, 39, 40, 37].includes(key)){
+        console.log("sent p2 key", key)
+        socket.emit('keypress', data)
+      }
     }
   }
 

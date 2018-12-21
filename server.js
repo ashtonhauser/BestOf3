@@ -18,28 +18,29 @@ const server = http.createServer(app);
 // SOCKET SETUP
 
 var io = socket(server);
+
 var clients = {};
 var p1R = false;
+var p1Reset = false;
 var p2R = false;
-var snakeCounter = 0;
-var directionL = 'right'
-var directionR = 'left'
+var p2Reset = false;
+var snakeCount = 0;
+var directionL = 'right';
+var directionR = 'left';
 
 let pongCounter = 0;
 let pongKeys = [];
 
-const snake = io.of('/snake')
+const snake = io.of('/snake');
 const pong = io.of('/pong');
 
 // SNAKE HANDLING
 snake.on('connection', function(socket) {
   console.log("connected to snake socket")
   // Kicks user if 2 connected already
-  if (snakeCounter >= 2) {
+  if (snakeCount >= 2) {
     socket.disconnect()
     console.log("booted client, max reached")
-  } else {
-    snakeCounter++;
   }
 
   // adds username to client
@@ -63,7 +64,8 @@ snake.on('connection', function(socket) {
         "player": 1
       }
     }
-    console.log(clients)
+    snakeCount = Object.keys(clients).length;
+    snake.emit('counter', {count: snakeCount})
   })
 
   // Checks if both players ready
@@ -87,12 +89,12 @@ snake.on('connection', function(socket) {
   })
 
   // handles rematch
-  socket.on('rematch', function(data) {
-    snake.emit('rematch', true)
+  socket.on('reset', function() {
+    console.log("recieved reset")
+    snake.emit('clientState', 'RESET')
   })
 
-  // emitts client count on connect
-  snake.emit('counter', {count: snakeCounter})
+  // emitts client snakeCount on connect
 
   // broadcast keypresses and x y cords to socket
   socket.on('keypress', function(data) {
@@ -148,10 +150,22 @@ snake.on('connection', function(socket) {
   // Update counter on disconnect
   socket.on('disconnect', function() {
     console.log('client dissconected')
-    snakeCounter--;
-    snake.emit('counter', {count: snakeCounter});
+    for (var key in clients) {
+      if (clients[key].player == 2) {
+        clients[key].player = 1
+        snake.emit('playerNum', 1)
+      }
+      if (socket.id == clients[key].socket) {
+        delete clients[key];
+        snakeCount = Object.keys(clients).length;
+        snake.emit('clientState', 'RESET')
+      }
+    }
+    snake.emit('counter', {count: snakeCount});
   })
 })
+
+
 
 // PONG HANDLING
 
