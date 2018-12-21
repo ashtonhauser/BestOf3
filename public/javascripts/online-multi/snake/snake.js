@@ -23,8 +23,6 @@ socket.on('counter', function (data) {
   clientCount = data.count;
 });
 
-// sets client state from server
-
 var sketch = function(s) {
   socket.on('clientState', function(data) {
     clientState = data;
@@ -39,7 +37,7 @@ var sketch = function(s) {
   var yFruit; // defined by server
   var button;
   var waitingDiv;
-  var text; // defined by server
+  var text;
   var gameOver;
 
   var numSegmentsL; // defined by server
@@ -247,8 +245,8 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
-      scoreElemL.html('You lost!');
-      scoreElemR.html('You won!');
+      scoreElemL.html('Player 1 lost!');
+      scoreElemR.html('Player 2 wins!');
       button.style('display', 'block')
       $(".rematch").unbind().click(function() {
         socket.emit('reset')
@@ -260,8 +258,8 @@ var sketch = function(s) {
                 s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
-      scoreElemL.html('You won!');
-      scoreElemR.html('You lost!');
+      scoreElemL.html('Player 1 wins!');
+      scoreElemR.html('Player 2 lost!');
       button.style('display', 'block')
       $(".rematch").unbind().click(function() {
         socket.emit('reset')

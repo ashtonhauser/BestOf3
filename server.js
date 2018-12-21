@@ -160,6 +160,8 @@ snake.on('connection', function(socket) {
         delete clients[key];
         snakeCount = Object.keys(clients).length;
         snake.emit('clientState', 'PLAYER_LEFT')
+        directionR = 'left'
+        directionL = 'right'
       }
     }
     snake.emit('counter', {count: snakeCount});
