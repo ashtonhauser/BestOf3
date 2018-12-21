@@ -1,12 +1,12 @@
-extends layout
+extends ../layout
 
 block content
-  link(rel="stylesheet", href="/stylesheets/login-register.css")
+  link(rel="stylesheet", href="/stylesheets/user/login-register.css")
   
   body
     div
       h1#title LOGIN
-      form(action="/login" method="POST" id='loginform')
+      form(action="/user/login" method="POST" id='loginform')
         label.alien(for="email") Email:
           input(type="email", name="email", placeholder="")
         br

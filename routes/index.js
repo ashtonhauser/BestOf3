@@ -11,11 +11,11 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
-router.get('/register', function(req, res) {
-  res.render('register');
+router.get('/user/register', function(req, res) {
+  res.render('user/register');
 });
 
-router.post('/register', function(req, res) {
+router.post('/user/register', function(req, res) {
   dbUtils.setEmailandPassword(
     req.body.email,
     bcrypt.hashSync(req.body.password, salt)
@@ -25,27 +25,30 @@ router.post('/register', function(req, res) {
       req.session.userId = user.id;
       res.redirect('/');
     } else {
-      res.render('register');
+      res.render('user/register');
     }
   });
 });
 
-router.get('/login', function(req, res) {
+router.get('/user/login', function(req, res) {
   if (req.currentUser) return res.redirect('/');
-  res.render('login');
+  res.render('user/login');
 });
 
-router.post('/login', function(req, res) {
+router.post('/user/login', function(req, res) {
   dbUtils.grabUserByEmail(req.body.email).then((response) => {
     const user = response[0];
     if (bcrypt.compareSync(req.body.password, user.password)) {
       req.session.userId = user.id;
       res.redirect('/');
     } else {
-      res.render('login');
+      res.render('user/login');
     }
   });
 });
 
+router.get('/user/profile', function(req, res){
+  res.render('user/profile', {user: req.currentUser});
+});
 
 module.exports = router;

@@ -9,6 +9,7 @@
     "db:seed": "node db/seeds/gameseed.js"
   },
   "dependencies": {
+    "animejs": "^2.2.0",
     "bcrypt": "~1.0.3",
     "body-parser": "^1.18.3",
     "debug": "~2.6.9",
@@ -18,9 +19,9 @@
     "morgan": "~1.9.0",
     "pg": "^7.7.1",
     "pug": "2.0.0-beta11",
-    "uuid": "^3.3.2",
     "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0"
+    "socket.io-client": "^2.2.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.8"

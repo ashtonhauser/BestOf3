@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  link(rel="stylesheet", href="/stylesheets/user/profile.css")
+  script(src="/javascripts/profile-animation.js" type="text/javascript")
+
+  body
+    include ../nav.pug
+      div.profilecontainer
+        div.dynamicProfile
+          div.imgContainer
+            img.profilePic(src="../../images/spaceinvader_sprite.png" alt="Space Invader Sprite")
+          div.emailContainer
+            h2 #{user.email}
+        div.exp
+          span.lvl Level: 2
+          div.progressBar
+            div.progress
+      div.onlineStats
+        div.onlineStatsTitleCont
+          span.onlineStatsTitle Online Stats
+        br
+        div.importantStats
+          p => Most Played Game: Snake
+          p => Highest W/L Ratio: Pong
+        br
+        div.wltitlecont
+          span.wltitle W/L
+        div.wlcont
+          p Pong: 2.33
+          p Snake: 0.8
+          

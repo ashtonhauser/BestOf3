@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // puts currentUser on req
 app.use(function(req, res, next) {
   if (!req.session.userId) return next();
-  return dbUtils.grabUserId(req.session.userId).then((response) => {
+  return dbUtils.grabUserById(req.session.userId).then((response) => {
     if (!response || !response[0]) return next();
     req.currentUser = response[0];
     return next();

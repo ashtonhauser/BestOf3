@@ -91,23 +91,29 @@ a.home-button{
   color: black;
   display: inline-block;
 }
+
 a.home-button:hover{
   color: #fff;
   background-color: inherit;
 }
 
-#login, #logout, #register{
+#login, #logout, #register, #profile{
   color: black;
 }
 
-#login:hover, #logout:hover, #register:hover{
+#login:hover, #logout:hover, #register:hover, #profile:hover{
   color: #fff;
   background-color: inherit;
 }
 
-nav{
-  width: 75vh;
+.navbar{
+  width: 100%;
   transition: 0.5s;
+  justify-content: flex-start;
+}
+
+.nav-item{
+  width: 150px;
 }
 
 @media(max-width:568px){

@@ -26,8 +26,6 @@ var p2R = false;
 var snakeCounter = 0;
 let pongCounter = 0;
 let pongKeys = [];
-
-const snake = io.of('/snake')
 const pong = io.of('/pong');
 
 snake.on('connection', function(socket) {

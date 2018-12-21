@@ -18,17 +18,18 @@ module.exports = {
   ).then(parseResult).catch(e => console.error('setEmailandPassword', e));
   },
 
-  grabUserByEmail: async function(email){
+  grabUserByEmail: function async (email){
     return client.query("SELECT * FROM users WHERE email= '" + email + "';"
   )
   .then(parseResult)
   .catch(e => console.error(e));
   },
 
-  grabUserId: async function(id){
+  grabUserById: function async (id){
     return client.query(`SELECT * FROM users WHERE id= '${Number(id)}';`
     )
-    .then(parseResult).catch(e => console.error(e));
+    .then(parseResult)
+    .catch(e => console.error(e));
   }
 
-}
+};
