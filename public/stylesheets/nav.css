@@ -1,6 +1,7 @@
 .navbar{
   overflow:hidden;
   height:63px;
+  font-family: 'Press Start 2P', sans-serif;
 }
 
 a.open-slide {
@@ -60,7 +61,6 @@ a.open-slide {
 
 #actual-body{
   transition:margin-left 0.5s;
-  padding:20px;
   overflow:hidden;
   width:100%;
 }

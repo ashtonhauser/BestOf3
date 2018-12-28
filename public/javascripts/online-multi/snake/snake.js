@@ -2,70 +2,66 @@ var form = document.getElementsByClassName('.formm');
 var ready = document.getElementById('#option1')
 var clientCount;
 var clientState = 'NOT_READY';
-var clientsReady = false;
-var clientRematch;
-var stopwatch = null;
 var socket = io.connect('http://localhost:3000/snake')
-var username = Math.floor(Math.random() * Math.floor(50 ))
+var username = Math.floor(Math.random() * Math.floor(500))
+var p1 = false;
+var p2 = false;
 socket.emit('add-user', {"username": username})
 
+// sets player 1 or 2
+socket.on('playerNum', function(data) {
+  if (data == 1) {
+    p1 = true;
+    p2 = false;
+  } else {
+    p1 = false;
+    p2 = true;
+  }
+})
+
+// user count
 socket.on('counter', function (data) {
   $("#counter").text(data.count);
   clientCount = data.count;
-  console.log(clientCount)
 });
 
-socket.on('clientState', function(data) {
-  if (data.state == 'PLAYERS_READY') {
-    clientState = 'PLAYERS_READY';
-  }
-})
-socket.on('playersReady', function(ready) {
-  if (ready) {
-    clientState = 'PLAYERS_READY'
-  } else {
-    clientState = 'NOT_READY'
-  }
-})
-
-
 var sketch = function(s) {
-  socket.on('rematch', function(data) {
-    if (data) {
-      s.resetSketch()
+  socket.on('clientState', function(data) {
+    clientState = data;
+    if (data == 'RESET') {
+      s.resetSketch();
+    } else if (data == 'PLAYER_LEFT') {
+      location.reload()
     }
   })
   var readyState;
-  var xFruit;
-  var yFruit;
+  var xFruit; // defined by server
+  var yFruit; // defined by server
   var button;
-  var data;
   var waitingDiv;
-  var timer;
+  var text;
+  var gameOver;
 
-  var numSegmentsL;
-  var directionL;
+  var numSegmentsL; // defined by server
+  var directionL; // defined by server
   var xStartL;
   var yStartL;
   var diffL;
-  var xCorL;
-  var yCorL;
+  var xCorL;  // defined by server
+  var yCorL;  // defined by server
   var scoreElemL;
 
-  var numSegmentsR;
-  var directionR;
+  var numSegmentsR; // defined by server
+  var directionR; // defined by server
   var xStartR;
   var yStartR;
   var diffR;
-  var xCorR;
-  var yCorR;
+  var xCorR; // defined by server
+  var yCorR; // defined by server
   var scoreElemR;
 
 
   s.setup = function() {
-    socket.on('keypress', s.newKey)
-
-
     s.createCanvas(1000, 500);
     s.frameRate(15);
     s.stroke(255);
@@ -84,12 +80,13 @@ var sketch = function(s) {
   }
 
   s.resetSketch = function() {
-    clientRematch = false;
+    clientState = 'NOT_READY'
     readyState = {'username': username, 'state': 'NOT_READY'}
-    socket.emit('clientState', readyState)
-    timer = 5;
+    socket.emit('clientReady', readyState)
+    text = 'loading...';
     xFruit= 0;
     yFruit = 0;
+    gameOver = false;
 
     // LEFT
     numSegmentsL = 20;
@@ -111,7 +108,7 @@ var sketch = function(s) {
     xCorR = [];
     yCorR = [];
 
-    s.updateFruitCoordinates();
+    // s.updateFruitCoordinates();
 
     for (var i = 0; i < numSegmentsL; i++) {
       xCorL.push(xStartL + (i * diffL));
@@ -126,36 +123,27 @@ var sketch = function(s) {
       waitingDiv = s.createDiv('Waiting for second player...').id('matching')
     }
 
+    // on document load + 2.5 seconds alert server clientstate ready
     $(function() {
-      readyState = {'username': username, state: 'PLAYERS_READY'};
-      socket.emit('clientState', readyState)
+      setTimeout(function() {
+        readyState = {'username': username, state: 'PLAYERS_READY'};
+        socket.emit('clientReady', readyState)
+        text = 'ready'
+      }, 2500)
     })
-    if (clientState = 'PLAYERS_READY') {
-      s.draw()
-      s.loop()
-      scoreElemR.html('p2')
-      scoreElemL.html('p1')
-      button.style('display', 'none')
-    }
+
+    s.draw()
+    s.loop()
+    scoreElemR.html('p2')
+    scoreElemL.html('p1')
+    button.style('display', 'none')
   }
 
   s.draw = function() {
     s.background(0)
     s.textAlign(s.CENTER, s.CENTER);
     s.textSize(100);
-    s.text(timer, s.width/2, s.height/2);
-
-    if (clientCount == 2 && clientState == 'PLAYERS_READY') {
-      if (!stopwatch) {
-        stopwatch = setInterval(() => {
-          timer -= 1;
-        }, 1000)
-      }
-
-      if (timer === 0 && stopwatch) {
-        clearInterval(stopwatch)
-      }
-    }
+    s.text(text, s.width/2, s.height/2);
 
     if (clientCount == 2 && waitingDiv) {
       waitingDiv.hide();
@@ -163,9 +151,18 @@ var sketch = function(s) {
       waitingDiv.show();
     }
 
-    if (timer == 0 && clientCount == 2) {
+    if (clientState === 'PLAYERS_READY' && clientCount == 2) {
+      text = 'go'
       s.drawL()
       s.drawR()
+      socket.on('move', function(dir) {
+        directionL = dir.L.directionL || directionL;
+        directionR = dir.R.directionR || directionR;
+        xCorR = dir.R.xCorR || xCorR;
+        xCorL = dir.L.xCorL || xCorL;
+        yCorR = dir.R.yCorR || yCorR;
+        yCorL = dir.L.yCorL || yCorL;
+      })
     }
   }
 
@@ -175,7 +172,7 @@ var sketch = function(s) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
     s.updateSnakeCoordinatesL();
-    s.checkForFruitL();
+    // s.checkForFruitL();
     s.checkGameStatus();
   }
 
@@ -185,106 +182,63 @@ var sketch = function(s) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
     s.updateSnakeCoordinatesR();
-    s.checkForFruitR();
+    // s.checkForFruitR();
     s.checkGameStatus();
   }
 
-  s.newKey = function(data) {
-    switch (data) {
-      case 37:
-        if (directionR != 'right') {
-          directionR = 'left';
-        }
-        break;
-      case 39:
-        if (directionR != 'left') {
-          directionR = 'right';
-        }
-        break;
-      case 38:
-        if (directionR != 'down') {
-          directionR = 'up';
-        }
-        break;
-      case 40:
-        if (directionR != 'up') {
-          directionR = 'down';
-        }
-        break;
-      case 65:
-        if (directionL != 'right') {
-          directionL = 'left';
-        }
-        break;
-      case 68:
-        if (directionL != 'left') {
-          directionL = 'right';
-        }
-        break;
-      case 87:
-        if (directionL != 'down') {
-          directionL = 'up';
-        }
-        break;
-      case 83:
-        if (directionL != 'up') {
-          directionL = 'down';
-        }
-    }
-  }
-
+  // should run on server
   // LEFT
   s.updateSnakeCoordinatesL = function() {
-    for (var i = 0; i < numSegmentsL - 1; i++) {
-      xCorL[i] = xCorL[i + 1];
-      yCorL[i] = yCorL[i + 1];
-    }
-    switch (directionL) {
-      case 'right':
-        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] + diffL;
-        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
-        break;
-      case 'up':
-        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
-        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] - diffL;
-        break;
-      case 'left':
-        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] - diffL;
-        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
-        break;
-      case 'down':
-        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
-        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] + diffL;
-        break;
-    }
+      for (var i = 0; i < numSegmentsL - 1; i++) {
+        xCorL[i] = xCorL[i + 1];
+        yCorL[i] = yCorL[i + 1];
+      }
+      switch (directionL) {
+        case 'right':
+          xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] + diffL;
+          yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
+          break;
+        case 'up':
+          xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
+          yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] - diffL;
+          break;
+        case 'left':
+          xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] - diffL;
+          yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
+          break;
+        case 'down':
+          xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
+          yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] + diffL;
+          break;
+      }
   }
 
+  // should run on server
   s.updateSnakeCoordinatesR = function() {
-    for (var i = 0; i < numSegmentsR - 1; i++) {
-      xCorR[i] = xCorR[i + 1];
-      yCorR[i] = yCorR[i + 1];
-    }
-    switch (directionR) {
-      case 'right':
-        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] + diffR;
-        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
-        break;
-      case 'up':
-        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
-        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] - diffR;
-        break;
-      case 'left':
-        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] - diffR;
-        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
-        break;
-      case 'down':
-        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
-        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] + diffR;
-        break;
-    }
+      for (var i = 0; i < numSegmentsR - 1; i++) {
+        xCorR[i] = xCorR[i + 1];
+        yCorR[i] = yCorR[i + 1];
+      }
+      switch (directionR) {
+        case 'right':
+          xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] + diffR;
+          yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
+          break;
+        case 'up':
+          xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
+          yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] - diffR;
+          break;
+        case 'left':
+          xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] - diffR;
+          yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
+          break;
+        case 'down':
+          xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
+          yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] + diffR;
+          break;
+      }
   }
 
-  // user wins when other opponent is killed
   s.checkGameStatus = function() {
     if (xCorL[xCorL.length - 1] > s.width ||
         xCorL[xCorL.length - 1] < 0 ||
@@ -292,30 +246,30 @@ var sketch = function(s) {
         yCorL[yCorL.length - 1] < 0 ||
         s.checkSnakeCollisionL()) {
       s.noLoop();
-      scoreElemL.html('You lost!');
-      scoreElemR.html('You won!');
-      if (!s.button) {
-        button.style('display', 'block')
-        button.mousePressed(s.resetSketch)
-        // button.mousePressed(socket.emit('rematch', true))
-      }
-    } else if (
-        xCorR[xCorR.length - 1] > s.width ||
-        xCorR[xCorR.length - 1] < 0 ||
-        yCorR[yCorR.length - 1] > s.height ||
-        yCorR[yCorR.length - 1] < 0 ||
-        s.checkSnakeCollisionR()) {
+      gameOver = true;
+      scoreElemL.html('Player 1 lost!');
+      scoreElemR.html('Player 2 wins!');
+      button.style('display', 'block')
+      $(".rematch").unbind().click(function() {
+        socket.emit('reset', username)
+      })
+    } else if ( xCorR[xCorR.length - 1] > s.width ||
+                xCorR[xCorR.length - 1] < 0 ||
+                yCorR[yCorR.length - 1] > s.height ||
+                yCorR[yCorR.length - 1] < 0 ||
+                s.checkSnakeCollisionR()) {
       s.noLoop();
-      scoreElemL.html('You won!');
-      scoreElemR.html('You lost!');
-      if (!s.button) {
-        button.style('display', 'block')
-        button.mousePressed(s.resetSketch);
-        // button.mousePressed(socket.emit('rematch', true))
-      }
+      gameOver = true;
+      scoreElemL.html('Player 1 wins!');
+      scoreElemR.html('Player 2 lost!');
+      button.style('display', 'block')
+      $(".rematch").unbind().click(function() {
+        socket.emit('reset', username)
+      })
     }
   }
 
+  // move to server
   s.checkSnakeCollisionL = function() {
     s.snakeHeadXL = xCorL[xCorL.length - 1];
     s.snakeHeadYL = yCorL[yCorL.length - 1];
@@ -331,6 +285,7 @@ var sketch = function(s) {
     }
   }
 
+  // move to server
   s.checkSnakeCollisionR = function() {
     s.snakeHeadXR = xCorR[xCorR.length - 1];
     s.snakeHeadYR = yCorR[yCorR.length - 1];
@@ -346,81 +301,53 @@ var sketch = function(s) {
     }
   }
 
+  s.keyPressed = function() {
+    var key = s.keyCode
+    var data = {
+      key,
+      'L': {xCorL, yCorL},
+      'R': {xCorR, yCorR}
+    }
 
-  s.checkForFruitL = function() {
-    s.stroke(200)
-    s.point(xFruit, yFruit);
-    if (xCorL[xCorL.length - 1] === xFruit && yCorL[yCorL.length - 1] === yFruit) {
-      xCorL.unshift(xCorL[0]);
-      yCorL.unshift(yCorL[0]);
-      numSegmentsL++;
-      s.updateFruitCoordinates();
+    // filters output based on player number
+    if (clientState === 'PLAYERS_READY' && gameOver === false) {
+      if (p1 && [65, 68, 87, 83].includes(key)) {
+        console.log("sent p1 key", key)
+        socket.emit('keypress', data)
+      } else if (p2 && [38, 39, 40, 37].includes(key)){
+        console.log("sent p2 key", key)
+        socket.emit('keypress', data)
+      }
     }
   }
 
-  s.checkForFruitR = function() {
-    s.stroke(200)
-    s.point(xFruit, yFruit);
-    if (xCorR[xCorR.length - 1] === xFruit && yCorR[yCorR.length - 1] === yFruit) {
-      xCorR.unshift(xCorR[0]);
-      yCorR.unshift(yCorR[0]);
-      numSegmentsR++;
-      s.updateFruitCoordinates();
-    }
-  }
+  // s.checkForFruitL = function() {
+  //   s.stroke(200)
+  //   s.point(xFruit, yFruit);
+  //   if (xCorL[xCorL.length - 1] === xFruit && yCorL[yCorL.length - 1] === yFruit) {
+  //     xCorL.unshift(xCorL[0]);
+  //     yCorL.unshift(yCorL[0]);
+  //     numSegmentsL++;
+  //     s.updateFruitCoordinates();
+  //   }
+  // }
+
+  // s.checkForFruitR = function() {
+  //   s.stroke(200)
+  //   s.point(xFruit, yFruit);
+  //   if (xCorR[xCorR.length - 1] === xFruit && yCorR[yCorR.length - 1] === yFruit) {
+  //     xCorR.unshift(xCorR[0]);
+  //     yCorR.unshift(yCorR[0]);
+  //     numSegmentsR++;
+  //     s.updateFruitCoordinates();
+  //   }
+  // }
 
   // setup to spawn both fruits consistently through clients
-  s.updateFruitCoordinates = function() {
-    xFruit = s.floor(s.random(10, (s.width - 100) / 10)) * 10;
-    yFruit = s.floor(s.random(10, (s.height - 100) / 10)) * 10;
-  }
-
-  s.keyPressed = function() {
-    data = s.keyCode;
-    socket.emit('keypress', data)
-
-    switch (s.keyCode) {
-      case 37:
-        if (directionR != 'right') {
-          directionR = 'left';
-        }
-        break;
-      case 39:
-        if (directionR != 'left') {
-          directionR = 'right';
-        }
-        break;
-      case 38:
-        if (directionR != 'down') {
-          directionR = 'up';
-        }
-        break;
-      case 40:
-        if (directionR != 'up') {
-          directionR = 'down';
-        }
-        break;
-      case 65:
-        if (directionL != 'right') {
-          directionL = 'left';
-        }
-        break;
-      case 68:
-        if (directionL != 'left') {
-          directionL = 'right';
-        }
-        break;
-      case 87:
-        if (directionL != 'down') {
-          directionL = 'up';
-        }
-        break;
-      case 83:
-        if (directionL != 'up') {
-          directionL = 'down';
-        }
-    }
-  }
+  // s.updateFruitCoordinates = function() {
+  //   xFruit = s.floor(s.random(10, (s.width - 100) / 10)) * 10;
+  //   yFruit = s.floor(s.random(10, (s.height - 100) / 10)) * 10;
+  // }
 };
 
 var snakeGame = new p5(sketch, 'snakeContainer');
