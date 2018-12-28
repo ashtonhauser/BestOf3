@@ -1,6 +1,3 @@
-#!/usr/bin/env node
- // Module dependencies.
-
 var app = require('./app');
 var debug = require('debug')('bestof3:server');
 var http = require('http');
@@ -89,12 +86,18 @@ snake.on('connection', function(socket) {
   })
 
   // handles rematch
-  socket.on('reset', function() {
-    console.log("recieved reset")
-    snake.emit('clientState', 'RESET')
+  socket.on('reset', function(data) {
+    if (clients[data].player == 1) {
+      p1Reset = true;
+    } else if (clients[data].player == 2) {
+      p2Reset = true;
+    }
+    if (p1Reset && p2Reset) {
+      snake.emit('clientState', 'RESET')
+      p1Reset = false;
+      p2Reset = false;
+    }
   })
-
-  // emitts client snakeCount on connect
 
   // broadcast keypresses and x y cords to socket
   socket.on('keypress', function(data) {

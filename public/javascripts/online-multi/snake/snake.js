@@ -3,7 +3,7 @@ var ready = document.getElementById('#option1')
 var clientCount;
 var clientState = 'NOT_READY';
 var socket = io.connect('http://localhost:3000/snake')
-var username = Math.floor(Math.random() * Math.floor(50))
+var username = Math.floor(Math.random() * Math.floor(500))
 var p1 = false;
 var p2 = false;
 socket.emit('add-user', {"username": username})
@@ -12,7 +12,9 @@ socket.emit('add-user', {"username": username})
 socket.on('playerNum', function(data) {
   if (data == 1) {
     p1 = true;
+    p2 = false;
   } else {
+    p1 = false;
     p2 = true;
   }
 })
@@ -249,7 +251,7 @@ var sketch = function(s) {
       scoreElemR.html('Player 2 wins!');
       button.style('display', 'block')
       $(".rematch").unbind().click(function() {
-        socket.emit('reset')
+        socket.emit('reset', username)
       })
     } else if ( xCorR[xCorR.length - 1] > s.width ||
                 xCorR[xCorR.length - 1] < 0 ||
@@ -262,11 +264,10 @@ var sketch = function(s) {
       scoreElemR.html('Player 2 lost!');
       button.style('display', 'block')
       $(".rematch").unbind().click(function() {
-        socket.emit('reset')
+        socket.emit('reset', username)
       })
     }
   }
-
 
   // move to server
   s.checkSnakeCollisionL = function() {

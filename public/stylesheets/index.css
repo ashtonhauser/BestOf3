@@ -3,7 +3,7 @@ body, html{
   margin: 0;
 }
 
-.pimg1, .pimg2, .pimg3 {
+.pimg1 {
   position: relative;
   background-position: center;
   background-size: cover;
@@ -17,21 +17,11 @@ body, html{
   position: relative;
 }
 
-.pimg2 {
-  background-image: url('../images/arcade-2.jpg');
-  min-height: 400px;
-}
-
-.pimg3 {
-  background-image: url('../images/arcade-4.jpg');
-  min-height: 400px;
-}
-
 .section{
   text-align: center;
   padding:50px 80px;
-  background-color: #f3dfb8;
-  color: black;
+  background-color: #353232;
+  color: white;
   height: 250px;
 }
 
