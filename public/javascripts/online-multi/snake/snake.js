@@ -140,7 +140,7 @@ var sketch = function(s) {
   }
 
   s.draw = function() {
-    s.background(0)
+    s.background(66, 75, 84)
     s.textAlign(s.CENTER, s.CENTER);
     s.textSize(100);
     s.text(text, s.width/2, s.height/2);
@@ -189,54 +189,54 @@ var sketch = function(s) {
   // should run on server
   // LEFT
   s.updateSnakeCoordinatesL = function() {
-      for (var i = 0; i < numSegmentsL - 1; i++) {
-        xCorL[i] = xCorL[i + 1];
-        yCorL[i] = yCorL[i + 1];
-      }
-      switch (directionL) {
-        case 'right':
-          xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] + diffL;
-          yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
-          break;
-        case 'up':
-          xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
-          yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] - diffL;
-          break;
-        case 'left':
-          xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] - diffL;
-          yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
-          break;
-        case 'down':
-          xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
-          yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] + diffL;
-          break;
-      }
+    for (var i = 0; i < numSegmentsL - 1; i++) {
+      xCorL[i] = xCorL[i + 1];
+      yCorL[i] = yCorL[i + 1];
+    }
+    switch (directionL) {
+      case 'right':
+        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] + diffL;
+        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
+        break;
+      case 'up':
+        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
+        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] - diffL;
+        break;
+      case 'left':
+        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] - diffL;
+        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
+        break;
+      case 'down':
+        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
+        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] + diffL;
+        break;
+    }
   }
 
   // should run on server
   s.updateSnakeCoordinatesR = function() {
-      for (var i = 0; i < numSegmentsR - 1; i++) {
-        xCorR[i] = xCorR[i + 1];
-        yCorR[i] = yCorR[i + 1];
-      }
-      switch (directionR) {
-        case 'right':
-          xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] + diffR;
-          yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
-          break;
-        case 'up':
-          xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
-          yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] - diffR;
-          break;
-        case 'left':
-          xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] - diffR;
-          yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
-          break;
-        case 'down':
-          xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
-          yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] + diffR;
-          break;
-      }
+    for (var i = 0; i < numSegmentsR - 1; i++) {
+      xCorR[i] = xCorR[i + 1];
+      yCorR[i] = yCorR[i + 1];
+    }
+    switch (directionR) {
+      case 'right':
+        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] + diffR;
+        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
+        break;
+      case 'up':
+        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
+        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] - diffR;
+        break;
+      case 'left':
+        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] - diffR;
+        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
+        break;
+      case 'down':
+        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
+        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] + diffR;
+        break;
+    }
   }
 
   s.checkGameStatus = function() {
