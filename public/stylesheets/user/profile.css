@@ -1,0 +1,74 @@
+.imgContainer{
+  border: solid;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+.progressBar{
+  border: solid;
+  border-radius: 10px;
+  border-color: black;
+  background-color: white;
+}
+
+.progress{
+  margin: 2px;
+  border-radius: 10px;
+  width: 1%;
+  background-color: gold;
+  height: 15px;
+}
+
+.profilePic{
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  padding: 5px;
+}
+
+.emailContainer{
+ display: inline-block;
+ vertical-align: bottom;
+ margin-left: 10px;
+}
+
+.profilecontainer, .onlineStats{
+  border: solid;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 6px 8px 6px -6px grey;
+}
+
+.onlineStatsTitleCont{
+  text-align: center;
+}
+
+.onlineStatsTitle{
+  padding-bottom: 2px;
+  border-bottom: 5px solid black;
+  border-radius: 5px;
+  font-size: 35px;
+}
+
+.importantStats{
+  text-align: center;
+  margin-left: -100%;
+}
+
+.wltitlecont{
+  text-align: center;
+}
+
+.wltitle{
+  border-bottom: 5px solid black;
+  font-size: 25px;
+  border-radius: 4px;
+}
+
+.wlcont{
+  text-align: center;
+  margin-top: 20px;
+  margin-left: -100%;
+}

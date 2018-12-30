@@ -8,7 +8,7 @@ router.get('/single', function(req, res) {
 });
 
 router.get('/single/:game_name', function(req, res) {
-  name = req.params.game_name
+  name = req.params.game_name;
   res.render(`game/single/${name}`, { user: req.currentUser })
 });
 
@@ -18,8 +18,12 @@ router.get('/multi/local', function(req, res) {
 });
 
 router.get('/multi/local/:game_name', function(req, res) {
-  name = req.params.game_name
+  name = req.params.game_name;
   res.render(`game/local-multi/${name}`, { user: req.currentUser })
+});
+
+router.get('/multi/local/bo3', function(req, res){
+  res.render('game/local-multi/bo3', { user: req.currentUser });
 });
 
 // ONLINE ROUTES

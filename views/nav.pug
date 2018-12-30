@@ -9,15 +9,17 @@ block content
           path(d="M0,23 30,23", stroke="#353232", stroke-width="5")
     a.home-button.navbar-brand(href="/") BestOf3
     - if (!user) {
+    span.nav-item.col-sm-1
+      a#login.nav-link(href="/user/login")='Login'
     span.nav-item
-      a#login.nav-link(href="/login")='Login'
-    span.nav-item
-      a#register.nav-link(href="/register")='Register'
+      a#register.nav-link(href="/user/register")='Register'
     - } else {
-    - if (!cannotLogout) {
+      - if (!cannotLogout) {
     span.nav-item
-      a#logout.nav-link(href="/logout")= 'Logout'
-    - }
+      a#logout.nav-link(href="/user/logout")= 'Logout'
+    span.nav-item
+      a#profile.nav-link(href="/user/profile")='Account'
+      - }
     - }
   div#side-menu.side-nav
     a.btn-close(href="#", onclick="closeSlideMenu()") &times;
