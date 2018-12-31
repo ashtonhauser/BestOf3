@@ -1,5 +1,44 @@
+var clientCount;
+var clientState = 'NOT_READY';
+var socket = io.connect('http://localhost:3000/tron')
+var username = Math.floor(Math.random() * Math.floor(500))
+var p1 = false;
+socket.emit('addUser', username)
+
+// sets player 1 or 2
+socket.on('playerNum', function(data) {
+  if (data == 1) {
+    p1 = true;
+  } else {
+    p1 = false;
+  }
+})
+
+// user count
+socket.on('counter', function (data) {
+  $("#counter").text(data.count);
+  clientCount = data.count;
+});
+
 var sketch = function(s) {
+  socket.on('clientState', function(data) {
+  console.log(`recieved state ${data}`)
+    clientState = data;
+    if (data == 'RESET') {
+      s.resetSketch();
+    } else if (data == 'PLAYER_LEFT') {
+      location.reload()
+    }
+  })
+
   var button;
+  var readyState;
+  var xFruit; // defined by server
+  var yFruit; // defined by server
+  var button;
+  var waitingDiv;
+  var text;
+  var gameOver;
 
   // LEFT
   var numSegmentsL;
@@ -42,11 +81,16 @@ var sketch = function(s) {
     button.style('display', 'none')
 
     s.resetSketch()
-
   }
 
 
   s.resetSketch = function() {
+    clientState = 'NOT_READY'
+    readyState = {'p1': p1, 'state': 'NOT_READY'}
+    socket.emit('clientReady', readyState)
+    text = 'ready';
+    gameOver = false;
+
     // LEFT
     numSegmentsL = 1;
     directionL = 'right';
@@ -75,6 +119,15 @@ var sketch = function(s) {
       xCorR.push(xStartR - (o * diffR));
       yCorR.push(yStartR);
     }
+
+    $(function() {
+      setTimeout(function() {
+        readyState = {'p1': p1, state: 'PLAYERS_READY'};
+        socket.emit('clientReady', readyState)
+        text = 'set'
+      }, 2500)
+    })
+
     s.draw()
     s.loop()
     scoreElemR.html('p2')
@@ -84,9 +137,23 @@ var sketch = function(s) {
 
   s.draw = function() {
     s.background(66, 75, 84)
+    s.textAlign(s.CENTER, s.CENTER);
+    s.textSize(100);
+    s.text(text, s.width/2, s.height/2);
 
-    s.drawL()
-    s.drawR()
+    if (clientState === 'PLAYERS_READY' && clientCount == 2) {
+      text = 'go'
+      s.drawL()
+      s.drawR()
+      socket.on('move', function(dir) {
+        directionL = dir.L.directionL || directionL;
+        directionR = dir.R.directionR || directionR;
+        xCorR = dir.R.xCorR || xCorR;
+        xCorL = dir.L.xCorL || xCorL;
+        yCorR = dir.R.yCorR || yCorR;
+        yCorL = dir.L.yCorL || yCorL;
+      })
+    }
   }
 
   s.drawL = function() {
@@ -216,46 +283,22 @@ var sketch = function(s) {
   }
 
   s.keyPressed = function() {
-    switch (s.keyCode) {
-      case 37:
-        if (directionR != 'right') {
-          directionR = 'left';
-        }
-        break;
-      case 39:
-        if (directionR != 'left') {
-          directionR = 'right';
-        }
-        break;
-      case 38:
-        if (directionR != 'down') {
-          directionR = 'up';
-        }
-        break;
-      case 40:
-        if (directionR != 'up') {
-          directionR = 'down';
-        }
-        break;
-      case 65:
-        if (directionL != 'right') {
-          directionL = 'left';
-        }
-        break;
-      case 68:
-        if (directionL != 'left') {
-          directionL = 'right';
-        }
-        break;
-      case 87:
-        if (directionL != 'down') {
-          directionL = 'up';
-        }
-        break;
-      case 83:
-        if (directionL != 'up') {
-          directionL = 'down';
-        }
+    let key = s.keyCode
+    let data = {
+      key,
+      'L': {xCorL, yCorL},
+      'R': {xCorR, yCorR}
+    }
+
+    // filters output based on player number
+    if (clientState === 'PLAYERS_READY' && gameOver === false) {
+      if (p1 && [65, 68, 87, 83].includes(key)) {
+        console.log("sent p1 key", key)
+        socket.emit('keypress', data)
+      } else if (p2 && [38, 39, 40, 37].includes(key)){
+        console.log("sent p2 key", key)
+        socket.emit('keypress', data)
+      }
     }
   }
 };

@@ -1,12 +1,10 @@
-var form = document.getElementsByClassName('.formm');
-var ready = document.getElementById('#option1')
 var clientCount;
 var clientState = 'NOT_READY';
 var socket = io.connect('http://localhost:3000/snake')
 var username = Math.floor(Math.random() * Math.floor(500))
 var p1 = false;
 var p2 = false;
-socket.emit('add-user', {"username": username})
+socket.emit('addUser', username)
 
 // sets player 1 or 2
 socket.on('playerNum', function(data) {
@@ -34,6 +32,7 @@ var sketch = function(s) {
       location.reload()
     }
   })
+
   var readyState;
   var xFruit; // defined by server
   var yFruit; // defined by server
@@ -145,6 +144,7 @@ var sketch = function(s) {
     s.textSize(100);
     s.text(text, s.width/2, s.height/2);
 
+    // change
     if (clientCount == 2 && waitingDiv) {
       waitingDiv.hide();
     } else if (clientCount < 2 && !waitingDiv){
