@@ -4,15 +4,29 @@ body, html{
   background: linear-gradient(to bottom, #424b54 0%,#646b73 35%,#fff9f7 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#424b54', endColorstr='#fff9f7',GradientType=0 );
 }
-/*
-.one{
-  margin-left: 50px;
-}*/
+#slick-slide00, #slick-slide01, #slick-slide02 {
+  background-color:none;
+}
+
+.prev {
+  position:absolute;
+  top:65px;
+  left:-100px;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.next {
+  position:absolute;
+  top:65px;
+  right:-75px;
+  font-size: 40px;
+  cursor: pointer;
+}
+
 .game{
   max-width: 200px;
-}
-.slick-track {
-  margin:auto;
+  padding-left: 1px;
 }
 
 .sectTitle {
@@ -26,14 +40,12 @@ body, html{
 }
 
 .contain{
-  margin-left: 50px;
-  margin-top: 50px;
+  margin: 50px;
   border-style: solid;
-  margin-right: 50px;
 }
 
 h2.gameName{
-  margin-top: 1%;
+  margin-top: 10px;
   color: black;
 }
 
