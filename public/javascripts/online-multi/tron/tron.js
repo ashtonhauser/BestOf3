@@ -145,6 +145,10 @@ var sketch = function(s) {
       text = 'go'
       s.drawL()
       s.drawR()
+      socket.emit('cords', {
+        'L': {xCorL: xCorL[numSegmentsL - 1], yCorL: yCorL[numSegmentsL - 1]},
+        'R': {xCorR: xCorR[numSegmentsR - 1], yCorR: yCorR[numSegmentsR - 1]}
+      })
       socket.on('move', function(dir) {
         directionL = dir.L.directionL || directionL;
         directionR = dir.R.directionR || directionR;
@@ -230,12 +234,13 @@ var sketch = function(s) {
         yCorL[yCorL.length - 1] < 0 ||
         s.checkSnakeCollisionL()) {
       s.noLoop();
-      scoreElemL.html('You lost!');
-      scoreElemR.html('You won!');
-      if (!s.button) {
-        button.style('display', 'block')
-        button.mousePressed(s.resetSketch);
-      }
+      gameOver = true;
+      scoreElemL.html('Player 1 lost!');
+      scoreElemR.html('Player 2 wins!');
+      button.style('display', 'block')
+      $(".rematch").unbind().click(function() {
+        socket.emit('reset', username)
+      })
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
         xCorR[xCorR.length - 1] < 0 ||
@@ -243,12 +248,13 @@ var sketch = function(s) {
         yCorR[yCorR.length - 1] < 0 ||
         s.checkSnakeCollisionR()) {
       s.noLoop();
-      scoreElemL.html('You won!');
-      scoreElemR.html('You lost!');
-      if (!s.button) {
-        button.style('display', 'block')
-        button.mousePressed(s.resetSketch);
-      }
+      gameOver = true;
+      scoreElemL.html('Player 1 wins!');
+      scoreElemR.html('Player 2 lost!');
+      button.style('display', 'block')
+      $(".rematch").unbind().click(function() {
+        socket.emit('reset', username)
+      })
     }
   }
 
@@ -284,6 +290,7 @@ var sketch = function(s) {
 
   s.keyPressed = function() {
     let key = s.keyCode
+    console.log(xCorR, xCorL)
     let data = {
       key,
       'L': {xCorL, yCorL},
@@ -295,7 +302,7 @@ var sketch = function(s) {
       if (p1 && [65, 68, 87, 83].includes(key)) {
         console.log("sent p1 key", key)
         socket.emit('keypress', data)
-      } else if (p2 && [38, 39, 40, 37].includes(key)){
+      } else if (!p1 && [38, 39, 40, 37].includes(key)){
         console.log("sent p2 key", key)
         socket.emit('keypress', data)
       }

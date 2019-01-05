@@ -33,6 +33,10 @@ var tronP2R = false;
 var tronP2Reset = false;
 var tDirectionL = 'right';
 var tDirectionR = 'left';
+var tronCordsLX = [];
+var tronCordsLY = [];
+var tronCordsRX = [];
+var tronCordsRY = [];
 
 // pong variables
 let pongCounter = 0;
@@ -77,16 +81,6 @@ tron.on('connection', function(socket) {
       tronP2R = true;
     }
 
-
-    // if (tClients[data.username].player == 1 && data.state == 'PLAYERS_READY') {
-    //   tronP1R = true;
-    // } else if (tClients[data.username].player == 2 && data.state == 'PLAYERS_READY') {
-    //   tronP2R = true;
-    // } else if (tClients[data.username].player == 1 && data.state != 'PLAYERS_READY') {
-    //   tronP1R = false;
-    // } else if (tClients[data.username].player == 2 && data.state != 'PLAYERS_READY') {
-    //   tronP2R = false;
-    // }
     console.log(tronP2R, tronP1R)
     if (tronP1R && tronP2R) {
       tron.emit('clientState', 'PLAYERS_READY')
@@ -151,10 +145,18 @@ tron.on('connection', function(socket) {
         }
     }
     let position = {
-      'L': {xCorL: data.L.xCorL, yCorL: data.L.yCorL, directionL: tDirectionL},
-      'R': {xCorR: data.R.xCorR, yCorR: data.R.yCorR, directionR: tDirectionR}
+      'L': {xCorL: tronCordsLX, yCorL: tronCordsLY, directionL: tDirectionL},
+      'R': {xCorR: tronCordsRX, yCorR: tronCordsRY, directionR: tDirectionR}
     }
+    console.log(position)
     tron.emit('move', position)
+  })
+
+  socket.on('cords', function(data) {
+    tronCordsRX += data.R.xCorR
+    tronCordsRY += data.R.yCorR
+    tronCordsLX += data.L.xCorL
+    tronCordsLY += data.L.yCorL
   })
 
   socket.on('disconnect', function() {
