@@ -16,7 +16,7 @@ client.query(
   )
 ).then(
   () => client.query(
-    'CREATE TABLE stats(user_id INTEGER REFERENCES users(id), game_id INTEGER REFERENCES games(id), wins INTEGER, losses INTEGER);'
+    'CREATE TABLE stats(user_id INTEGER REFERENCES users(id), game_id INTEGER REFERENCES games(id), wins INTEGER DEFAULT 0, losses INTEGER DEFAULT 0);'
   )
 ).then(
   () => client.end()
