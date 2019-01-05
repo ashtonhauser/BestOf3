@@ -1,26 +1,35 @@
 body, html{
-  height: 100%;
-  margin: 0;
-  background-color: #424B54;
+  background: -moz-linear-gradient(top, #424b54 0%, #646b73 35%, #fff9f7 100%);
+  background: -webkit-linear-gradient(top, #424b54 0%,#646b73 35%,#fff9f7 100%);
+  background: linear-gradient(to bottom, #424b54 0%,#646b73 35%,#fff9f7 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#424b54', endColorstr='#fff9f7',GradientType=0 );
+}
+/*
+.one{
+  margin-left: 50px;
+}*/
+.game{
+  max-width: 200px;
+}
+.slick-track {
+  margin:auto;
 }
 
-.flex-inner {
-  min-width:0;
-  max-height:0;
-}
 .sectTitle {
-  color: #E8E3E1;
+  color: black;
   text-align: center;
 }
 
 .local, .single, .online{
-  width: 800px;
+  width: 200px;
   margin: 0 auto;
 }
 
 .contain{
   margin-left: 50px;
-  margin-bottom: 50px;
+  margin-top: 50px;
+  border-style: solid;
+  margin-right: 50px;
 }
 
 h2.gameName{
@@ -36,7 +45,6 @@ img.static{
 }
 
 img.gif{
-  position: relative;
   height: 200px;
   width: 200px;
   z-index: 1;
@@ -52,24 +60,6 @@ img.static:hover{
   font-size: 100px;
   font-family: 'alien', sans-serif;
   color: #eaeaea;
-}
-
-button.btn-primary{
-  margin: 5px;
-  background-color: rgb(223,181,73);
-  border-color: rgb(223,181,73);
-  border-width: 3px;
-}
-
-button.btn-primary:hover{
-  background-color: rgb(215,59,37);
-  border-color: rgb(202,29,38);
-}
-
-#single:focus, #multi:focus{
-  background-color: rgb(151,26,57);
-  border-color: rgb(98,15,54);
-  outline: 0 none;
 }
 
 
