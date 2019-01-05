@@ -1,0 +1,13 @@
+extends ../../layout
+
+block content
+  link(rel="stylesheet", href="/stylesheets/local-multi/snake.css")
+  script(src="/javascripts/local-multi/tron/tron.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
+  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
+
+  body
+    include ../../nav.pug
+    div#actual-body
+      div#snakeContainer

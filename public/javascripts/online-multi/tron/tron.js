@@ -1,19 +1,16 @@
 var clientCount;
 var clientState = 'NOT_READY';
-var socket = io.connect('http://localhost:3000/snake')
+var socket = io.connect('http://localhost:3000/tron')
 var username = Math.floor(Math.random() * Math.floor(500))
 var p1 = false;
-var p2 = false;
 socket.emit('addUser', username)
 
 // sets player 1 or 2
 socket.on('playerNum', function(data) {
   if (data == 1) {
     p1 = true;
-    p2 = false;
   } else {
     p1 = false;
-    p2 = true;
   }
 })
 
@@ -25,6 +22,7 @@ socket.on('counter', function (data) {
 
 var sketch = function(s) {
   socket.on('clientState', function(data) {
+  console.log(`recieved state ${data}`)
     clientState = data;
     if (data == 'RESET') {
       s.resetSketch();
@@ -33,6 +31,7 @@ var sketch = function(s) {
     }
   })
 
+  var button;
   var readyState;
   var xFruit; // defined by server
   var yFruit; // defined by server
@@ -41,28 +40,34 @@ var sketch = function(s) {
   var text;
   var gameOver;
 
-  var numSegmentsL; // defined by server
-  var directionL; // defined by server
+  // LEFT
+  var numSegmentsL;
+  var directionL;
   var xStartL;
   var yStartL;
   var diffL;
-  var xCorL;  // defined by server
-  var yCorL;  // defined by server
+
+  var xCorL;
+  var yCorL;
+
   var scoreElemL;
 
-  var numSegmentsR; // defined by server
-  var directionR; // defined by server
+  // RIGHT
+  var numSegmentsR;
+  var directionR;
   var xStartR;
   var yStartR;
   var diffR;
-  var xCorR; // defined by server
-  var yCorR; // defined by server
-  var scoreElemR;
 
+  var xCorR;
+  var yCorR;
+
+  var scoreElemR;
 
   s.setup = function() {
     s.createCanvas(1000, 500);
-    s.frameRate(15);
+
+    s.frameRate(35);
     s.stroke(255);
     s.strokeWeight(10);
 
@@ -78,19 +83,18 @@ var sketch = function(s) {
     s.resetSketch()
   }
 
+
   s.resetSketch = function() {
     clientState = 'NOT_READY'
-    readyState = {'username': username, 'state': 'NOT_READY'}
+    readyState = {'p1': p1, 'state': 'NOT_READY'}
     socket.emit('clientReady', readyState)
-    text = 'loading...';
-    xFruit= 0;
-    yFruit = 0;
+    text = 'ready';
     gameOver = false;
 
     // LEFT
-    numSegmentsL = 20;
+    numSegmentsL = 1;
     directionL = 'right';
-    xStartL = 10;
+    xStartL = 200;
     yStartL = 250;
     diffL = 10;
 
@@ -98,16 +102,14 @@ var sketch = function(s) {
     yCorL = [];
 
     // RIGHT
-    numSegmentsR = 20;
+    numSegmentsR = 1;
     directionR = 'left';
-    xStartR = 1000;
+    xStartR = 800;
     yStartR = 250;
     diffR = 10;
 
     xCorR = [];
     yCorR = [];
-
-    // s.updateFruitCoordinates();
 
     for (var i = 0; i < numSegmentsL; i++) {
       xCorL.push(xStartL + (i * diffL));
@@ -118,16 +120,11 @@ var sketch = function(s) {
       yCorR.push(yStartR);
     }
 
-    if (clientCount < 2){
-      waitingDiv = s.createDiv('Waiting for second player...').id('matching')
-    }
-
-    // on document load + 2.5 seconds alert server clientstate ready
     $(function() {
       setTimeout(function() {
-        readyState = {'username': username, state: 'PLAYERS_READY'};
+        readyState = {'p1': p1, state: 'PLAYERS_READY'};
         socket.emit('clientReady', readyState)
-        text = 'ready'
+        text = 'set'
       }, 2500)
     })
 
@@ -144,18 +141,14 @@ var sketch = function(s) {
     s.textSize(100);
     s.text(text, s.width/2, s.height/2);
 
-    // change
-    if (clientCount == 2 && waitingDiv) {
-      waitingDiv.hide();
-    } else if (clientCount < 2 && !waitingDiv){
-      waitingDiv.show();
-    }
-
     if (clientState === 'PLAYERS_READY' && clientCount == 2) {
       text = 'go'
       s.drawL()
       s.drawR()
-      s.checkGameStatus();
+      socket.emit('cords', {
+        'L': {xCorL: xCorL[numSegmentsL - 1], yCorL: yCorL[numSegmentsL - 1]},
+        'R': {xCorR: xCorR[numSegmentsR - 1], yCorR: yCorR[numSegmentsR - 1]}
+      })
       socket.on('move', function(dir) {
         directionL = dir.L.directionL || directionL;
         directionR = dir.R.directionR || directionR;
@@ -168,30 +161,27 @@ var sketch = function(s) {
   }
 
   s.drawL = function() {
-    s.stroke(44,35,85)
+    s.stroke(130, 240, 240)
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
     s.updateSnakeCoordinatesL();
-    // s.checkForFruitL();
+    s.checkGameStatus();
   }
 
   s.drawR = function() {
-    s.stroke(37,97,105)
+    s.stroke(240,84,79)
     for (var i = 0; i < numSegmentsR - 1; i++) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
     s.updateSnakeCoordinatesR();
-    // s.checkForFruitR();
+    s.checkGameStatus();
   }
 
-  // should run on server
-  // LEFT
   s.updateSnakeCoordinatesL = function() {
-    for (var i = 0; i < numSegmentsL - 1; i++) {
-      xCorL[i] = xCorL[i + 1];
-      yCorL[i] = yCorL[i + 1];
-    }
+    numSegmentsL++
+    xCorL.push(xCorL[numSegmentsL.length - 1] + 1)
+    yCorL.push(yCorL[numSegmentsL.length - 1] + 1)
     switch (directionL) {
       case 'right':
         xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] + diffL;
@@ -212,12 +202,10 @@ var sketch = function(s) {
     }
   }
 
-  // should run on server
   s.updateSnakeCoordinatesR = function() {
-    for (var i = 0; i < numSegmentsR - 1; i++) {
-      xCorR[i] = xCorR[i + 1];
-      yCorR[i] = yCorR[i + 1];
-    }
+    numSegmentsR++
+    xCorR.push(xCorR[numSegmentsR.length - 1] - 1)
+    yCorR.push(yCorR[numSegmentsR.length - 1] - 1)
     switch (directionR) {
       case 'right':
         xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] + diffR;
@@ -238,6 +226,7 @@ var sketch = function(s) {
     }
   }
 
+  // user wins when other opponent is killed
   s.checkGameStatus = function() {
     if (xCorL[xCorL.length - 1] > s.width ||
         xCorL[xCorL.length - 1] < 0 ||
@@ -246,31 +235,20 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
-      if (p1) {
-        socket.emit('l', user_id);
-      }
-      if (p2) {
-        socket.emit('w', user_id);
-      }
       scoreElemL.html('Player 1 lost!');
       scoreElemR.html('Player 2 wins!');
       button.style('display', 'block')
       $(".rematch").unbind().click(function() {
         socket.emit('reset', username)
       })
-    } else if ( xCorR[xCorR.length - 1] > s.width ||
-                xCorR[xCorR.length - 1] < 0 ||
-                yCorR[yCorR.length - 1] > s.height ||
-                yCorR[yCorR.length - 1] < 0 ||
-                s.checkSnakeCollisionR()) {
+    } else if (
+        xCorR[xCorR.length - 1] > s.width ||
+        xCorR[xCorR.length - 1] < 0 ||
+        yCorR[yCorR.length - 1] > s.height ||
+        yCorR[yCorR.length - 1] < 0 ||
+        s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
-      if (p1) {
-        socket.emit('w', user_id);
-      }
-      if (p2) {
-        socket.emit('l', user_id);
-      }
       scoreElemL.html('Player 1 wins!');
       scoreElemR.html('Player 2 lost!');
       button.style('display', 'block')
@@ -280,7 +258,6 @@ var sketch = function(s) {
     }
   }
 
-  // move to server
   s.checkSnakeCollisionL = function() {
     s.snakeHeadXL = xCorL[xCorL.length - 1];
     s.snakeHeadYL = yCorL[yCorL.length - 1];
@@ -296,7 +273,6 @@ var sketch = function(s) {
     }
   }
 
-  // move to server
   s.checkSnakeCollisionR = function() {
     s.snakeHeadXR = xCorR[xCorR.length - 1];
     s.snakeHeadYR = yCorR[yCorR.length - 1];
@@ -313,8 +289,9 @@ var sketch = function(s) {
   }
 
   s.keyPressed = function() {
-    var key = s.keyCode
-    var data = {
+    let key = s.keyCode
+    console.log(xCorR, xCorL)
+    let data = {
       key,
       'L': {xCorL, yCorL},
       'R': {xCorR, yCorR}
@@ -325,40 +302,14 @@ var sketch = function(s) {
       if (p1 && [65, 68, 87, 83].includes(key)) {
         console.log("sent p1 key", key)
         socket.emit('keypress', data)
-      } else if (p2 && [38, 39, 40, 37].includes(key)){
+      } else if (!p1 && [38, 39, 40, 37].includes(key)){
         console.log("sent p2 key", key)
         socket.emit('keypress', data)
       }
     }
   }
-
-  // s.checkForFruitL = function() {
-  //   s.stroke(200)
-  //   s.point(xFruit, yFruit);
-  //   if (xCorL[xCorL.length - 1] === xFruit && yCorL[yCorL.length - 1] === yFruit) {
-  //     xCorL.unshift(xCorL[0]);
-  //     yCorL.unshift(yCorL[0]);
-  //     numSegmentsL++;
-  //     s.updateFruitCoordinates();
-  //   }
-  // }
-
-  // s.checkForFruitR = function() {
-  //   s.stroke(200)
-  //   s.point(xFruit, yFruit);
-  //   if (xCorR[xCorR.length - 1] === xFruit && yCorR[yCorR.length - 1] === yFruit) {
-  //     xCorR.unshift(xCorR[0]);
-  //     yCorR.unshift(yCorR[0]);
-  //     numSegmentsR++;
-  //     s.updateFruitCoordinates();
-  //   }
-  // }
-
-  // setup to spawn both fruits consistently through clients
-  // s.updateFruitCoordinates = function() {
-  //   xFruit = s.floor(s.random(10, (s.width - 100) / 10)) * 10;
-  //   yFruit = s.floor(s.random(10, (s.height - 100) / 10)) * 10;
-  // }
 };
 
-var snakeGame = new p5(sketch, 'snakeContainer');
+var snakeGame = new p5(sketch, 'snakeContainer')
+
+

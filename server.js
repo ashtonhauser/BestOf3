@@ -27,69 +27,214 @@ const server = http.createServer(app);
 
 var io = socket(server);
 
-var clients = {};
-var p1R = false;
-var p1Reset = false;
-var p2R = false;
-var p2Reset = false;
-var snakeCount = 0;
-var directionL = 'right';
-var directionR = 'left';
+// snake variables
+var sClients = {};
+var snakeP1R = false;
+var snakeP1Reset = false;
+var snakeP2R = false;
+var snakeP2Reset = false;
+var sDirectionL = 'right';
+var sDirectionR = 'left';
 
+// tron variables
+var tClients = {};
+var tronP1R = false;
+var tronP1Reset = false;
+var tronP2R = false;
+var tronP2Reset = false;
+var tDirectionL = 'right';
+var tDirectionR = 'left';
+var tronCordsLX = [];
+var tronCordsLY = [];
+var tronCordsRX = [];
+var tronCordsRY = [];
+
+// pong variables
 let pongCounter = 0;
 let pongKeys = [];
 
+const tron = io.of('/tron')
 const snake = io.of('/snake');
 const pong = io.of('/pong');
 
-// SNAKE HANDLING
-snake.on('connection', function(socket) {
-  console.log("connected to snake socket")
-  // Kicks user if 2 connected already
-  if (snakeCount >= 2) {
+// TRON HANDLING
+tron.on('connection', function(socket) {
+  console.log('client attempting connection to tron')
+
+  if (Object.keys(tClients).length >= 2) {
     socket.disconnect()
-    console.log("booted client, max reached")
+    console.log('refused connection, max clients')
   }
 
-  // adds username to client
-  socket.on('add-user', function(data) {
-    let p1 = false;
-    for (var key in clients) {
-      if (key.player = 1) {
-        p1 = true;
-      }
-    }
-    if (p1) {
+  socket.on('addUser', function(data) {
+    if (Object.keys(tClients).length > 0) {
       socket.emit('playerNum', 2)
-      clients[data.username] = {
+      tClients[data] = {
         "socket": socket.id,
         "player": 2
       }
     } else {
       socket.emit('playerNum', 1)
-      clients[data.username] = {
+      tClients[data] = {
         "socket": socket.id,
         "player": 1
       }
     }
-    snakeCount = Object.keys(clients).length;
-    snake.emit('counter', {count: snakeCount})
+    tron.emit('counter', {count: Object.keys(tClients).length})
+  })
+
+  socket.on('clientReady', function(data) {
+    console.log(`recieved ready status from client ${data.p1}, ${data.state}`)
+
+    if (data.p1 && data.state == 'PLAYERS_READY') {
+      tronP1R = true;
+    } else if (!data.p1 && data.state == 'PLAYERS_READY') {
+      tronP2R = true;
+    }
+
+    console.log(tronP2R, tronP1R)
+    if (tronP1R && tronP2R) {
+      tron.emit('clientState', 'PLAYERS_READY')
+    } else {
+      tron.emit('clientState', 'NOT_READY')
+    }
+  })
+
+  socket.on('reset', function(data) {
+    if (tClients[data].player == 1) {
+      tronP1Reset = true;
+    } else if (tClients[data].player == 2) {
+      tronP2Reset = true;
+    }
+    if (tronP1Reset && tronP2Reset) {
+      tron.emit('clientState', 'RESET')
+      tronP1Reset = false;
+      tronP2Reset = false;
+    }
+  })
+
+  socket.on('keypress', function(data) {
+    switch (data.key) {
+      case 37:
+        if (tDirectionR != 'right') {
+          tDirectionR = 'left';
+        }
+        break;
+      case 39:
+        if (tDirectionR != 'left') {
+          tDirectionR = 'right';
+        }
+        break;
+      case 38:
+        if (tDirectionR != 'down') {
+          tDirectionR = 'up';
+        }
+        break;
+      case 40:
+        if (tDirectionR != 'up') {
+          tDirectionR = 'down';
+        }
+        break;
+      case 65:
+        if (tDirectionL != 'right') {
+          tDirectionL = 'left';
+        }
+        break;
+      case 68:
+        if (tDirectionL != 'left') {
+          tDirectionL = 'right';
+        }
+        break;
+      case 87:
+        if (tDirectionL != 'down') {
+          tDirectionL = 'up';
+        }
+        break;
+      case 83:
+        if (tDirectionL != 'up') {
+          tDirectionL = 'down';
+        }
+    }
+    let position = {
+      'L': {xCorL: tronCordsLX, yCorL: tronCordsLY, directionL: tDirectionL},
+      'R': {xCorR: tronCordsRX, yCorR: tronCordsRY, directionR: tDirectionR}
+    }
+    console.log(position)
+    tron.emit('move', position)
+  })
+
+  socket.on('cords', function(data) {
+    tronCordsRX += data.R.xCorR
+    tronCordsRY += data.R.yCorR
+    tronCordsLX += data.L.xCorL
+    tronCordsLY += data.L.yCorL
+  })
+
+  socket.on('disconnect', function() {
+    console.log('client dissconected')
+    for (var key in tClients) {
+      if (tClients[key].player == 2) {
+        tClients[key].player = 1
+        tron.emit('playerNum', 1)
+      }
+      if (socket.id == tClients[key].socket) {
+        delete tClients[key];
+        tron.emit('clientState', 'PLAYER_LEFT')
+        sDirectionR = 'left'
+        sDirectionL = 'right'
+      }
+    }
+    tron.emit('counter', {count: Object.keys(sClients).length});
+  })
+})
+
+// SNAKE HANDLING
+snake.on('connection', function(socket) {
+  console.log("client attempting connection to snake")
+  // Kicks user if 2 connected already
+  if (Object.keys(sClients).length >= 2) {
+    socket.disconnect()
+    console.log("booted client, max reached")
+  }
+
+  // adds username to client
+  socket.on('addUser', function(data) {
+    let p1 = false;
+    for (var key in sClients) {
+      if (key.player == 1) {
+        p1 = true;
+      }
+    }
+    if (p1) {
+      socket.emit('playerNum', 2)
+      sClients[data] = {
+        "socket": socket.id,
+        "player": 2
+      }
+    } else {
+      socket.emit('playerNum', 1)
+      sClients[data] = {
+        "socket": socket.id,
+        "player": 1
+      }
+    }
+    snake.emit('counter', {count: Object.keys(sClients).length})
   })
 
   // Checks if both players ready
   socket.on('clientReady', function(data) {
     console.log(`recieved ready status from client ${data.username}, ${data.state}`)
 
-    if (clients[data.username].player == 1 && data.state == 'PLAYERS_READY') {
-      p1R = true;
-    } else if (clients[data.username].player == 2 && data.state == 'PLAYERS_READY') {
-      p2R = true;
-    } else if (clients[data.username].player == 1 && data.state != 'PLAYERS_READY') {
-      p1R = false;
-    } else if (clients[data.username].player == 2 && data.state != 'PLAYERS_READY') {
-      p2R = false;
+    if (sClients[data.username].player == 1 && data.state == 'PLAYERS_READY') {
+      snakeP1R = true;
+    } else if (sClients[data.username].player == 2 && data.state == 'PLAYERS_READY') {
+      snakeP2R = true;
+    } else if (sClients[data.username].player == 1 && data.state != 'PLAYERS_READY') {
+      snakeP1R = false;
+    } else if (sClients[data.username].player == 2 && data.state != 'PLAYERS_READY') {
+      snakeP2R = false;
     }
-    if (p1R && p2R) {
+    if (snakeP1R && snakeP2R) {
       snake.emit('clientState', 'PLAYERS_READY')
     } else {
       snake.emit('clientState', 'NOT_READY')
@@ -98,15 +243,15 @@ snake.on('connection', function(socket) {
 
   // handles rematch
   socket.on('reset', function(data) {
-    if (clients[data].player == 1) {
-      p1Reset = true;
-    } else if (clients[data].player == 2) {
-      p2Reset = true;
+    if (sClients[data].player == 1) {
+      snakeP1Reset = true;
+    } else if (sClients[data].player == 2) {
+      snakeP2Reset = true;
     }
-    if (p1Reset && p2Reset) {
+    if (snakeP1Reset && snakeP2Reset) {
       snake.emit('clientState', 'RESET')
-      p1Reset = false;
-      p2Reset = false;
+      snakeP1Reset = false;
+      snakeP2Reset = false;
     }
   })
 
@@ -114,49 +259,48 @@ snake.on('connection', function(socket) {
   socket.on('keypress', function(data) {
     switch (data.key) {
       case 37:
-        if (directionR != 'right') {
-          directionR = 'left';
+        if (sDirectionR != 'right') {
+          sDirectionR = 'left';
         }
         break;
       case 39:
-        if (directionR != 'left') {
-          directionR = 'right';
+        if (sDirectionR != 'left') {
+          sDirectionR = 'right';
         }
         break;
       case 38:
-        if (directionR != 'down') {
-          directionR = 'up';
+        if (sDirectionR != 'down') {
+          sDirectionR = 'up';
         }
         break;
       case 40:
-        if (directionR != 'up') {
-          directionR = 'down';
+        if (sDirectionR != 'up') {
+          sDirectionR = 'down';
         }
         break;
       case 65:
-        if (directionL != 'right') {
-          directionL = 'left';
+        if (sDirectionL != 'right') {
+          sDirectionL = 'left';
         }
         break;
       case 68:
-        if (directionL != 'left') {
-          directionL = 'right';
+        if (sDirectionL != 'left') {
+          sDirectionL = 'right';
         }
         break;
       case 87:
-        if (directionL != 'down') {
-          directionL = 'up';
+        if (sDirectionL != 'down') {
+          sDirectionL = 'up';
         }
         break;
       case 83:
-        if (directionL != 'up') {
-          directionL = 'down';
+        if (sDirectionL != 'up') {
+          sDirectionL = 'down';
         }
     }
-    // put in let
-    position = {
-      'L': {xCorL: data.L.xCorL, yCorL: data.L.yCorL, directionL: directionL},
-      'R': {xCorR: data.R.xCorR, yCorR: data.R.yCorR, directionR: directionR}
+    let position = {
+      'L': {xCorL: data.L.xCorL, yCorL: data.L.yCorL, directionL: sDirectionL},
+      'R': {xCorR: data.R.xCorR, yCorR: data.R.yCorR, directionR: sDirectionR}
     }
     snake.emit('move', position)
   })
@@ -190,20 +334,19 @@ snake.on('connection', function(socket) {
   // on discconect tell remaining client to refresh
   socket.on('disconnect', function() {
     console.log('client dissconected')
-    for (var key in clients) {
-      if (clients[key].player == 2) {
-        clients[key].player = 1
+    for (var key in sClients) {
+      if (sClients[key].player == 2) {
+        sClients[key].player = 1
         snake.emit('playerNum', 1)
       }
-      if (socket.id == clients[key].socket) {
-        delete clients[key];
-        snakeCount = Object.keys(clients).length;
+      if (socket.id == sClients[key].socket) {
+        delete sClients[key];
         snake.emit('clientState', 'PLAYER_LEFT')
-        directionR = 'left'
-        directionL = 'right'
+        sDirectionR = 'left'
+        sDirectionL = 'right'
       }
     }
-    snake.emit('counter', {count: snakeCount});
+    snake.emit('counter', {count: Object.keys(sClients).length});
   })
 })
 

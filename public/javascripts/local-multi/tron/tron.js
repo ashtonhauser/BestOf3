@@ -1,6 +1,4 @@
 var sketch = function(s) {
-  var xFruit;
-  var yFruit;
   var button;
 
   // LEFT
@@ -30,7 +28,7 @@ var sketch = function(s) {
   s.setup = function() {
     s.createCanvas(1000, 500);
 
-    s.frameRate(15);
+    s.frameRate(35);
     s.stroke(255);
     s.strokeWeight(10);
 
@@ -44,35 +42,31 @@ var sketch = function(s) {
     button.style('display', 'none')
 
     s.resetSketch()
+
   }
 
 
   s.resetSketch = function() {
-    xFruit= 0;
-    yFruit = 0;
-
     // LEFT
-    numSegmentsL = 30;
+    numSegmentsL = 1;
     directionL = 'right';
-    xStartL = 10;
+    xStartL = 200;
     yStartL = 250;
     diffL = 10;
 
     xCorL = [];
     yCorL = [];
 
-
     // RIGHT
-    numSegmentsR = 30;
+    numSegmentsR = 1;
     directionR = 'left';
-    xStartR = 1000;
+    xStartR = 800;
     yStartR = 250;
     diffR = 10;
 
     xCorR = [];
     yCorR = [];
 
-    s.updateFruitCoordinates();
     for (var i = 0; i < numSegmentsL; i++) {
       xCorL.push(xStartL + (i * diffL));
       yCorL.push(yStartL);
@@ -96,30 +90,27 @@ var sketch = function(s) {
   }
 
   s.drawL = function() {
-    s.stroke(6, 214, 160)
+    s.stroke(130, 240, 240)
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
     s.updateSnakeCoordinatesL();
-    s.checkForFruitL();
     s.checkGameStatus();
   }
 
   s.drawR = function() {
-    s.stroke(240, 84, 79)
+    s.stroke(240,84,79)
     for (var i = 0; i < numSegmentsR - 1; i++) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
     s.updateSnakeCoordinatesR();
-    s.checkForFruitR();
     s.checkGameStatus();
   }
 
   s.updateSnakeCoordinatesL = function() {
-    for (var i = 0; i < numSegmentsL - 1; i++) {
-      xCorL[i] = xCorL[i + 1];
-      yCorL[i] = yCorL[i + 1];
-    }
+    numSegmentsL++
+    xCorL.push(xCorL[numSegmentsL.length - 1] + 1)
+    yCorL.push(yCorL[numSegmentsL.length - 1] + 1)
     switch (directionL) {
       case 'right':
         xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] + diffL;
@@ -141,10 +132,9 @@ var sketch = function(s) {
   }
 
   s.updateSnakeCoordinatesR = function() {
-    for (var i = 0; i < numSegmentsR - 1; i++) {
-      xCorR[i] = xCorR[i + 1];
-      yCorR[i] = yCorR[i + 1];
-    }
+    numSegmentsR++
+    xCorR.push(xCorR[numSegmentsR.length - 1] - 1)
+    yCorR.push(yCorR[numSegmentsR.length - 1] - 1)
     switch (directionR) {
       case 'right':
         xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] + diffR;
@@ -223,36 +213,6 @@ var sketch = function(s) {
         return true;
       }
     }
-  }
-
-
-  s.checkForFruitL = function() {
-    s.stroke(200)
-    s.point(xFruit, yFruit);
-    if (xCorL[xCorL.length - 1] === xFruit && yCorL[yCorL.length - 1] === yFruit) {
-      xCorL.unshift(xCorL[0]);
-      yCorL.unshift(yCorL[0]);
-      numSegmentsL++;
-      s.updateFruitCoordinates();
-    }
-  }
-
-  s.checkForFruitR = function() {
-    s.stroke(200)
-    s.point(xFruit, yFruit);
-    if (xCorR[xCorR.length - 1] === xFruit && yCorR[yCorR.length - 1] === yFruit) {
-      xCorR.unshift(xCorR[0]);
-      yCorR.unshift(yCorR[0]);
-      numSegmentsR++;
-      s.updateFruitCoordinates();
-    }
-  }
-
-  // create one fruit spawn which both snakes can consume
-  s.updateFruitCoordinates = function() {
-    s.stroke(200)
-    xFruit = s.floor(s.random(10, (s.width - 100) / 10)) * 10;
-    yFruit = s.floor(s.random(10, (s.height - 100) / 10)) * 10;
   }
 
   s.keyPressed = function() {

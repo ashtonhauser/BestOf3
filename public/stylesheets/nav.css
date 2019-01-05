@@ -2,6 +2,7 @@
   overflow:hidden;
   height:63px;
   font-family: 'Press Start 2P', sans-serif;
+  background-color: #424B54;
 }
 
 a.open-slide {
@@ -31,7 +32,7 @@ a.open-slide {
   top:0;
   left:0;
   background-color:#111;
-  opacity:0.9;
+  opacity:1;
   overflow-x:hidden;
   padding-top:60px;
   transition:0.5s;

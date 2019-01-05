@@ -2,20 +2,55 @@ extends layout
 
 block content
   link(rel='stylesheet', href='/stylesheets/index.css')
+  link(rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css")
+
 
   body
-    div.pimg1
-      div.ptext
-        h1#indextitle BestOf3
-        p.description Welcome to best of 3, the online retro arcade utilizing only p5.js and socket.io. These simple games aim to provide a modern flashback of the arcade era and create a fun user experience!
+    h1#indextitle BestOf3
+
+    div.contain
+      h1.sectTitle Single Player Games
+      div.single
+        div.game.one
+          a(href='/game/single/snake')
+            img.static(src="/images/snake_static.png")
+            img.gif(src="/images/snake.gif")
+          h2.gameName Snake
+
+    div.contain
+      h1.sectTitle Local Player Games
+      div.local
+        div.game.one
+          a(href='/game/multi/local/snake')
+            img.static(src="/images/snake_static.png")
+            img.gif(src="/images/snake.gif")
+          h2.gameName Snake V Snake
+        div.game
+          a(href='/game/multi/local/pong')
+            img.static(src="/images/pong_static.png")
+            img.gif(src="/images/pong.gif")
+          h2.gameName Pong
+        div.game
+          a(href='/game/multi/local/tron')
+            img.static(src="/images/tron_static.png")
+            img.gif(src="/images/tron.gif")
+          h2.gameName Tron
+
+    div.contain
+      h1.sectTitle Online Player Games
+      div.online
+        div.game.one
+          a(href='/game/multi/online/snake')
+            img.static(src="/images/snake_static.png")
+            img.gif(src="/images/snake.gif")
+          h2.gameName Snake V Snake
+        div.game
+          a(href='/game/multi/online/tron')
+            img.static(src="/images/tron_static.png")
+            img.gif(src="/images/tron.gif")
+          h2.gameName Tron
 
 
-    section.section
-      h2.section1 play
-      p djnanfsdkjnl
-      a(href='/game/single')
-        button(id= 'single', type='button', class= 'btn btn-primary') Single Player
-      a(href='/game/multi/local')
-        button(id= 'multi', type='button', class= 'btn btn-primary') Local Multiplayer
-      a(href='/game/multi/online')
-        button(id= 'multi', type='button', class= 'btn btn-primary') Online Multiplayer
+      script(type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js")
+      script(type="text/javascript", src='/javascripts/index.js')
+

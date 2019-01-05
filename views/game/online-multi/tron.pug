@@ -1,0 +1,17 @@
+extends ../../layout
+
+block content
+  include ../../nav.pug
+  link(href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet")
+  link(rel="stylesheet", href="/stylesheets/online-multi/tron.css")
+
+  body
+    div#snakeContainer
+    div#countContainer
+      h2.count User count:
+        span#counter
+
+    script(src="/javascripts/online-multi/tron/tron.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")

@@ -128,7 +128,7 @@ var pong = function(p){
     };
 
     p.draw = function(){
-      p.background(0);
+      p.background(66, 75, 84);
       p.left = p.PaddleLeft;
       p.right = p.PaddleRight;
       if (p.Puck.gameover === 'leftwin') {
