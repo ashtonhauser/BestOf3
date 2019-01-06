@@ -30,7 +30,7 @@ var sketch = function(s) {
   s.setup = function() {
     s.createCanvas(1000, 500);
 
-    s.frameRate(15);
+    s.frameRate(20);
     s.stroke(255);
     s.strokeWeight(10);
 
@@ -89,10 +89,12 @@ var sketch = function(s) {
   }
 
   s.draw = function() {
-    s.background(66, 75, 84)
+    s.background(37, 40, 57)
 
     s.drawL()
     s.drawR()
+
+    s.checkGameStatus();
   }
 
   s.drawL = function() {
@@ -102,7 +104,6 @@ var sketch = function(s) {
     }
     s.updateSnakeCoordinatesL();
     s.checkForFruitL();
-    s.checkGameStatus();
   }
 
   s.drawR = function() {
@@ -112,7 +113,6 @@ var sketch = function(s) {
     }
     s.updateSnakeCoordinatesR();
     s.checkForFruitR();
-    s.checkGameStatus();
   }
 
   s.updateSnakeCoordinatesL = function() {

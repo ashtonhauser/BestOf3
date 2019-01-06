@@ -83,10 +83,12 @@ var sketch = function(s) {
   }
 
   s.draw = function() {
-    s.background(66, 75, 84)
+    s.background(37, 40, 57)
 
     s.drawL()
     s.drawR()
+
+    s.checkGameStatus();
   }
 
   s.drawL = function() {
@@ -95,7 +97,6 @@ var sketch = function(s) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
     s.updateSnakeCoordinatesL();
-    s.checkGameStatus();
   }
 
   s.drawR = function() {
@@ -104,7 +105,6 @@ var sketch = function(s) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
     s.updateSnakeCoordinatesR();
-    s.checkGameStatus();
   }
 
   s.updateSnakeCoordinatesL = function() {
