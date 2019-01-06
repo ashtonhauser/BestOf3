@@ -92,7 +92,6 @@ tron.on('connection', function(socket) {
       tronP2R = true;
     }
 
-    console.log(tronP2R, tronP1R)
     if (tronP1R && tronP2R) {
       tron.emit('clientState', 'PLAYERS_READY')
     } else {
@@ -199,13 +198,7 @@ snake.on('connection', function(socket) {
 
   // adds username to client
   socket.on('addUser', function(data) {
-    let p1 = false;
-    for (var key in sClients) {
-      if (key.player == 1) {
-        p1 = true;
-      }
-    }
-    if (p1) {
+    if (Object.keys(sClients).length > 0) {
       socket.emit('playerNum', 2)
       sClients[data] = {
         "socket": socket.id,
@@ -223,17 +216,14 @@ snake.on('connection', function(socket) {
 
   // Checks if both players ready
   socket.on('clientReady', function(data) {
-    console.log(`recieved ready status from client ${data.username}, ${data.state}`)
+    console.log(`recieved ready status from client ${data.p1}, ${data.state}`)
 
-    if (sClients[data.username].player == 1 && data.state == 'PLAYERS_READY') {
+    if (data.p1 && data.state == 'PLAYERS_READY') {
       snakeP1R = true;
-    } else if (sClients[data.username].player == 2 && data.state == 'PLAYERS_READY') {
+    } else if (!data.p1 && data.state == 'PLAYERS_READY') {
       snakeP2R = true;
-    } else if (sClients[data.username].player == 1 && data.state != 'PLAYERS_READY') {
-      snakeP1R = false;
-    } else if (sClients[data.username].player == 2 && data.state != 'PLAYERS_READY') {
-      snakeP2R = false;
     }
+    console.log(snakeP1R, snakeP2R)
     if (snakeP1R && snakeP2R) {
       snake.emit('clientState', 'PLAYERS_READY')
     } else {
