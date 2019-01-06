@@ -6,13 +6,15 @@ block content
   link(rel="stylesheet", href="/stylesheets/online-multi/snake.css")
 
   body
+    script.
+      var user_id = #{user_id};
     div#snakeContainer
     div#countContainer
       h2.count User count:
         span#counter
 
     script(src="/javascripts/online-multi/snake/snake.js")
+      currentPlayer=user
     script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
     script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
     script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
-

@@ -12,6 +12,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/user/register', function(req, res) {
+  if (req.currentUser) return res.redirect('/');
   res.render('user/register');
 });
 
@@ -23,7 +24,9 @@ router.post('/user/register', function(req, res) {
     const user = response[0];
     if (user) {
       req.session.userId = user.id;
-      res.redirect('/');
+      dbUtils.initSnakeStats(
+        user.id
+      ).then(res.redirect('/'));
     } else {
       res.render('user/register');
     }
@@ -49,6 +52,11 @@ router.post('/user/login', function(req, res) {
 
 router.get('/user/profile', function(req, res){
   res.render('user/profile', {user: req.currentUser});
+});
+
+router.get('/user/logout', function(req, res){
+  req.session.userId = 'none';
+  res.render('index', {user: null});
 });
 
 module.exports = router;

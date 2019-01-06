@@ -1,7 +1,18 @@
+const pg = require('pg');
+
+const dbClient = new pg.Client({
+  user: 'development',
+  host: 'localhost',
+  database: 'bestof3',
+  password: 'development',
+  port: 5432
+});
 var app = require('./app');
 var debug = require('debug')('bestof3:server');
 var http = require('http');
 var socket = require('socket.io');
+
+dbClient.connect();
 
 // Get port from environment and store in Express.
 
@@ -293,6 +304,31 @@ snake.on('connection', function(socket) {
     }
     snake.emit('move', position)
   })
+
+  // socket.on('wAndL', function(data) {
+  //   let wUserID = 1;
+  //   let lUserID = 2;
+  //
+  //   dbClient.query(
+  //     `UPDATE stats SET wins=wins+1 WHERE user_id=${wUserID}`
+  //   ).then(
+  //     () => dbClient.query(
+  //       `UPDATE stats SET losses=losses+1 WHERE user_id=${lUserID}`
+  //     )
+  //   );
+  // });
+
+  socket.on('w', function(user_id) {
+    dbClient.query(
+      `UPDATE stats SET wins=wins+1 WHERE user_id=${user_id}`
+    );
+  });
+
+  socket.on('l', function(user_id) {
+    dbClient.query(
+      `UPDATE stats SET losses=losses+1 WHERE user_id=${user_id}`
+    );
+  });
 
   // Update counter on disconnect
   // on discconect tell remaining client to refresh

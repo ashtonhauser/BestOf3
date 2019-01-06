@@ -155,6 +155,7 @@ var sketch = function(s) {
       text = 'go'
       s.drawL()
       s.drawR()
+      s.checkGameStatus();
       socket.on('move', function(dir) {
         directionL = dir.L.directionL || directionL;
         directionR = dir.R.directionR || directionR;
@@ -173,7 +174,6 @@ var sketch = function(s) {
     }
     s.updateSnakeCoordinatesL();
     // s.checkForFruitL();
-    s.checkGameStatus();
   }
 
   s.drawR = function() {
@@ -183,7 +183,6 @@ var sketch = function(s) {
     }
     s.updateSnakeCoordinatesR();
     // s.checkForFruitR();
-    s.checkGameStatus();
   }
 
   // should run on server
@@ -247,6 +246,12 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
+      if (p1) {
+        socket.emit('l', user_id);
+      }
+      if (p2) {
+        socket.emit('w', user_id);
+      }
       scoreElemL.html('Player 1 lost!');
       scoreElemR.html('Player 2 wins!');
       button.style('display', 'block')
@@ -260,6 +265,12 @@ var sketch = function(s) {
                 s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
+      if (p1) {
+        socket.emit('w', user_id);
+      }
+      if (p2) {
+        socket.emit('l', user_id);
+      }
       scoreElemL.html('Player 1 wins!');
       scoreElemR.html('Player 2 lost!');
       button.style('display', 'block')
@@ -351,5 +362,3 @@ var sketch = function(s) {
 };
 
 var snakeGame = new p5(sketch, 'snakeContainer');
-
-
