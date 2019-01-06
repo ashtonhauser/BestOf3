@@ -6,6 +6,13 @@ var p1 = false;
 var p2 = false;
 socket.emit('addUser', username)
 
+// prevents arrow keys moving page
+window.addEventListener("keydown", function(e) {
+  if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+      e.preventDefault();
+  }
+}, false);
+
 // sets player 1 or 2
 socket.on('playerNum', function(data) {
   if (data == 1) {
