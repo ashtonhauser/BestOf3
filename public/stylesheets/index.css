@@ -39,7 +39,7 @@ body, html{
 }
 
 .contain{
-  margin: 50px;
+  margin: 50px 100px 50px 100px;
   border-style: solid;
   background-color: #DBD5D4;
 }
@@ -68,16 +68,18 @@ img.static:hover{
 
 #indextitle{
   letter-spacing: 5px;
-  text-align: center;
+  margin-bottom: 100px;
+  /*text-align: center;*/
   padding: 0;
-  font-size: 100px;
-  font-family: 'alien', sans-serif;
+  font-size: 70px;
+  height: 100px;
+  /*font-family: 'prisma', sans-serif;*/
   color: #3C454D;
   background-color: #DBD5D4;
 }
 
 
 @font-face {
-  font-family: "alien";
-  src: url(fonts/alien/SFAlienEncounters.ttf);
+  font-family: "prisma";
+  src: url(fonts/prisma/Prisma.ttf);
 }
