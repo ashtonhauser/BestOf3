@@ -101,31 +101,16 @@ var sketch = function(s) {
     // LEFT
     numSegmentsL = 1;
     directionL = 'right';
-    xStartL = 200;
-    yStartL = 250;
     diffL = 10;
-
-    xCorL = [];
-    yCorL = [];
+    xCorL = [200];
+    yCorL = [250];
 
     // RIGHT
     numSegmentsR = 1;
     directionR = 'left';
-    xStartR = 800;
-    yStartR = 250;
     diffR = 10;
-
-    xCorR = [];
-    yCorR = [];
-
-    for (var i = 0; i < numSegmentsL; i++) {
-      xCorL.push(xStartL + (i * diffL));
-      yCorL.push(yStartL);
-    }
-    for (var o = 0; o < numSegmentsR; o++) {
-      xCorR.push(xStartR - (o * diffR));
-      yCorR.push(yStartR);
-    }
+    xCorR = [800];
+    yCorR = [250];
 
     $(function() {
       setTimeout(function() {
@@ -152,10 +137,12 @@ var sketch = function(s) {
       text = 'go'
       s.drawL()
       s.drawR()
-      socket.emit('cords', {
-        'L': {xCorL: xCorL[numSegmentsL - 1], yCorL: yCorL[numSegmentsL - 1]},
-        'R': {xCorR: xCorR[numSegmentsR - 1], yCorR: yCorR[numSegmentsR - 1]}
-      })
+      s.checkGameStatus();
+
+      // socket.emit('cords', {
+      //   'L': {xCorL: xCorL[numSegmentsL - 1], yCorL: yCorL[numSegmentsL - 1]},
+      //   'R': {xCorR: xCorR[numSegmentsR - 1], yCorR: yCorR[numSegmentsR - 1]}
+      // })
       socket.on('move', function(dir) {
         directionL = dir.L.directionL || directionL;
         directionR = dir.R.directionR || directionR;
@@ -173,7 +160,6 @@ var sketch = function(s) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
     s.updateSnakeCoordinatesL();
-    s.checkGameStatus();
   }
 
   s.drawR = function() {
@@ -182,7 +168,6 @@ var sketch = function(s) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
     s.updateSnakeCoordinatesR();
-    s.checkGameStatus();
   }
 
   s.updateSnakeCoordinatesL = function() {

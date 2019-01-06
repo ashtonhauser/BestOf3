@@ -54,8 +54,8 @@ var sketch = function(s) {
     xStartL = 200;
     yStartL = 250;
     diffL = 10;
-    xCorL = [];
-    yCorL = [];
+    xCorL = [200];
+    yCorL = [250];
 
     // RIGHT
     numSegmentsR = 1;
@@ -63,17 +63,8 @@ var sketch = function(s) {
     xStartR = 800;
     yStartR = 250;
     diffR = 10;
-    xCorR = [];
-    yCorR = [];
-
-    for (var i = 0; i < numSegmentsL; i++) {
-      xCorL.push(xStartL + (i * diffL));
-      yCorL.push(yStartL);
-    }
-    for (var o = 0; o < numSegmentsR; o++) {
-      xCorR.push(xStartR - (o * diffR));
-      yCorR.push(yStartR);
-    }
+    xCorR = [800];
+    yCorR = [250];
 
     s.draw()
     s.loop()
