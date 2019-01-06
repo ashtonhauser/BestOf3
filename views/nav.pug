@@ -1,28 +1,22 @@
 block content
-  script(src="/javascripts/nav-animation.js")
-  nav.navbar#nav
-    span.menu-and-title
-      a.open-slide#hamburger(href="#", onclick="openSlideMenu()")
-        svg(width="30", height="30")
-          path(d="M0,5 30,5", stroke="#353232", stroke-width="5")
-          path(d="M0,14 30,14", stroke="#353232", stroke-width="5")
-          path(d="M0,23 30,23", stroke="#353232", stroke-width="5")
-    a.home-button.navbar-brand(href="/") BestOf3
-    - if (!user) {
-    span.nav-item
-      a#login.nav-link(href="/user/login")='Login'
-    span.nav-item.col-sm
-      a#register.nav-link(href="/user/register")='Register'
+  nav.navbar
+    ul.nav
+      li.float-left
+        a(href="/")
+          img(src="/images/logo.png")
+      li.float-left
+        a.home.navbar-brand(href='/') Home
+      - if (!user) {
+    div.nav
+      span.float-right
+        a#login(href="/user/login")='Login'
+      span.float-right
+        a#register(href="/user/register")='Register'
     - } else {
       - if (!cannotLogout) {
-    span.nav-item.col-sm
-      a#logout.nav-link(href="/user/logout")= 'Logout'
-    span.nav-item.col-sm
-      a#profile.nav-link(href="/user/profile")='Account'
+      span.float-right
+        a#logout(href="/user/logout")= 'Logout'
+      span.float-right
+        a#profile(href="/user/profile")='Account'
       - }
     - }
-  div#side-menu.side-nav
-    a.btn-close(href="#", onclick="closeSlideMenu()") &times;
-    a#nav-button(href="/game/single") Single Player
-    a#nav-button(href="/game/multi/local") Local Multi
-    a#nav-button(href="/game/multi/online") Online Multi
