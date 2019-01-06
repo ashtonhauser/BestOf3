@@ -2,7 +2,6 @@ extends ../layout
 
 block content
   link(rel="stylesheet", href="/stylesheets/user/profile.css")
-  script(src="/javascripts/profile-animation.js" type="text/javascript")
 
   body
     include ../nav.pug
@@ -13,7 +12,39 @@ block content
           div.emailContainer
             h2 #{user.email}
         div.exp
-          span.lvl Level: 2
+          - var userLevel = 1
+          - if (user.exp >= 50) {
+          -  userLevel = 2
+          - }
+          - if (user.exp >= 125) {
+          -  userLevel = 3
+          - }
+          - if (user.exp >= 310) {
+          -  userLevel = 4
+          - }
+          - if (user.exp >= 780) {
+          -  userLevel = 5
+          - }
+          - if (user.exp >= 2000) {
+          -  userLevel = 6
+          - }
+          - if (user.exp >= 3500) {
+          -  userLevel = 7
+          - }
+          - if (user.exp >= 6000) {
+          -  userLevel = 8
+          - }
+          - if (user.exp >= 9500) {
+          -  userLevel = 9
+          - }
+          - if (user.exp >= 14000) {
+          -  userLevel = 10
+          - }
+          - if (user.exp >= 20000) {
+          -  userLevel = 2
+          - }
+          span.lvl Level: #{userLevel} || Exp: 
+          span#exp #{user.exp}
           div.progressBar
             div.progress
       div.onlineStats
@@ -31,5 +62,6 @@ block content
           p Wins: #{wCount}
           p Losses: #{lCount}
           p W/L: #{winlossratio}
-          p exp #{user.exp}
+        
+  script(src="/javascripts/profile-animation.js" type="text/javascript")
           

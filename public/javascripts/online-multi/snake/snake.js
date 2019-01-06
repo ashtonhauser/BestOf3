@@ -243,10 +243,15 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
-      if (p1) {
-        socket.emit('l', user_id);
-      } else {
-        socket.emit('w', user_id);
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('l', user_id);
+        }
+      }
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('w', user_id);
+        }
       }
       scoreElemL.html('Player 1 lost!');
       scoreElemR.html('Player 2 wins!');
@@ -261,10 +266,15 @@ var sketch = function(s) {
                 s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
-      if (p1) {
-        socket.emit('w', user_id);
-      } else {
-        socket.emit('l', user_id);
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('w', user_id);
+        }
+      }
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('l', user_id);
+        }
       }
       scoreElemL.html('Player 1 wins!');
       scoreElemR.html('Player 2 lost!');
