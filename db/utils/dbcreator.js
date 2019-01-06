@@ -27,14 +27,20 @@ module.exports = {
 
   grabSnakeLosses: function async (user_id){
     return client.query(`SELECT (losses) FROM stats WHERE user_id=${user_id}`
-  ).then(parseResult)
-  .catch(e => console.error(e));
+    ).then(parseResult
+    ).catch(e => console.error(e));
   },
 
   grabSnakeWins: function async (user_id){
     return client.query(`SELECT (wins) FROM stats WHERE user_id=${user_id}`
-  ).then(parseResult)
-  .catch(e => console.error(e));
+    ).then(parseResult
+    ).catch(e => console.error(e));
+  },
+
+  grabUserExp: function async (user_id){
+    return client.query(`SELECT (exp) FROM users WHERE id=${user_id}`
+    ).then(parseResult
+    ).catch((e) => console.error(e));
   },
 
   grabUserByEmail: function async (email){
