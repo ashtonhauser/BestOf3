@@ -4,9 +4,9 @@
 }
 
 body, html{
-  background: -moz-linear-gradient(top, #373E45 20%, #646B73 100%);
-  background: -webkit-linear-gradient(top, #373E45 20%,#646B73 100%);
-  background: linear-gradient(to bottom, #373E45 20%,#646B73 100%);
+  background: -moz-linear-gradient(top, #677077 20%, #646B73 100%);
+  background: -webkit-linear-gradient(top, #677077 20%,#646B73 100%);
+  background: linear-gradient(to bottom, #677077 20%,#646B73 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#424b54', endColorstr='#fff9f7',GradientType=0 );
 }
 
@@ -14,23 +14,27 @@ body, html{
   float: left;
   letter-spacing: 5px;
   font-size: 70px;
-  color: #474A58;
+  color: #B5B5B7;
   padding-top: 20px;
+  margin-left: 10px;
 }
 .title {
-  background-color: #E8E6E5;
-  height: 115px;
+  background-color: #252839;
+  height: 110px;
   margin-bottom: 100px;
 }
 
 .logo{
+  margin-top: 8px;
   float: left;
   text-align: center;
+  width: 161.50px;
+  height: 92.5px;
 }
 
 #signup{
   font-size: 30px;
-  background-color: #E8CB4C;
+  background-color: #F2B632;
 }
 
 .prev {
@@ -50,7 +54,7 @@ body, html{
 }
 
 .sectTitle {
-  color: black;
+  color: #343641;
   text-align: center;
 }
 
@@ -64,13 +68,14 @@ body, html{
 .contain{
   margin: 50px 100px 50px 100px;
   border-style: solid;
-  background-color: #E8E6E5;
+  background-color: #B5B5B7;
   box-shadow: 0px 0px 40px 16px rgba(0,0,0,0.22);
 }
 
 h2.gameName{
+  text-align: center;
   margin-top: 10px;
-  color: black;
+  color: #343641;
 }
 
 img.static{
@@ -106,6 +111,7 @@ img.static:hover{
   height: 320px;
   margin: 0 auto;
   width: 640px;
+  margin-bottom: 100px;
 }
 @media (max-width: 767px) {
   .container {
@@ -115,7 +121,7 @@ img.static:hover{
   }
 }
 .left {
-  background: #E8E6E5;
+  background: #B5B5B7;
   height: calc(100% - 40px);
   top: 20px;
   position: relative;
@@ -133,15 +139,16 @@ img.static:hover{
   font-size: 50px;
   font-weight: 900;
   margin: 50px 40px 40px;
+  color: #343641;
 }
 .eula {
-  color: #474A58;
+  color: #343641;
   font-size: 14px;
   line-height: 1.5;
   margin: 40px;
 }
 .right {
-  background: #474A59;
+  background: #252839;
   box-shadow: 0px 0px 40px 16px rgba(0,0,0,0.22);
   color: #F1F1F2;
   position: relative;
