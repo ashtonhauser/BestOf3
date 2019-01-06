@@ -9,5 +9,20 @@ block content
 
   body
     include ../../nav.pug
-    div#actual-body
-      div#snakeContainer
+
+    div#snakeContainer
+
+    div.container
+      h1.title More Local Games
+      div.tron
+        a.link(href='/game/multi/local/tron')
+          img.static(src="/images/tron_static.png")
+          img.gif(src="/images/tron.gif")
+        h2.gameName Tron
+      div.pong
+        a.link(href='/game/multi/local/pong')
+          img.static(src="/images/pong_static.png")
+          img.gif(src="/images/pong.gif")
+        h2.gameName Pong
+
+

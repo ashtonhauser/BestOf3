@@ -1,11 +1,15 @@
 #snakeContainer{
-  margin: 20px auto;
+  margin: 75px auto;
   text-align: center;
+  width: 1000px;
   max-width: 1000px;
+  background-color: #677077;
+  height: 575px;
 }
 
 .Lscore{
   float: left;
+  margin-top: 12px;
   margin-left: 25px;
   display: inline-block;
   width: auto;
@@ -14,6 +18,7 @@
 
 .Rscore{
   float: right;
+  margin-top: 12px;
   margin-right: 25px;
   display: inline-block;
   width: auto;
@@ -21,22 +26,49 @@
 }
 
 button.rematch {
-  margin: auto;
+  margin: 7px auto;
   text-align: center;
-  display:block;
-  width:175px;
-  height:58px;
-  line-height:50px;
-  border-style: none;
+  width:180px;
+  height:50px;
   color:#f5f5f5;
-  text-align:center;
-  text-decoration:none;
-  background: #424B54;
-  box-shadow: 0 0 3px gray;
+  background: #EF4937;
   font-size:20px;
-  font-weight:bold;
 }
 
 button.rematch:hover {
-  background: #373E45;
+  background: #F2B632;
 }
+
+.tron, .snake, .pong{
+  float: left;
+  text-align: center;
+}
+
+h2.gameName{
+  margin: 10px auto;
+  color: #343641;
+  width: 200px
+}
+
+img.static{
+  margin: 25px;
+  position: absolute;
+  height: 250px;
+  width: 250px;
+  z-index: 2;
+}
+
+img.gif{
+  margin: 25px;
+  height: 250px;
+  width: 250px;
+  z-index: 1;
+}
+
+img.static:hover{
+  opacity: 0;
+}
+
+
+
+

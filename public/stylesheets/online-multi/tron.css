@@ -1,7 +1,10 @@
 #snakeContainer{
-  margin: 0 auto;
+  margin: 75px auto;
   text-align: center;
+  width: 1000px;
   max-width: 1000px;
+  background-color: #677077;
+  height: 575px;
 }
 
 #matching {
@@ -54,5 +57,35 @@ button.rematch {
 
 button.rematch:hover {
   background: #373E45;
+}
+
+.tron, .snake, .pong{
+  float: left;
+  text-align: center;
+}
+
+h2.gameName{
+  margin: 10px auto;
+  color: #343641;
+  width: 200px
+}
+
+img.static{
+  margin: 25px;
+  position: absolute;
+  height: 250px;
+  width: 250px;
+  z-index: 2;
+}
+
+img.gif{
+  margin: 25px;
+  height: 250px;
+  width: 250px;
+  z-index: 1;
+}
+
+img.static:hover{
+  opacity: 0;
 }
 

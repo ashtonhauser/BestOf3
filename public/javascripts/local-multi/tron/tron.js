@@ -1,3 +1,9 @@
+window.addEventListener("keydown", function(e) {
+  if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+    e.preventDefault();
+  }
+}, false);
+
 var sketch = function(s) {
   var button;
 
@@ -7,10 +13,8 @@ var sketch = function(s) {
   var xStartL;
   var yStartL;
   var diffL;
-
   var xCorL;
   var yCorL;
-
   var scoreElemL;
 
   // RIGHT
@@ -19,10 +23,8 @@ var sketch = function(s) {
   var xStartR;
   var yStartR;
   var diffR;
-
   var xCorR;
   var yCorR;
-
   var scoreElemR;
 
   s.setup = function() {
@@ -42,7 +44,6 @@ var sketch = function(s) {
     button.style('display', 'none')
 
     s.resetSketch()
-
   }
 
 
@@ -53,7 +54,6 @@ var sketch = function(s) {
     xStartL = 200;
     yStartL = 250;
     diffL = 10;
-
     xCorL = [];
     yCorL = [];
 
@@ -63,7 +63,6 @@ var sketch = function(s) {
     xStartR = 800;
     yStartR = 250;
     diffR = 10;
-
     xCorR = [];
     yCorR = [];
 
@@ -75,6 +74,7 @@ var sketch = function(s) {
       xCorR.push(xStartR - (o * diffR));
       yCorR.push(yStartR);
     }
+
     s.draw()
     s.loop()
     scoreElemR.html('p2')
@@ -83,19 +83,18 @@ var sketch = function(s) {
   }
 
   s.draw = function() {
-    s.background(66, 75, 84)
-
+    s.background(37, 40, 57)
     s.drawL()
     s.drawR()
+    s.checkGameStatus();
   }
 
   s.drawL = function() {
-    s.stroke(130, 240, 240)
+    s.stroke(130,240,240)
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
     s.updateSnakeCoordinatesL();
-    s.checkGameStatus();
   }
 
   s.drawR = function() {
@@ -104,7 +103,6 @@ var sketch = function(s) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
     s.updateSnakeCoordinatesR();
-    s.checkGameStatus();
   }
 
   s.updateSnakeCoordinatesL = function() {
