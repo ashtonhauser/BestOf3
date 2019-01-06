@@ -51,7 +51,11 @@ router.post('/user/login', function(req, res) {
 });
 
 router.get('/user/profile', function(req, res){
-  res.render('user/profile', {user: req.currentUser});
+  dbUtils.grabSnakeWins(req.currentUser.id).then((winsObject) => {
+    dbUtils.grabSnakeLosses(req.currentUser.id).then((lossesObject) => 
+      res.render('user/profile', {user: req.currentUser, wCount: winsObject[0].wins, lCount: lossesObject[0].losses});
+    })
+  })
 });
 
 router.get('/user/logout', function(req, res){

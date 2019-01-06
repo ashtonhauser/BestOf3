@@ -15,21 +15,32 @@ module.exports = {
 
   setEmailandPassword: function(email, password){
     return client.query(`INSERT INTO users (email, password) VALUES ('${email}', '${password}') RETURNING *;`
-  ).then(parseResult)
-  .catch(e => console.error(e));
+    ).then(parseResult)
+    .catch(e => console.error(e));
   },
 
   initSnakeStats: function async (user_id){
     return client.query(`INSERT INTO stats (user_id, game_id) VALUES (${user_id}, 1);`
+    ).then(parseResult)
+    .catch(e => console.error(e));
+  },
+
+  grabSnakeLosses: function async (user_id){
+    return client.query(`SELECT (losses) FROM stats WHERE user_id=${user_id}`
+  ).then(parseResult)
+  .catch(e => console.error(e));
+  },
+
+  grabSnakeWins: function async (user_id){
+    return client.query(`SELECT (wins) FROM stats WHERE user_id=${user_id}`
   ).then(parseResult)
   .catch(e => console.error(e));
   },
 
   grabUserByEmail: function async (email){
     return client.query("SELECT * FROM users WHERE email= '" + email + "';"
-  )
-  .then(parseResult)
-  .catch(e => console.error(e));
+    ).then(parseResult)
+    .catch(e => console.error(e));
   },
 
   grabUserById: function async (id){
