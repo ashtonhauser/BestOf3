@@ -10,6 +10,7 @@
   margin-left: 10px;
   margin-top: 16px;
 }
+
 .home:hover {
   color: #fff;
 }
@@ -22,6 +23,7 @@ img{
 #login, #logout, #register, #stats{
   color: #B5B5B7;
   margin: 10px;
+
 }
 
 #login:hover, #logout:hover, #register:hover, #stats:hover{
@@ -34,13 +36,13 @@ img{
   src: url(fonts/alien/SFAlienEncounters.ttf);
 }
 
-span.exp, span.email{
+span.exp, span.lvl, span.email{
   color: white;
 }
 
 .profileBadge{
   border: solid;
-  display: block;
+  display: inline-block;
   border-color: white;
   background-color: black;
   padding: 3px 4px;

@@ -19,46 +19,44 @@ block content
       span.float-right
         a#register(href="/register")='Register'
     - } else {
-    div.nav
-      span.float-right
+      li.float-right
         a#logout(href="/logout")= 'Logout'
-      span.float-right
+      li.float-right
         a#stats(href="/profile")= 'Stats'
-    div.float-right.profileBadge
+    span.profileBadge
       span.email #{user.email}
       br
-      span.exp
-        - var userLevel = 1
-        - if (exp >= 50) {
-        -  userLevel = 2
-        - }
-        - if (exp >= 125) {
-        -  userLevel = 3
-        - }
-        - if (exp >= 310) {
-        -  userLevel = 4
-        - }
-        - if (exp >= 780) {
-        -  userLevel = 5
-        - }
-        - if (exp >= 2000) {
-        -  userLevel = 6
-        - }
-        - if (exp >= 3500) {
-        -  userLevel = 7
-        - }
-        - if (exp >= 6000) {
-        -  userLevel = 8
-        - }
-        - if (exp >= 9500) {
-        -  userLevel = 9
-        - }
-        - if (exp >= 14000) {
-        -  userLevel = 10
-        - }
-        - if (exp >= 20000) {
-        -  userLevel = 2
-        - }
-        span.lvl Level: #{userLevel} || Exp: 
-        span#exp #{user.exp}
-  - }
+      - var userLevel = 1
+      - if (user.exp >= 50) {
+      -  userLevel = 2
+      - }
+      - if (user.exp >= 125) {
+      -  userLevel = 3
+      - }
+      - if (user.exp >= 310) {
+      -  userLevel = 4
+      - }
+      - if (user.exp >= 780) {
+      -  userLevel = 5
+      - }
+      - if (user.exp >= 2000) {
+      -  userLevel = 6
+      - }
+      - if (user.exp >= 3500) {
+      -  userLevel = 7
+      - }
+      - if (user.exp >= 6000) {
+      -  userLevel = 8
+      - }
+      - if (user.exp >= 9500) {
+      -  userLevel = 9
+      - }
+      - if (user.exp >= 14000) {
+      -  userLevel = 10
+      - }
+      - if (user.exp >= 20000) {
+      -  userLevel = 11
+      - }
+      span.lvl Level: #{userLevel} || Exp: 
+      span.exp #{user.exp}
+    - }
