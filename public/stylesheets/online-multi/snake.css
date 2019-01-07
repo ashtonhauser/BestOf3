@@ -88,3 +88,13 @@ img.gif{
 img.static:hover{
   opacity: 0;
 }
+
+.controlsCont{
+  display: block;
+  text-align: center;
+  border: solid;
+  width: 50%;
+  margin: 5px auto;
+  border-radius: 5px;
+  padding: 5px;
+}
