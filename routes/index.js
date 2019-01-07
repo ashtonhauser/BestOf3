@@ -8,15 +8,21 @@ const salt = bcrypt.genSaltSync(saltRounds);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index');
+  var user;
+  if (req.currentUser) {
+    user = req.currentUser;
+  } else {
+    user = null;
+  }
+  res.render('index', {user: user});
 });
 
-router.get('/user/register', function(req, res) {
+router.get('/register', function(req, res) {
   if (req.currentUser) return res.redirect('/');
   res.render('user/register');
 });
 
-router.post('/user/register', function(req, res) {
+router.post('/register', function(req, res) {
   dbUtils.setEmailandPassword(
     req.body.email,
     bcrypt.hashSync(req.body.password, salt)
@@ -33,28 +39,37 @@ router.post('/user/register', function(req, res) {
   });
 });
 
-router.get('/user/login', function(req, res) {
-  if (req.currentUser) return res.redirect('/');
-  res.render('user/login');
-});
+// router.get('/user/login', function(req, res) {
+//   if (req.currentUser) return res.redirect('/');
+//   res.render('user/login');
+// });
 
-router.post('/user/login', function(req, res) {
+router.post('/login', function(req, res) {
   dbUtils.grabUserByEmail(req.body.email).then((response) => {
     const user = response[0];
-    if (bcrypt.compareSync(req.body.password, user.password)) {
-      req.session.userId = user.id;
-      res.redirect('/');
+    if (user) {
+      if (bcrypt.compareSync(req.body.password, user.password)) {
+        req.session.userId = user.id;
+        res.redirect('/')
+      } else {
+        res.redirect('/')
+      }
     } else {
-      res.render('user/login');
+      res.redirect('/')
     }
   });
 });
 
-router.get('/user/profile', function(req, res){
-  res.render('user/profile', {user: req.currentUser});
+router.get('/profile', function(req, res){
+  console.log(req.currentUser)
+  dbUtils.grabSnakeWins(req.currentUser.id).then((winsObject) => {
+    dbUtils.grabSnakeLosses(req.currentUser.id).then((lossesObject) => {
+      res.render('user/profile', {user: req.currentUser, wCount: winsObject[0].wins, lCount: lossesObject[0].losses});
+    })
+  })
 });
 
-router.get('/user/logout', function(req, res){
+router.get('/logout', function(req, res){
   req.session.userId = 'none';
   res.render('index', {user: null});
 });

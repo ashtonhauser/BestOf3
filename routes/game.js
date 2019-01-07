@@ -32,7 +32,11 @@ router.get('/multi/local/:game_name', function(req, res) {
 
 router.get('/multi/online/:game_name', function(req, res) {
   name = req.params.game_name
-  res.render(`game/online-multi/${name}`, { user_id: req.currentUser.id })
+  if (req.currentUser) {
+    res.render(`game/online-multi/${name}`, { user_id: req.currentUser.id })
+  } else {
+    res.render(`game/online-multi/${name}`, { user_id: null })
+  }
 });
 
 

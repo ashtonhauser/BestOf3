@@ -3,7 +3,6 @@ var clientState = 'NOT_READY';
 var socket = io.connect('http://localhost:3000/snake')
 var username = Math.floor(Math.random() * Math.floor(500))
 var p1 = false;
-var p2 = false;
 socket.emit('addUser', username)
 
 // prevents arrow keys moving page
@@ -17,10 +16,8 @@ window.addEventListener("keydown", function(e) {
 socket.on('playerNum', function(data) {
   if (data == 1) {
     p1 = true;
-    p2 = false;
   } else {
     p1 = false;
-    p2 = true;
   }
 })
 
@@ -132,9 +129,9 @@ var sketch = function(s) {
     // on document load + 2.5 seconds alert server clientstate ready
     $(function() {
       setTimeout(function() {
-        readyState = {'username': username, state: 'PLAYERS_READY'};
+        readyState = {'p1': p1, state: 'PLAYERS_READY'};
         socket.emit('clientReady', readyState)
-        text = 'ready'
+        text = 'set'
       }, 2500)
     })
 
@@ -253,11 +250,15 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
-      if (p1) {
-        socket.emit('l', user_id);
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('l', user_id);
+        }
       }
-      if (p2) {
-        socket.emit('w', user_id);
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('w', user_id);
+        }
       }
       scoreElemL.html('Player 1 lost!');
       scoreElemR.html('Player 2 wins!');
@@ -272,11 +273,15 @@ var sketch = function(s) {
                 s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
-      if (p1) {
-        socket.emit('w', user_id);
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('w', user_id);
+        }
       }
-      if (p2) {
-        socket.emit('l', user_id);
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('l', user_id);
+        }
       }
       scoreElemL.html('Player 1 wins!');
       scoreElemR.html('Player 2 lost!');
@@ -332,7 +337,7 @@ var sketch = function(s) {
       if (p1 && [65, 68, 87, 83].includes(key)) {
         console.log("sent p1 key", key)
         socket.emit('keypress', data)
-      } else if (p2 && [38, 39, 40, 37].includes(key)){
+      } else if (!p1 && [38, 39, 40, 37].includes(key)){
         console.log("sent p2 key", key)
         socket.emit('keypress', data)
       }
