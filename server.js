@@ -150,12 +150,22 @@ tron.on('connection', function(socket) {
     }
   })
 
-  socket.on('update', function() {
+  socket.on('updateL', function() {
     if (tronP1R && tronP2R) {
       cordsL()
-      socket.emit('cordL', {tCordsLX, tCordsLY, segmentsL})
+      tron.emit('cord', {
+        L: {tCordsLX, tCordsLY, segmentsL},
+        R: {tCordsRX, tCordsRY, segmentsR}
+      })
+    }
+  })
+  socket.on('updateR', function(data) {
+    if (tronP1R && tronP2R) {
       cordsR()
-      socket.emit('cordR', {tCordsRX, tCordsRY, segmentsR})
+      tron.emit('cord', {
+        L: {tCordsLX, tCordsLY, segmentsL},
+        R: {tCordsRX, tCordsRY, segmentsR}
+      })
     }
   })
 
@@ -167,8 +177,18 @@ tron.on('connection', function(socket) {
     }
     if (tronP1Reset && tronP2Reset) {
       tron.emit('clientState', 'RESET')
+      tronP1R = false;
       tronP1Reset = false;
+      tronP2R = false;
       tronP2Reset = false;
+      tDirectionL = 'right';
+      tDirectionR = 'left';
+      tCordsLX = [200];
+      tCordsLY = [250];
+      tCordsRX = [800];
+      tCordsRY = [250];
+      segmentsL = 1;
+      segmentsR = 1;
     }
   })
 
@@ -214,12 +234,6 @@ tron.on('connection', function(socket) {
           tDirectionL = 'down';
         }
     }
-    // let position = {
-    //   'L': {xCorL: tCordsLX, yCorL: tCordsLY, numSeg: segmentsL},
-    //   'R': {xCorR: tCordsRX, yCorR: tCordsRY, numSeg: segmentsR}
-    // }
-    // console.log(position)
-    // tron.emit('move', position)
   })
 
   socket.on('disconnect', function() {
@@ -232,8 +246,19 @@ tron.on('connection', function(socket) {
       if (socket.id == tClients[key].socket) {
         delete tClients[key];
         tron.emit('clientState', 'PLAYER_LEFT')
-        sDirectionR = 'left'
-        sDirectionL = 'right'
+
+        tronP1R = false;
+        tronP1Reset = false;
+        tronP2R = false;
+        tronP2Reset = false;
+        tDirectionL = 'right';
+        tDirectionR = 'left';
+        tCordsLX = [200];
+        tCordsLY = [250];
+        tCordsRX = [800];
+        tCordsRY = [250];
+        segmentsL = 1;
+        segmentsR = 1;
       }
     }
     tron.emit('counter', {count: Object.keys(sClients).length});

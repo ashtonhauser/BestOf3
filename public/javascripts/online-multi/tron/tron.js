@@ -28,17 +28,15 @@ socket.on('counter', function (data) {
 });
 
 var sketch = function(s) {
-  socket.on('cordR', function(data) {
-    console.log("got cordR", data.tCordsRX)
-    xCorR = data.tCordsRX
-    yCorR = data.tCordsRY
-    numSegmentsR = data.segmentsR
-  })
+  socket.on('cord', function(data) {
+    console.log("got cord", data.R.tCordsRX)
+    xCorR = data.R.tCordsRX
+    yCorR = data.R.tCordsRY
+    numSegmentsR = data.R.segmentsR
 
-  socket.on('cordL', function(data) {
-    xCorL = data.tCordsLX
-    yCorL = data.tCordsLY
-    numSegmentsL = data.segmentsL
+    xCorL = data.L.tCordsLX
+    yCorL = data.L.tCordsLY
+    numSegmentsL = data.L.segmentsL
   })
 
   socket.on('clientState', function(data) {
@@ -53,8 +51,6 @@ var sketch = function(s) {
 
   var button;
   var readyState;
-  var xFruit; // defined by server
-  var yFruit; // defined by server
   var button;
   var waitingDiv;
   var text;
@@ -62,22 +58,12 @@ var sketch = function(s) {
   var diff;
 
   // LEFT
-  var numSegmentsL;
-  var directionL;
-  var xStartL;
-  var yStartL;
-
   var xCorL;
   var yCorL;
 
   var scoreElemL;
 
   // RIGHT
-  var numSegmentsR;
-  var directionR;
-  var xStartR;
-  var yStartR;
-
   var xCorR;
   var yCorR;
 
@@ -86,7 +72,7 @@ var sketch = function(s) {
   s.setup = function() {
     s.createCanvas(1000, 500);
 
-    s.frameRate(1);
+    s.frameRate(25);
     s.stroke(255);
     s.strokeWeight(10);
 
@@ -109,16 +95,14 @@ var sketch = function(s) {
     socket.emit('clientReady', readyState)
     text = 'ready';
     gameOver = false;
-    diff = 10;
+
     // LEFT
     numSegmentsL = 1;
-    directionL = 'right';
     xCorL = [200];
     yCorL = [250];
 
     // RIGHT
     numSegmentsR = 1;
-    directionR = 'left';
     xCorR = [800];
     yCorR = [250];
 
@@ -137,6 +121,7 @@ var sketch = function(s) {
     button.style('display', 'none')
   }
 
+
   s.draw = function() {
     s.background(66, 75, 84)
     s.textAlign(s.CENTER, s.CENTER);
@@ -147,6 +132,11 @@ var sketch = function(s) {
       text = 'go'
       s.drawL()
       s.drawR()
+      if (p1) {
+        socket.emit('updateL')
+      } else {
+        socket.emit('updateR')
+      }
       s.checkGameStatus();
       socket.on('move', function(data) {
         numSegmentsL = data.L.numSeg
@@ -165,7 +155,6 @@ var sketch = function(s) {
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
-    socket.emit('update')
   }
 
   s.drawR = function() {
@@ -173,8 +162,10 @@ var sketch = function(s) {
     for (var i = 0; i < numSegmentsR - 1; i++) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
-    socket.emit('update')
   }
+
+
+
 
 
 
