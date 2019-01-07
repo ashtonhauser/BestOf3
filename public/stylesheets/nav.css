@@ -19,15 +19,12 @@ img{
   height: 70px;
 }
 
-#login, #register {
+#login, #logout, #register, #stats{
+  color: #B5B5B7;
   margin: 10px;
 }
 
-#login, #logout, #register, #profile{
-  color: #B5B5B7;
-}
-
-#login:hover, #logout:hover, #register:hover, #profile:hover{
+#login:hover, #logout:hover, #register:hover, #stats:hover{
   color: #fff;
   background-color: inherit;
 }
@@ -35,4 +32,17 @@ img{
 @font-face {
   font-family: "alien";
   src: url(fonts/alien/SFAlienEncounters.ttf);
+}
+
+span.exp, span.email{
+  color: white;
+}
+
+.profileBadge{
+  border: solid;
+  display: block;
+  border-color: white;
+  background-color: black;
+  padding: 3px 4px;
+  border-radius: 4px;
 }
