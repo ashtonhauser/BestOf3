@@ -241,21 +241,28 @@ input::-moz-focus-inner {
  vertical-align: bottom;
  margin-left: 10px;
 }
+.email, .exp{
+  color: white;
+}
 .profilecontainer, .onlineStats{
   border: solid;
   border-radius: 5px;
   padding: 10px;
   box-shadow: 6px 8px 6px -6px grey;
   margin: 50px 100px 50px 100px;
+  min-width: 400px;
 }
 .logoutContainer{
-  display: block;
+  display: inline-block;
   width: 200px;
-  margin: 4px auto 8px 0;
+  margin: 4px auto 8px 5px;
   border: 4px solid black;
   background-color: white;
   border-radius: 4px;
 }
 .logout{
   color: black;
+}
+.logoutContainer:hover{
+  background-color: #B5B5B7;
 }

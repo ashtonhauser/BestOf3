@@ -15,9 +15,12 @@ block content
         div.imgContainer
           img.profilePic(src="../../images/spaceinvader_sprite.png" alt="Space Invader Sprite")
         div.emailContainer
-          h2 #{user.email}
+          h2.email #{user.email}
+        br
         form.logoutContainer(action="/logout" method="get")
           input.logout(type="submit" value="Logout")
+        form.logoutContainer(action="/stats" method="get")
+          input.logout(type="submit" value="Stats")
 
       div.exp
         - var userLevel = 1
@@ -51,8 +54,8 @@ block content
         - if (exp >= 20000) {
         -  userLevel = 2
         - }
-        span.lvl Level: #{userLevel} || Exp:
-        span#exp #{user.exp}
+        span.lvl Level: #{userLevel} || Exp: 
+        span.exp #{user.exp}
         div.progressBar
           div.progress
     -} else {

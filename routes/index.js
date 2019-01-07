@@ -52,15 +52,15 @@ router.post('/login', function(req, res) {
         req.session.userId = user.id;
         res.redirect('/')
       } else {
-        res.redirect('/')
+        res.alert('adsh')
       }
     } else {
-      res.redirect('/')
+      res.alert('isdygf')
     }
   });
 });
 
-router.get('/profile', function(req, res){
+router.get('/stats', function(req, res){
   console.log(req.currentUser)
   dbUtils.grabSnakeWins(req.currentUser.id).then((winsObject) => {
     dbUtils.grabSnakeLosses(req.currentUser.id).then((lossesObject) => {
