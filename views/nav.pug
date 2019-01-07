@@ -6,17 +6,22 @@ block content
           img(src="/images/logo.png")
       li.float-left
         a.home.navbar-brand(href='/') Home
-      - if (!user) {
+    - if (user_id == undefined && !user) {
     div.nav
       span.float-right
-        a#login(href="/user/login")='Login'
+        a#login(href="/")='Login'
       span.float-right
-        a#register(href="/user/register")='Register'
+        a#register(href="/register")='Register'
+    - } else if (user == undefined && !user_id) {
+    div.nav
+      span.float-right
+        a#login(href="/")='Login'
+      span.float-right
+        a#register(href="/register")='Register'
     - } else {
-      - if (!cannotLogout) {
+    div.nav
       span.float-right
-        a#logout(href="/user/logout")= 'Logout'
+        a#logout(href="/logout")= 'Logout'
       span.float-right
-        a#profile(href="/user/profile")='Account'
-      - }
+        a#profile(href="/profile")='Account'
     - }

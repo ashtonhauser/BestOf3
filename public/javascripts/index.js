@@ -1,4 +1,4 @@
-if ($('#email').visibility) {
+if ($('div.form').is(':visible')) {
   document.getElementById("signup").onclick = function () {
     location.href = "http://localhost:3000/user/register";
   };
