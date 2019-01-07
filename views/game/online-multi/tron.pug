@@ -6,6 +6,8 @@ block content
   link(rel="stylesheet", href="/stylesheets/online-multi/tron.css")
 
   body
+    script.
+      if("#{user_id}") { user_id="#{user_id}" } else {user_id='guest'}
     div#snakeContainer
     div#countContainer
       h2.count User count:

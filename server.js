@@ -323,7 +323,7 @@ snake.on('connection', function(socket) {
       `UPDATE stats SET losses=losses+1 WHERE user_id=${user_id}`
     ).then(
       dbClient.query(
-        `UPDATE users SET exp=exp-10 WHERE id=${user_id}`
+        `UPDATE users SET exp=exp+2 WHERE id=${user_id}`
       )
     );
   });
