@@ -188,6 +188,16 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('l', user_id);
+        }
+      }
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('w', user_id);
+        }
+      }
       scoreElemL.html('Player 1 lost!');
       scoreElemR.html('Player 2 wins!');
       button.style('display', 'block')
@@ -202,6 +212,16 @@ var sketch = function(s) {
         s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('w', user_id);
+        }
+      }
+      if (true) {
+        if (user_id !== 'guest') {
+          socket.emit('l', user_id);
+        }
+      }
       scoreElemL.html('Player 1 wins!');
       scoreElemR.html('Player 2 lost!');
       button.style('display', 'block')
@@ -264,5 +284,3 @@ var sketch = function(s) {
 };
 
 var snakeGame = new p5(sketch, 'snakeContainer')
-
-
