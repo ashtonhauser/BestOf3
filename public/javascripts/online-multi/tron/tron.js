@@ -28,6 +28,19 @@ socket.on('counter', function (data) {
 });
 
 var sketch = function(s) {
+  socket.on('cordR', function(data) {
+    console.log("got cordR", data.tCordsRX)
+    xCorR = data.tCordsRX
+    yCorR = data.tCordsRY
+    numSegmentsR = data.segmentsR
+  })
+
+  socket.on('cordL', function(data) {
+    xCorL = data.tCordsLX
+    yCorL = data.tCordsLY
+    numSegmentsL = data.segmentsL
+  })
+
   socket.on('clientState', function(data) {
   console.log(`recieved state ${data}`)
     clientState = data;
@@ -46,13 +59,13 @@ var sketch = function(s) {
   var waitingDiv;
   var text;
   var gameOver;
+  var diff;
 
   // LEFT
   var numSegmentsL;
   var directionL;
   var xStartL;
   var yStartL;
-  var diffL;
 
   var xCorL;
   var yCorL;
@@ -64,7 +77,6 @@ var sketch = function(s) {
   var directionR;
   var xStartR;
   var yStartR;
-  var diffR;
 
   var xCorR;
   var yCorR;
@@ -74,7 +86,7 @@ var sketch = function(s) {
   s.setup = function() {
     s.createCanvas(1000, 500);
 
-    s.frameRate(35);
+    s.frameRate(1);
     s.stroke(255);
     s.strokeWeight(10);
 
@@ -97,18 +109,16 @@ var sketch = function(s) {
     socket.emit('clientReady', readyState)
     text = 'ready';
     gameOver = false;
-
+    diff = 10;
     // LEFT
     numSegmentsL = 1;
     directionL = 'right';
-    diffL = 10;
     xCorL = [200];
     yCorL = [250];
 
     // RIGHT
     numSegmentsR = 1;
     directionR = 'left';
-    diffR = 10;
     xCorR = [800];
     yCorR = [250];
 
@@ -138,28 +148,24 @@ var sketch = function(s) {
       s.drawL()
       s.drawR()
       s.checkGameStatus();
-
-      // socket.emit('cords', {
-      //   'L': {xCorL: xCorL[numSegmentsL - 1], yCorL: yCorL[numSegmentsL - 1]},
-      //   'R': {xCorR: xCorR[numSegmentsR - 1], yCorR: yCorR[numSegmentsR - 1]}
-      // })
-      socket.on('move', function(dir) {
-        directionL = dir.L.directionL || directionL;
-        directionR = dir.R.directionR || directionR;
-        xCorR = dir.R.xCorR || xCorR;
-        xCorL = dir.L.xCorL || xCorL;
-        yCorR = dir.R.yCorR || yCorR;
-        yCorL = dir.L.yCorL || yCorL;
+      socket.on('move', function(data) {
+        numSegmentsL = data.L.numSeg
+        numSegmentsR = data.R.numSeg
+        xCorR = data.R.xCorR || xCorR;
+        xCorL = data.L.xCorL || xCorL;
+        yCorR = data.R.yCorR || yCorR;
+        yCorL = data.L.yCorL || yCorL;
       })
     }
   }
 
   s.drawL = function() {
+    console.log("drew")
     s.stroke(130, 240, 240)
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
-    s.updateSnakeCoordinatesL();
+    socket.emit('update')
   }
 
   s.drawR = function() {
@@ -167,56 +173,11 @@ var sketch = function(s) {
     for (var i = 0; i < numSegmentsR - 1; i++) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
-    s.updateSnakeCoordinatesR();
+    socket.emit('update')
   }
 
-  s.updateSnakeCoordinatesL = function() {
-    numSegmentsL++
-    xCorL.push(xCorL[numSegmentsL.length - 1] + 1)
-    yCorL.push(yCorL[numSegmentsL.length - 1] + 1)
-    switch (directionL) {
-      case 'right':
-        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] + diffL;
-        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
-        break;
-      case 'up':
-        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
-        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] - diffL;
-        break;
-      case 'left':
-        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2] - diffL;
-        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2];
-        break;
-      case 'down':
-        xCorL[numSegmentsL - 1] = xCorL[numSegmentsL - 2];
-        yCorL[numSegmentsL - 1] = yCorL[numSegmentsL - 2] + diffL;
-        break;
-    }
-  }
 
-  s.updateSnakeCoordinatesR = function() {
-    numSegmentsR++
-    xCorR.push(xCorR[numSegmentsR.length - 1] - 1)
-    yCorR.push(yCorR[numSegmentsR.length - 1] - 1)
-    switch (directionR) {
-      case 'right':
-        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] + diffR;
-        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
-        break;
-      case 'up':
-        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
-        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] - diffR;
-        break;
-      case 'left':
-        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2] - diffR;
-        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2];
-        break;
-      case 'down':
-        xCorR[numSegmentsR - 1] = xCorR[numSegmentsR - 2];
-        yCorR[numSegmentsR - 1] = yCorR[numSegmentsR - 2] + diffR;
-        break;
-    }
-  }
+
 
   // user wins when other opponent is killed
   s.checkGameStatus = function() {

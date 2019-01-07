@@ -44,10 +44,13 @@ var tronP2R = false;
 var tronP2Reset = false;
 var tDirectionL = 'right';
 var tDirectionR = 'left';
-var tronCordsLX = [];
-var tronCordsLY = [];
-var tronCordsRX = [];
-var tronCordsRY = [];
+var tCordsLX = [200];
+var tCordsLY = [250];
+var tCordsRX = [800];
+var tCordsRY = [250];
+var segmentsL = 1;
+var segmentsR = 1;
+var diff = 10;
 
 // pong variables
 let pongCounter = 0;
@@ -58,6 +61,54 @@ const snake = io.of('/snake');
 const pong = io.of('/pong');
 
 // TRON HANDLING
+function cordsR() {
+  segmentsR++
+  tCordsRX.push(tCordsRX[segmentsR.length - 1] - 1)
+  tCordsRY.push(tCordsRY[segmentsR.length - 1] - 1)
+  switch (tDirectionR) {
+    case 'right':
+      tCordsRX[segmentsR - 1] = tCordsRX[segmentsR - 2] + diff;
+      tCordsRY[segmentsR - 1] = tCordsRY[segmentsR - 2];
+      break;
+    case 'up':
+      tCordsRX[segmentsR - 1] = tCordsRX[segmentsR - 2];
+      tCordsRY[segmentsR - 1] = tCordsRY[segmentsR - 2] - diff;
+      break;
+    case 'left':
+      tCordsRX[segmentsR - 1] = tCordsRX[segmentsR - 2] - diff;
+      tCordsRY[segmentsR - 1] = tCordsRY[segmentsR - 2];
+      break;
+    case 'down':
+      tCordsRX[segmentsR - 1] = tCordsRX[segmentsR - 2];
+      tCordsRY[segmentsR - 1] = tCordsRY[segmentsR - 2] + diff;
+      break;
+  }
+}
+
+function cordsL() {
+  segmentsL++
+  tCordsLX.push(tCordsLX[segmentsL.length - 1] - 1)
+  tCordsLY.push(tCordsLY[segmentsL.length - 1] - 1)
+  switch (tDirectionL) {
+    case 'right':
+      tCordsLX[segmentsL - 1] = tCordsLX[segmentsL - 2] + diff;
+      tCordsLY[segmentsL - 1] = tCordsLY[segmentsL - 2];
+      break;
+    case 'up':
+      tCordsLX[segmentsL - 1] = tCordsLX[segmentsL - 2];
+      tCordsLY[segmentsL - 1] = tCordsLY[segmentsL - 2] - diff;
+      break;
+    case 'left':
+      tCordsLX[segmentsL - 1] = tCordsLX[segmentsL - 2] - diff;
+      tCordsLY[segmentsL - 1] = tCordsLY[segmentsL - 2];
+      break;
+    case 'down':
+      tCordsLX[segmentsL - 1] = tCordsLX[segmentsL - 2];
+      tCordsLY[segmentsL - 1] = tCordsLY[segmentsL - 2] + diff;
+      break;
+  }
+}
+
 tron.on('connection', function(socket) {
   console.log('client attempting connection to tron')
 
@@ -97,6 +148,15 @@ tron.on('connection', function(socket) {
       tron.emit('clientState', 'PLAYERS_READY')
     } else {
       tron.emit('clientState', 'NOT_READY')
+    }
+  })
+
+  socket.on('update', function() {
+    if (tronP1R && tronP2R) {
+      cordsL()
+      socket.emit('cordL', {tCordsLX, tCordsLY, segmentsL})
+      cordsR()
+      socket.emit('cordR', {tCordsRX, tCordsRY, segmentsR})
     }
   })
 
@@ -155,19 +215,12 @@ tron.on('connection', function(socket) {
           tDirectionL = 'down';
         }
     }
-    let position = {
-      'L': {xCorL: tronCordsLX, yCorL: tronCordsLY, directionL: tDirectionL},
-      'R': {xCorR: tronCordsRX, yCorR: tronCordsRY, directionR: tDirectionR}
-    }
-    console.log(position)
-    tron.emit('move', position)
-  })
-
-  socket.on('cords', function(data) {
-    tronCordsRX += data.R.xCorR
-    tronCordsRY += data.R.yCorR
-    tronCordsLX += data.L.xCorL
-    tronCordsLY += data.L.yCorL
+    // let position = {
+    //   'L': {xCorL: tCordsLX, yCorL: tCordsLY, numSeg: segmentsL},
+    //   'R': {xCorR: tCordsRX, yCorR: tCordsRY, numSeg: segmentsR}
+    // }
+    // console.log(position)
+    // tron.emit('move', position)
   })
 
   socket.on('disconnect', function() {
@@ -187,6 +240,14 @@ tron.on('connection', function(socket) {
     tron.emit('counter', {count: Object.keys(sClients).length});
   })
 })
+
+
+
+
+
+
+
+
 
 // SNAKE HANDLING
 snake.on('connection', function(socket) {
