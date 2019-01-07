@@ -23,18 +23,25 @@ router.get('/register', function(req, res) {
 });
 
 router.post('/register', function(req, res) {
-  dbUtils.setEmailandPassword(
-    req.body.email,
-    bcrypt.hashSync(req.body.password, salt)
+  dbUtils.grabUserByEmail(req.body.email
   ).then((response) => {
-    const user = response[0];
-    if (user) {
-      req.session.userId = user.id;
-      dbUtils.initSnakeStats(
-        user.id
-      ).then(res.redirect('/'));
+    if (response.length < 1 && req.body.password) {
+      dbUtils.setEmailandPassword(
+        req.body.email,
+        bcrypt.hashSync(req.body.password, salt)
+      ).then((response) => {
+        const user = response[0];
+        if (user) {
+          req.session.userId = user.id;
+          dbUtils.initSnakeStats(
+            user.id
+          ).then(res.redirect('/'));
+        } else {
+          res.render('user/register');
+        }
+      });
     } else {
-      res.render('user/register');
+      res.render('user/register')
     }
   });
 });
@@ -52,10 +59,10 @@ router.post('/login', function(req, res) {
         req.session.userId = user.id;
         res.redirect('/')
       } else {
-        res.alert('adsh')
+        res.redirect('/')
       }
     } else {
-      res.alert('isdygf')
+      res.redirect('/')
     }
   });
 });
