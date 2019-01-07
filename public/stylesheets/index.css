@@ -33,7 +33,10 @@ body, html{
 }
 
 #signup{
-  font-size: 20px;
+  width: 180px;
+  height: 40px;
+  font-size: 25px;
+  color: #343641;
   background-color: #F2B632;
 }
 

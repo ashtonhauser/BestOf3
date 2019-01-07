@@ -8,7 +8,7 @@ block content
     div.title
       img.logo(src="/images/logo.png")
       h1#indextitle BestOf3
-    
+
     -if (user){
     div.profilecontainer
       div.dynamicProfile
@@ -18,7 +18,7 @@ block content
           h2 #{user.email}
         form.logoutContainer(action="/logout" method="get")
           input.logout(type="submit" value="Logout")
-    
+
       div.exp
         - var userLevel = 1
         - if (exp >= 50) {
@@ -51,7 +51,7 @@ block content
         - if (exp >= 20000) {
         -  userLevel = 2
         - }
-        span.lvl Level: #{userLevel} || Exp: 
+        span.lvl Level: #{userLevel} || Exp:
         span#exp #{user.exp}
         div.progressBar
           div.progress
@@ -59,9 +59,9 @@ block content
     div.container
       div.left
         div.login Login
-        form.eula(action="/register" method="get")
-          input#signup(type="submit" value="Signup")
-          // button#signup Signup
+        div.eula
+          form(action="/register" method="get")
+            input#signup(type="submit" value="Signup")
       .right
         svg(viewbox='0 0 320 300')
           defs
