@@ -103,7 +103,7 @@ var sketch = function(s) {
   }
 
   s.drawL = function() {
-    s.stroke(6, 214, 160)
+    s.stroke(229,70,52)
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
@@ -112,7 +112,7 @@ var sketch = function(s) {
   }
 
   s.drawR = function() {
-    s.stroke(240, 84, 79)
+    s.stroke(244,180,41)
     for (var i = 0; i < numSegmentsR - 1; i++) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }

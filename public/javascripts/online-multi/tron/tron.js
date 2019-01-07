@@ -151,24 +151,18 @@ var sketch = function(s) {
 
   s.drawL = function() {
     console.log("drew")
-    s.stroke(130, 240, 240)
+    s.stroke(229,70,52)
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
     }
   }
 
   s.drawR = function() {
-    s.stroke(240,84,79)
+    s.stroke(244,180,41)
     for (var i = 0; i < numSegmentsR - 1; i++) {
       s.line(xCorR[i], yCorR[i], xCorR[i + 1], yCorR[i + 1]);
     }
   }
-
-
-
-
-
-
 
   // user wins when other opponent is killed
   s.checkGameStatus = function() {
