@@ -59,8 +59,9 @@ block content
     div.container
       div.left
         div.login Login
-        form.eula(action="/register" method="get")
-          input#signup(type="submit" value="Signup")
+        div.eula
+          form(action="/register" method="get")
+            input#signup(type="submit" value="Signup")
       .right
         svg(viewbox='0 0 320 300')
           defs
