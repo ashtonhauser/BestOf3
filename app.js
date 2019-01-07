@@ -43,6 +43,15 @@ app.use(function(req, res, next) {
   });
 });
 
+app.use('/', function(req, res, next) {
+  if (!req.session.userId) return next();
+  return dbUtils.grabUserById(req.session.userId).then((response) => {
+    if (!response || !response[0]) return next();
+    req.currentUser = response[0];
+    return next();
+  });
+});
+
 app.use('/', indexRouter);
 app.use('/game', gameRouter);
 

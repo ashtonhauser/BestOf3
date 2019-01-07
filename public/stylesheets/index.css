@@ -208,10 +208,51 @@ input::-moz-focus-inner {
 #submit:active {
   color: #d0d0d2;
 }
-div.alert{
+.imgContainer{
+  border: solid;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 5px;
+}
+.progressBar{
+  border: solid;
+  border-radius: 10px;
+  border-color: black;
+  background-color: white;
+}
+.progress{
+  margin: 2px;
+  border-radius: 10px;
+  width: 1%;
+  background-color: gold;
+  height: 15px;
+}
+.profilePic{
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  padding: 5px;
+}
+.emailContainer{
+ display: inline-block;
+ vertical-align: bottom;
+ margin-left: 10px;
+}
+.profilecontainer, .onlineStats{
+  border: solid;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 6px 8px 6px -6px grey;
+  margin: 50px 100px 50px 100px;
+}
+.logoutContainer{
   display: block;
-  width: 50%;
-  text-align: center;
-  margin-left: 25%;
-  margin-right: 25%;
+  width: 200px;
+  margin: 4px auto 8px 0;
+  border: 4px solid black;
+  background-color: white;
+  border-radius: 4px;
+}
+.logout{
+  color: black;
 }

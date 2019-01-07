@@ -9,28 +9,53 @@ block content
       img.logo(src="/images/logo.png")
       h1#indextitle BestOf3
     
-    - if (loggedIn) {
-    div.alert.alert-danger.alert-dismissible.fade.show(role="alert")
-      button.close(type="button", data-dismiss="alert" aria-label="Close")
-        span(aria-hidden="true") &times;
-      strong Invalid Login
-      p Please verify your login credentials have been entered correctly
-    div.alert.alert-success.alert-dismissible.fade.show(role="alert")
-      button.close(type="button", data-dismiss="alert" aria-label="Close")
-        span(aria-hidden="true") &times;
-      strong Login Successful
-    - } else {
-    div.alert.alert-danger.alert-dismissible.fade.invisible(role="alert")
-      button.close(type="button", data-dismiss="alert" aria-label="Close")
-        span(aria-hidden="true") &times;
-      strong Invalid Login
-      p Please verify your login credentials have been entered correctly
-    div.alert.alert-success.alert-dismissible.fade.invisible(role="alert")
-      button.close(type="button", data-dismiss="alert" aria-label="Close")
-        span(aria-hidden="true") &times;
-      strong Login Successful
-    - }
-
+    -if (user){
+    div.profilecontainer
+      div.dynamicProfile
+        div.imgContainer
+          img.profilePic(src="../../images/spaceinvader_sprite.png" alt="Space Invader Sprite")
+        div.emailContainer
+          h2 #{user.email}
+        form.logoutContainer(action="/logout" method="get")
+          input.logout(type="submit" value="Logout")
+    
+      div.exp
+        - var userLevel = 1
+        - if (exp >= 50) {
+        -  userLevel = 2
+        - }
+        - if (exp >= 125) {
+        -  userLevel = 3
+        - }
+        - if (exp >= 310) {
+        -  userLevel = 4
+        - }
+        - if (exp >= 780) {
+        -  userLevel = 5
+        - }
+        - if (exp >= 2000) {
+        -  userLevel = 6
+        - }
+        - if (exp >= 3500) {
+        -  userLevel = 7
+        - }
+        - if (exp >= 6000) {
+        -  userLevel = 8
+        - }
+        - if (exp >= 9500) {
+        -  userLevel = 9
+        - }
+        - if (exp >= 14000) {
+        -  userLevel = 10
+        - }
+        - if (exp >= 20000) {
+        -  userLevel = 2
+        - }
+        span.lvl Level: #{userLevel} || Exp: 
+        span#exp #{user.exp}
+        div.progressBar
+          div.progress
+    -} else {
     div.container
       div.left
         div.login Login
@@ -50,6 +75,7 @@ block content
             label(for='password') Password
             input#password(type='password', name="password")
             input#submit(type='submit' value='Submit')
+    -}
 
     div.contain
       h1.sectTitle Single Player Games

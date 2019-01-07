@@ -8,10 +8,16 @@ const salt = bcrypt.genSaltSync(saltRounds);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', {loggedIn:req.session.userId});
+  var user;
+  if (req.currentUser) {
+    user = req.currentUser;
+  } else {
+    user = null;
+  }
+  res.render('index', {user: user});
 });
 
-router.get('/user/register', function(req, res) {
+router.get('/register', function(req, res) {
   if (req.currentUser) return res.redirect('/');
   res.render('user/register');
 });
@@ -55,6 +61,7 @@ router.post('/login', function(req, res) {
 });
 
 router.get('/profile', function(req, res){
+  console.log(req.currentUser)
   dbUtils.grabSnakeWins(req.currentUser.id).then((winsObject) => {
     dbUtils.grabSnakeLosses(req.currentUser.id).then((lossesObject) => {
       res.render('user/profile', {user: req.currentUser, wCount: winsObject[0].wins, lCount: lossesObject[0].losses});
