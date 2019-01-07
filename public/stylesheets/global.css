@@ -1,26 +1,19 @@
 body{
   font-family: 'Press Start 2P', sans-serif;
-  background-color: #B5B5B7;
+  background-color: #F2B632;
 }
-button.btn-primary{
-  margin: 5px;
-  background-color: rgb(223,181,73);
-  border-color: rgb(223,181,73);
-  border-width: 3px;
+@font-face {
+    font-family: "alienS";
+    src:url("/fonts/SFAlienEncountersSolid.ttf");
 }
-
-button.btn-primary:hover{
-  background-color: rgb(215,59,37);
-  border-color: rgb(202,29,38);
+@font-face {
+    font-family: "alien";
+    src:url("/fonts/SFAlienEncounters.ttf");
 }
-
 #playagain:focus, #single:focus, #multi:focus{
   background-color: rgb(151,26,57);
   border-color: rgb(98,15,54);
   outline: 0 none;
 }
 
-#scorecontainer{
-  margin-top: 30px;
-  text-align: center;
-}
+

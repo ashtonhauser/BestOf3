@@ -1,14 +1,14 @@
 .navbar{
-  overflow:hidden;
+  font-size: 40px;
+  font-family: 'alienS';
   height:75px;
-  font-family: 'Press Start 2P', sans-serif;
   background-color: #252839;
 }
 
 .home {
+  font-size: 40px;
   color: #B5B5B7;
-  margin-left: 10px;
-  margin-top: 16px;
+  margin-top: 6px;
 }
 
 .home:hover {
@@ -29,11 +29,6 @@ img{
 #login:hover, #logout:hover, #register:hover, #stats:hover{
   color: #fff;
   background-color: inherit;
-}
-
-@font-face {
-  font-family: "alien";
-  src: url(fonts/alien/SFAlienEncounters.ttf);
 }
 
 span.exp, span.lvl, span.email{

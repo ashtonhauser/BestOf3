@@ -2,7 +2,7 @@ block content
   nav.navbar
     ul.nav
       li.float-left
-        a(href="/")
+        a.navbar-brand(href="/")
           img(src="/images/logo.png")
       li.float-left
         a.home.navbar-brand(href='/') Home
@@ -57,6 +57,6 @@ block content
       - if (user.exp >= 20000) {
       -  userLevel = 11
       - }
-      span.lvl Level: #{userLevel} || Exp: 
+      span.lvl Level: #{userLevel} || Exp:
       span.exp #{user.exp}
     - }
