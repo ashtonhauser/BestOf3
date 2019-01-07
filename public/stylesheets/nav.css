@@ -1,11 +1,10 @@
 .navbar{
-  font-size: 40px;
-  font-family: 'alienS';
   height:75px;
   background-color: #252839;
 }
 
 .home {
+  font-family: 'alienS';
   font-size: 40px;
   color: #B5B5B7;
   margin-top: 6px;
@@ -19,11 +18,12 @@ img{
   width: 130px;
   height: 70px;
 }
-
+#logout{
+margin-top: 6px;
+}
 #login, #logout, #register, #stats{
   color: #B5B5B7;
   margin: 10px;
-
 }
 
 #login:hover, #logout:hover, #register:hover, #stats:hover{
@@ -35,7 +35,7 @@ span.exp, span.lvl, span.email{
   color: white;
 }
 
-.profileBadge{
+#stats{
   border: solid;
   display: inline-block;
   border-color: white;
