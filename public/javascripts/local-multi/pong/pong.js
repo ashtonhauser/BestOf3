@@ -8,13 +8,13 @@ var pong = function(p){
     p.createCanvas(500, 500);
     p.xspeedval = Math.round(Math.random());
     if (p.xspeedval === 1) {
-      p.xspeedval = Number(Math.random() * 5);
-      if (p.xspeedval < 1) {
+      p.xspeedval = Number(Math.random() * 3);
+      if (p.xspeedval < 1 && p.xspeedval > 0) {
         p.xspeedval = 1;
       }
     } else if (p.xspeedval === 0) {
-      p.xspeedval = Number(Math.random() * -5);
-      if (p.xspeedval > -1) {
+      p.xspeedval = Number(Math.random() * -3);
+      if (p.xspeedval > -1 && p.xspeedval < 0) {
         p.xspeedval = -1;
       }
     }
@@ -53,7 +53,7 @@ var pong = function(p){
       },
 
       edges: function(){
-        if (this.y < 0 || this.y > p.height) {
+        if (this.y - this.r < 0 || this.y + this.r > p.height) {
           this.yspeed *= -1;
         }
       }
