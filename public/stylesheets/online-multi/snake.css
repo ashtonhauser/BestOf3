@@ -8,20 +8,16 @@
 }
 
 .Lscore{
-  float: left;
-  margin-top: 15px;
-  margin-left: 25px;
-  display: inline-block;
-  width: auto;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
   font-size: 1.5em;
 }
 
 .Rscore{
-  float: right;
-  margin-right: 25px;
-  margin-top: 15px;
-  display: inline-block;
-  width: auto;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
   font-size: 1.5em;
 }
 
@@ -118,7 +114,6 @@ svg {
   position: absolute;
   width: 25px;
 }
-
 
 .progress-bar {
   margin: 7px;

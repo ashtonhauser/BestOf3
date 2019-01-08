@@ -303,6 +303,11 @@ snake.on('connection', function(socket) {
     } else if (!data.p1 && data.state == 'PLAYERS_READY') {
       snakeP2R = true;
     }
+    if (data.p1 && data.state == 'NOT_READY') {
+      snakeP1R = false;
+    } else if (!data.p1 && data.state == 'NOT_READY') {
+      snakeP2R = false;
+    }
     console.log(snakeP1R, snakeP2R)
     if (snakeP1R && snakeP2R) {
       var timer = setInterval(tick, 1000);
