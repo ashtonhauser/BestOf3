@@ -8,7 +8,7 @@ socket.emit('addUser', username)
 // prevents arrow keys moving page
 window.addEventListener("keydown", function(e) {
   if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-      e.preventDefault();
+    e.preventDefault();
   }
 }, false);
 
@@ -23,7 +23,6 @@ socket.on('playerNum', function(data) {
 
 // user count
 socket.on('counter', function (data) {
-  $("#counter").text(data.count);
   clientCount = data.count;
 });
 
@@ -44,6 +43,7 @@ var sketch = function(s) {
   var waitingDiv;
   var text;
   var gameOver;
+  var scoreElem
 
   var numSegmentsL; // defined by server
   var directionL; // defined by server
@@ -52,7 +52,7 @@ var sketch = function(s) {
   var diffL;
   var xCorL;  // defined by server
   var yCorL;  // defined by server
-  var scoreElemL;
+  var playerElemL;
 
   var numSegmentsR; // defined by server
   var directionR; // defined by server
@@ -61,7 +61,7 @@ var sketch = function(s) {
   var diffR;
   var xCorR; // defined by server
   var yCorR; // defined by server
-  var scoreElemR;
+  var playerElemR;
 
 
   s.setup = function() {
@@ -70,14 +70,7 @@ var sketch = function(s) {
     s.stroke(255);
     s.strokeWeight(10);
 
-    scoreElemL = s.createDiv('p1').addClass('Lscore container');
-    scoreElemL.style('color', 'black');
-
-    scoreElemR = s.createDiv('p2').addClass('Rscore container');
-    scoreElemR.style('color', 'black');
-
-    button = s.createButton('Rematch?').addClass('rematch btn is-warning')
-    button.style('display', 'none')
+    scoreElem = s.createDiv().addClass('score')
 
     s.resetSketch()
   }
@@ -86,6 +79,15 @@ var sketch = function(s) {
     clientState = 'NOT_READY'
     readyState = {'p1': p1, 'state': 'NOT_READY'}
     socket.emit('clientReady', readyState)
+    playerElemL = s.createDiv('Player 1').addClass('Lscore');
+    playerElemR = s.createDiv('Player 2').addClass('Rscore');
+    if (p1) {
+      scoreElem.html('Goodluck Player 1!')
+    } else {
+      scoreElem.html('Goodluck Player 2!')
+    }
+    $("#rematchL").css('display', 'none');
+    $("#rematchR").css('display', 'none');
 
     xFruit= 0;
     yFruit = 0;
@@ -99,7 +101,6 @@ var sketch = function(s) {
     xStartL = 10;
     yStartL = 250;
     diffL = 10;
-
     xCorL = [];
     yCorL = [];
 
@@ -109,7 +110,6 @@ var sketch = function(s) {
     xStartR = 1000;
     yStartR = 250;
     diffR = 10;
-
     xCorR = [];
     yCorR = [];
 
@@ -132,9 +132,6 @@ var sketch = function(s) {
 
     s.draw()
     s.loop()
-    scoreElemR.html('p2')
-    scoreElemL.html('p1')
-    button.style('display', 'none')
   }
 
   s.draw = function() {
@@ -246,12 +243,21 @@ var sketch = function(s) {
         socket.emit('l', user_id);
         socket.emit('w', user_id);
       }
-      scoreElemL.html('Player 1 lost!');
-      scoreElemR.html('Player 2 wins!');
-      button.style('display', 'block')
-      $(".rematch").unbind().click(function() {
-        socket.emit('reset', username)
-      })
+      playerElemL.hide()
+      playerElemR.hide()
+      if (p1) {
+        scoreElem.html('you lose')
+        $("#rematchL").css('display', 'block');
+        $("#rematchL").unbind().click(function() {
+          socket.emit('reset', username)
+        })
+      } else {
+        scoreElem.html('you win')
+        $("#rematchR").css('display', 'block')
+        $("#rematchR").unbind().click(function() {
+          socket.emit('reset', username)
+        })
+      }
     } else if ( xCorR[xCorR.length - 1] > s.width ||
                 xCorR[xCorR.length - 1] < 0 ||
                 yCorR[yCorR.length - 1] > s.height ||
@@ -264,12 +270,21 @@ var sketch = function(s) {
         socket.emit('w', user_id);
         socket.emit('l', user_id);
       }
-      scoreElemL.html('Player 1 wins!');
-      scoreElemR.html('Player 2 lost!');
-      button.style('display', 'block')
-      $(".rematch").unbind().click(function() {
-        socket.emit('reset', username)
-      })
+      playerElemR.hide()
+      playerElemL.hide()
+      if (p1) {
+        scoreElem.html('you win')
+        $("#rematchL").css('display', 'block')
+        $("#rematchL").unbind().click(function() {
+          socket.emit('reset', username)
+        })
+      } else {
+        scoreElem.html('you lose')
+        $("#rematchR").css('display', 'block')
+        $("#rematchR").unbind().click(function() {
+          socket.emit('reset', username)
+        })
+      }
     }
   }
 
@@ -354,4 +369,4 @@ var sketch = function(s) {
   // }
 };
 
-var snakeGame = new p5(sketch, 'snakeContainer');
+var snakeGame = new p5(sketch, 'bigContainer');

@@ -316,7 +316,6 @@ snake.on('connection', function(socket) {
           num = 3;
         }
       }
-
     } else {
       snake.emit('clientState', 'NOT_READY')
     }
