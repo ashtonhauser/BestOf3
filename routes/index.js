@@ -46,9 +46,9 @@ router.post('/register', function(req, res) {
   });
 });
 
-router.get('/user/login', function(req, res) {
+router.get('/login', function(req, res) {
   if (req.currentUser) return res.redirect('/');
-  res.render('user/login');
+  res.render('user/login', {onLogin: true});
 });
 
 router.post('/login', function(req, res) {

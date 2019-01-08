@@ -10,6 +10,10 @@ block content
     div.nav
       span.float-right
         a#login(href="/")='Login'
+    - } else if (user == undefined && !user_id && onLogin) {
+    div.nav
+      span.float-right
+        a#register(href="/register")='Register'
     - } else if (user == undefined && !user_id) {
     div.nav
       span.float-right
