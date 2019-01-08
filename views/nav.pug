@@ -6,13 +6,17 @@ block content
           img(src="/images/logo.png")
       li.float-left
         a.home.navbar-brand(href='/') Home
-    - if (user_id == undefined && !user) {
+    - if (user == undefined && !user_id && onRegister) {
+    div.nav
+      span.float-right
+        a#login(href="/")='Login'
+    - } else if (user == undefined && !user_id) {
     div.nav
       span.float-right
         a#login(href="/")='Login'
       span.float-right
         a#register(href="/register")='Register'
-    - } else if (user == undefined && !user_id) {
+    - } else if (user_id == undefined && !user) {
     div.nav
       span.float-right
         a#login(href="/")='Login'

@@ -19,7 +19,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/register', function(req, res) {
   if (req.currentUser) return res.redirect('/');
-  res.render('user/register');
+  res.render('user/register', {onRegister:true});
 });
 
 router.post('/register', function(req, res) {
