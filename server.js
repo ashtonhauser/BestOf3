@@ -27,15 +27,6 @@ const server = http.createServer(app);
 
 var io = socket(server);
 
-// snake variables
-var sClients = {};
-var snakeP1R = false;
-var snakeP1Reset = false;
-var snakeP2R = false;
-var snakeP2Reset = false;
-var sDirectionL = 'right';
-var sDirectionR = 'left';
-
 // tron variables
 var tClients = {};
 var tronP1R = false;
@@ -266,12 +257,15 @@ tron.on('connection', function(socket) {
 })
 
 
-
-
-
-
-
-
+// snake variables
+var sClients = {};
+var snakeP1R = false;
+var snakeP1Reset = false;
+var snakeP2R = false;
+var snakeP2Reset = false;
+var sDirectionL = 'right';
+var sDirectionR = 'left';
+var num = 3;
 
 // SNAKE HANDLING
 snake.on('connection', function(socket) {
@@ -319,7 +313,17 @@ snake.on('connection', function(socket) {
     }
     console.log(snakeP1R, snakeP2R)
     if (snakeP1R && snakeP2R) {
-      snake.emit('clientState', 'PLAYERS_READY')
+      var timer = setInterval(tick, 1000);
+      function tick() {
+        if (num > 0) {
+         snake.emit('timer', num)
+         num--;
+        } else {
+          clearInterval(timer)
+          snake.emit('clientState', 'PLAYERS_READY')
+          num = 3;
+        }
+      }
     } else {
       snake.emit('clientState', 'NOT_READY')
     }
@@ -336,7 +340,18 @@ snake.on('connection', function(socket) {
       snake.emit('clientState', 'RESET')
       snakeP1Reset = false;
       snakeP2Reset = false;
+      snakeP2R = false;
+      snakeP1R = false;
     }
+  })
+
+  socket.on('gameOver', function() {
+      snakeP1Reset = false;
+      snakeP2Reset = false;
+      snakeP2R = false;
+      snakeP1R = false;
+      sDirectionL = 'right';
+      sDirectionR = 'left';
   })
 
   // broadcast keypresses and x y cords to socket
@@ -389,18 +404,6 @@ snake.on('connection', function(socket) {
     snake.emit('move', position)
   })
 
-  // socket.on('wAndL', function(data) {
-  //   let wUserID = 1;
-  //   let lUserID = 2;
-  //
-  //   dbClient.query(
-  //     `UPDATE stats SET wins=wins+1 WHERE user_id=${wUserID}`
-  //   ).then(
-  //     () => dbClient.query(
-  //       `UPDATE stats SET losses=losses+1 WHERE user_id=${lUserID}`
-  //     )
-  //   );
-  // });
 
   socket.on('w', function(user_id) {
     dbClient.query(

@@ -10,7 +10,7 @@ socket.join('test');
 // prevents arrow keys moving page
 window.addEventListener("keydown", function(e) {
   if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-      e.preventDefault();
+    e.preventDefault();
   }
 }, false);
 
@@ -25,7 +25,6 @@ socket.on('playerNum', function(data) {
 
 // user count
 socket.on('counter', function (data) {
-  $("#counter").text(data.count);
   clientCount = data.count;
 });
 
@@ -46,6 +45,7 @@ var sketch = function(s) {
   var waitingDiv;
   var text;
   var gameOver;
+  var scoreElem
 
   var numSegmentsL; // defined by server
   var directionL; // defined by server
@@ -54,7 +54,7 @@ var sketch = function(s) {
   var diffL;
   var xCorL;  // defined by server
   var yCorL;  // defined by server
-  var scoreElemL;
+  var playerElemL;
 
   var numSegmentsR; // defined by server
   var directionR; // defined by server
@@ -63,7 +63,7 @@ var sketch = function(s) {
   var diffR;
   var xCorR; // defined by server
   var yCorR; // defined by server
-  var scoreElemR;
+  var playerElemR;
 
 
   s.setup = function() {
@@ -72,26 +72,30 @@ var sketch = function(s) {
     s.stroke(255);
     s.strokeWeight(10);
 
-    scoreElemL = s.createDiv('p1').addClass('Lscore container');
-    scoreElemL.style('color', 'black');
-
-    scoreElemR = s.createDiv('p2').addClass('Rscore container');
-    scoreElemR.style('color', 'black');
-
-    button = s.createButton('Rematch?').addClass('rematch btn is-warning')
-    button.style('display', 'none')
+    scoreElem = s.createDiv().addClass('score')
 
     s.resetSketch()
   }
 
   s.resetSketch = function() {
     clientState = 'NOT_READY'
-    readyState = {'username': username, 'state': 'NOT_READY'}
+    readyState = {'p1': p1, 'state': 'NOT_READY'}
     socket.emit('clientReady', readyState)
-    text = 'loading...';
+    playerElemL = s.createDiv('Player 1').addClass('Lscore');
+    playerElemR = s.createDiv('Player 2').addClass('Rscore');
+    if (p1) {
+      scoreElem.html('Goodluck Player 1!')
+    } else {
+      scoreElem.html('Goodluck Player 2!')
+    }
+    $("#rematchL").css('display', 'none');
+    $("#rematchR").css('display', 'none');
+
     xFruit= 0;
     yFruit = 0;
     gameOver = false;
+    startTimer = false;
+    text = 'waiting for oponent';
 
     // LEFT
     numSegmentsL = 20;
@@ -99,7 +103,6 @@ var sketch = function(s) {
     xStartL = 10;
     yStartL = 250;
     diffL = 10;
-
     xCorL = [];
     yCorL = [];
 
@@ -109,7 +112,6 @@ var sketch = function(s) {
     xStartR = 1000;
     yStartR = 250;
     diffR = 10;
-
     xCorR = [];
     yCorR = [];
 
@@ -124,41 +126,28 @@ var sketch = function(s) {
       yCorR.push(yStartR);
     }
 
-    if (clientCount < 2){
-      waitingDiv = s.createDiv('Waiting for second player...').id('matching')
-    }
-
     // on document load + 2.5 seconds alert server clientstate ready
     $(function() {
-      setTimeout(function() {
-        readyState = {'p1': p1, state: 'PLAYERS_READY'};
-        socket.emit('clientReady', readyState)
-        text = 'set'
-      }, 2500)
+      readyState = {'p1': p1, state: 'PLAYERS_READY'};
+      socket.emit('clientReady', readyState)
     })
 
     s.draw()
     s.loop()
-    scoreElemR.html('p2')
-    scoreElemL.html('p1')
-    button.style('display', 'none')
   }
 
   s.draw = function() {
-    s.background(66, 75, 84)
+    s.background(37, 40, 57)
     s.textAlign(s.CENTER, s.CENTER);
     s.textSize(100);
     s.text(text, s.width/2, s.height/2);
 
-    // change
-    if (clientCount == 2 && waitingDiv) {
-      waitingDiv.hide();
-    } else if (clientCount < 2 && !waitingDiv){
-      waitingDiv.show();
-    }
+    socket.on('timer', function(num) {
+      text = num;
+    })
 
     if (clientState === 'PLAYERS_READY' && clientCount == 2) {
-      text = 'go'
+      text = '';
       s.drawL()
       s.drawR()
       s.checkGameStatus();
@@ -191,7 +180,6 @@ var sketch = function(s) {
     // s.checkForFruitR();
   }
 
-  // should run on server
   // LEFT
   s.updateSnakeCoordinatesL = function() {
     for (var i = 0; i < numSegmentsL - 1; i++) {
@@ -252,22 +240,26 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('l', user_id);
-        }
+      socket.emit('gameOver')
+      if (user_id !== 'guest') {
+        socket.emit('l', user_id);
+        socket.emit('w', user_id);
       }
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('w', user_id);
-        }
+      playerElemL.hide()
+      playerElemR.hide()
+      if (p1) {
+        scoreElem.html('you lose')
+        $("#rematchL").css('display', 'block');
+        $("#rematchL").unbind().click(function() {
+          socket.emit('reset', username)
+        })
+      } else {
+        scoreElem.html('you win')
+        $("#rematchR").css('display', 'block')
+        $("#rematchR").unbind().click(function() {
+          socket.emit('reset', username)
+        })
       }
-      scoreElemL.html('Player 1 lost!');
-      scoreElemR.html('Player 2 wins!');
-      button.style('display', 'block')
-      $(".rematch").unbind().click(function() {
-        socket.emit('reset', username)
-      })
     } else if ( xCorR[xCorR.length - 1] > s.width ||
                 xCorR[xCorR.length - 1] < 0 ||
                 yCorR[yCorR.length - 1] > s.height ||
@@ -275,22 +267,26 @@ var sketch = function(s) {
                 s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('w', user_id);
-        }
+      socket.emit('gameOver')
+      if (user_id !== 'guest') {
+        socket.emit('w', user_id);
+        socket.emit('l', user_id);
       }
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('l', user_id);
-        }
+      playerElemR.hide()
+      playerElemL.hide()
+      if (p1) {
+        scoreElem.html('you win')
+        $("#rematchL").css('display', 'block')
+        $("#rematchL").unbind().click(function() {
+          socket.emit('reset', username)
+        })
+      } else {
+        scoreElem.html('you lose')
+        $("#rematchR").css('display', 'block')
+        $("#rematchR").unbind().click(function() {
+          socket.emit('reset', username)
+        })
       }
-      scoreElemL.html('Player 1 wins!');
-      scoreElemR.html('Player 2 lost!');
-      button.style('display', 'block')
-      $(".rematch").unbind().click(function() {
-        socket.emit('reset', username)
-      })
     }
   }
 
@@ -375,4 +371,4 @@ var sketch = function(s) {
   // }
 };
 
-var snakeGame = new p5(sketch, 'snakeContainer');
+var snakeGame = new p5(sketch, 'bigContainer');
