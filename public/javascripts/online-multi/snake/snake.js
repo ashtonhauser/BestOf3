@@ -84,12 +84,14 @@ var sketch = function(s) {
 
   s.resetSketch = function() {
     clientState = 'NOT_READY'
-    readyState = {'username': username, 'state': 'NOT_READY'}
+    readyState = {'p1': p1, 'state': 'NOT_READY'}
     socket.emit('clientReady', readyState)
-    text = 'loading...';
+
     xFruit= 0;
     yFruit = 0;
     gameOver = false;
+    startTimer = false;
+    text = 'waiting for oponent';
 
     // LEFT
     numSegmentsL = 20;
@@ -122,17 +124,10 @@ var sketch = function(s) {
       yCorR.push(yStartR);
     }
 
-    if (clientCount < 2){
-      waitingDiv = s.createDiv('Waiting for second player...').id('matching')
-    }
-
     // on document load + 2.5 seconds alert server clientstate ready
     $(function() {
-      setTimeout(function() {
-        readyState = {'p1': p1, state: 'PLAYERS_READY'};
-        socket.emit('clientReady', readyState)
-        text = 'set'
-      }, 2500)
+      readyState = {'p1': p1, state: 'PLAYERS_READY'};
+      socket.emit('clientReady', readyState)
     })
 
     s.draw()
@@ -143,20 +138,17 @@ var sketch = function(s) {
   }
 
   s.draw = function() {
-    s.background(66, 75, 84)
+    s.background(37, 40, 57)
     s.textAlign(s.CENTER, s.CENTER);
     s.textSize(100);
     s.text(text, s.width/2, s.height/2);
 
-    // change
-    if (clientCount == 2 && waitingDiv) {
-      waitingDiv.hide();
-    } else if (clientCount < 2 && !waitingDiv){
-      waitingDiv.show();
-    }
+    socket.on('timer', function(num) {
+      text = num;
+    })
 
     if (clientState === 'PLAYERS_READY' && clientCount == 2) {
-      text = 'go'
+      text = '';
       s.drawL()
       s.drawR()
       s.checkGameStatus();
@@ -189,7 +181,6 @@ var sketch = function(s) {
     // s.checkForFruitR();
   }
 
-  // should run on server
   // LEFT
   s.updateSnakeCoordinatesL = function() {
     for (var i = 0; i < numSegmentsL - 1; i++) {
@@ -250,15 +241,10 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('l', user_id);
-        }
-      }
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('w', user_id);
-        }
+      socket.emit('gameOver')
+      if (user_id !== 'guest') {
+        socket.emit('l', user_id);
+        socket.emit('w', user_id);
       }
       scoreElemL.html('Player 1 lost!');
       scoreElemR.html('Player 2 wins!');
@@ -273,15 +259,10 @@ var sketch = function(s) {
                 s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('w', user_id);
-        }
-      }
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('l', user_id);
-        }
+      socket.emit('gameOver')
+      if (user_id !== 'guest') {
+        socket.emit('w', user_id);
+        socket.emit('l', user_id);
       }
       scoreElemL.html('Player 1 wins!');
       scoreElemR.html('Player 2 lost!');

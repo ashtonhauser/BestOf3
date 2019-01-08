@@ -123,7 +123,7 @@ var sketch = function(s) {
 
 
   s.draw = function() {
-    s.background(66, 75, 84)
+    s.background(37, 40, 57)
     s.textAlign(s.CENTER, s.CENTER);
     s.textSize(100);
     s.text(text, s.width/2, s.height/2);
