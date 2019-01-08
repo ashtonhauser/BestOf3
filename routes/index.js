@@ -46,10 +46,10 @@ router.post('/register', function(req, res) {
   });
 });
 
-// router.get('/user/login', function(req, res) {
-//   if (req.currentUser) return res.redirect('/');
-//   res.render('user/login');
-// });
+router.get('/user/login', function(req, res) {
+  if (req.currentUser) return res.redirect('/');
+  res.render('user/login');
+});
 
 router.post('/login', function(req, res) {
   dbUtils.grabUserByEmail(req.body.email).then((response) => {
