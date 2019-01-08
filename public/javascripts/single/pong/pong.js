@@ -8,15 +8,15 @@ var pong = function(p){
     p.score.style('color', 'black');
     p.score.parent('scorecontainer');
     p.createCanvas(500, 500);
-    p.xspeedval = Math.round(Math.random());
+    p.xspeedval = 1
     if (p.xspeedval === 1) {
-      p.xspeedval = Number(Math.random() * 5);
-      if (p.xspeedval < 1) {
+      p.xspeedval = Number(Math.random() * 3);
+      if (p.xspeedval < 1 && p.xspeedval > 0) {
         p.xspeedval = 1;
       }
     } else if (p.xspeedval === 0) {
-      p.xspeedval = Number(Math.random() * -5);
-      if (p.xspeedval > -1) {
+      p.xspeedval = Number(Math.random() * -3);
+      if (p.xspeedval > -1 && p.xspeedval < 0) {
         p.xspeedval = -1;
       }
     }
@@ -24,7 +24,7 @@ var pong = function(p){
       x: p.width/2,
       y: p.height/2,
       xspeed: p.xspeedval,
-      yspeed: 4,
+      yspeed: 2.5,
       r: 12,
       gameover: false,
 
@@ -40,18 +40,18 @@ var pong = function(p){
         },
 
       checkPaddle: function(){
-        if (this.x + this.r >= p.PaddleRight.x - p.PaddleRight.w/2 &&
+        if (this.x + this.r > p.PaddleRight.x - p.PaddleRight.w/2 &&
             this.y > p.PaddleRight.y - p.PaddleRight.h/2 &&
             this.y < p.PaddleRight.y + p.PaddleRight.h/2) {
           this.xspeed *= -1.05;
-        } else if (this.x - this.r <= p.PaddleLeft.x + p.PaddleLeft.w/2 &&
+        } else if (this.x - this.r < p.PaddleLeft.x + p.PaddleLeft.w/2 &&
                    this.y > p.PaddleLeft.y - p.PaddleLeft.h/2 &&
                    this.y < p.PaddleLeft.y + p.PaddleLeft.h/2) {
           this.xspeed *= -1.05;
           this.handleAiReaction();
-        } else if (this.x + this.r > p.PaddleRight.x - p.PaddleRight.w/2) {
+        } else if (this.x + this.r > p.PaddleRight.x - p.PaddleRight.w/2 + 20) {
           this.gameover = 'leftwin';
-        } else if (this.x - this.r < p.PaddleLeft.x + p.PaddleLeft.w/2){
+        } else if (this.x - this.r < p.PaddleLeft.x + p.PaddleLeft.w/2 - 20){
           this.gameover = 'rightwin';
         }
       },
@@ -62,7 +62,7 @@ var pong = function(p){
       },
 
       edges: function(){
-        if (this.y < 0 || this.y > p.height) {
+        if (this.y - this.r < 0 || this.y + this.r > p.height) {
           this.yspeed *= -1;
         }
       }
