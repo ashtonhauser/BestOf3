@@ -325,8 +325,10 @@ snake.on('connection', function(socket) {
   socket.on('reset', function(data) {
     if (sClients[data].player == 1) {
       snakeP1Reset = true;
+      socket.broadcast.emit('sendReady')
     } else if (sClients[data].player == 2) {
       snakeP2Reset = true;
+      socket.broadcast.emit('sendReady')
     }
     if (snakeP1Reset && snakeP2Reset) {
       snake.emit('clientState', 'RESET')
