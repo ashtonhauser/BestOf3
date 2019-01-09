@@ -311,6 +311,11 @@ snake.on('connection', function(socket) {
     } else if (!data.p1 && data.state == 'PLAYERS_READY') {
       snakeP2R = true;
     }
+    if (data.p1 && data.state == 'NOT_READY') {
+      snakeP1R = false;
+    } else if (!data.p1 && data.state == 'NOT_READY') {
+      snakeP2R = false;
+    }
     console.log(snakeP1R, snakeP2R)
     if (snakeP1R && snakeP2R) {
       var timer = setInterval(tick, 1000);
@@ -333,8 +338,10 @@ snake.on('connection', function(socket) {
   socket.on('reset', function(data) {
     if (sClients[data].player == 1) {
       snakeP1Reset = true;
+      socket.broadcast.emit('sendReady')
     } else if (sClients[data].player == 2) {
       snakeP2Reset = true;
+      socket.broadcast.emit('sendReady')
     }
     if (snakeP1Reset && snakeP2Reset) {
       snake.emit('clientState', 'RESET')

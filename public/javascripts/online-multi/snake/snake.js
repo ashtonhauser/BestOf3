@@ -28,6 +28,16 @@ socket.on('counter', function (data) {
   clientCount = data.count;
 });
 
+socket.on('sendReady', function() {
+  if (p1) {
+    $(".PR").css("background", "#72dfbe")
+    $(".checkR").css("display", "block")
+  } else {
+    $(".PL").css("background", "#72dfbe")
+    $(".checkL").css("display", "block")
+  }
+})
+
 var sketch = function(s) {
   socket.on('clientState', function(data) {
     clientState = data;
@@ -90,6 +100,12 @@ var sketch = function(s) {
     }
     $("#rematchL").css('display', 'none');
     $("#rematchR").css('display', 'none');
+    $(".PR").css("display", "none")
+    $(".PL").css("display", "none")
+    $(".checkR").css("display", "none")
+    $(".checkL").css("display", "none")
+    $(".PR").css("background", "#E54634")
+    $(".PL").css("background", "#E54634")
 
     xFruit= 0;
     yFruit = 0;
@@ -249,12 +265,14 @@ var sketch = function(s) {
       playerElemR.hide()
       if (p1) {
         scoreElem.html('you lose')
+        $(".PR").css("display", "block")
         $("#rematchL").css('display', 'block');
         $("#rematchL").unbind().click(function() {
           socket.emit('reset', username)
         })
       } else {
         scoreElem.html('you win')
+        $(".PL").css("display", "block")
         $("#rematchR").css('display', 'block')
         $("#rematchR").unbind().click(function() {
           socket.emit('reset', username)
@@ -275,12 +293,14 @@ var sketch = function(s) {
       playerElemR.hide()
       playerElemL.hide()
       if (p1) {
+        $(".PR").css("display", "block")
         scoreElem.html('you win')
         $("#rematchL").css('display', 'block')
         $("#rematchL").unbind().click(function() {
           socket.emit('reset', username)
         })
       } else {
+        $(".PL").css("display", "block")
         scoreElem.html('you lose')
         $("#rematchR").css('display', 'block')
         $("#rematchR").unbind().click(function() {

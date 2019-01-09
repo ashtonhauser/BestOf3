@@ -8,20 +8,16 @@
 }
 
 .Lscore{
-  float: left;
-  margin-top: 15px;
-  margin-left: 25px;
-  display: inline-block;
-  width: auto;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
   font-size: 1.5em;
 }
 
 .Rscore{
-  float: right;
-  margin-right: 25px;
-  margin-top: 15px;
-  display: inline-block;
-  width: auto;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
   font-size: 1.5em;
 }
 
@@ -101,3 +97,50 @@ img.static:hover{
   border-radius: 5px;
   padding: 5px;
 }
+
+.PL{
+  bottom: 0;
+  left: 0;
+  display: none;
+}
+
+.PR{
+  display: none;
+  right: 0;
+  bottom: 0;
+}
+
+svg {
+  position: absolute;
+  width: 25px;
+}
+
+.progress-bar {
+  margin: 7px;
+  position: absolute;
+  height: 60px;
+  width: 60px;
+  border-radius: 200px;
+  background: #E54634;
+}
+
+.checkR{
+  display: none;
+  bottom: 23px;
+  right: 24px;
+}
+
+.checkL{
+  display: none;
+  bottom: 23px;
+  left: 24px;
+}
+
+.checkL, .checkR {
+  fill: none;
+  stroke: #FFFFFF;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
