@@ -1,34 +1,34 @@
 window.onload = function() {
 
   var expPercent;
-  if ($('#exp').text() <= '50') {
+  if (Number($('#exp').text()) <= 50) {
     expPercent = $('#exp').text() / 50 * 100
   }
-  if ($('#exp').text() <= '125') {
+  if (Number($('#exp').text()) <= 125) {
     expPercent = ($('#exp').text() - 50) / 75 * 100
   }
-  if ($('#exp').text() <= '310') {
+  if (Number($('#exp').text()) <= 310) {
     expPercent = ($('#exp').text() - 125) / 185 * 100
   }
-  if ($('#exp').text() <= '780') {
+  if (Number($('#exp').text()) <= 780) {
     expPercent = ($('#exp').text() - 310) / 470 * 100
   }
-  if ($('#exp').text() <= '2000') {
+  if (Number($('#exp').text()) <= 2000) {
     expPercent = ($('#exp').text() - 780) / 1220 * 100
   }
-  if ($('#exp').text() <= '3500') {
+  if (Number($('#exp').text()) <= 3500) {
     expPercent = ($('#exp').text() - 2000) / 1500 * 100
   }
-  if ($('#exp').text() <= '6000') {
+  if (Number($('#exp').text()) <= 6000) {
     expPercent = ($('#exp').text() - 3500) / 2500 * 100
   }
-  if ($('#exp').text() <= '9500') {
+  if (Number($('#exp').text()) <= 9500) {
     expPercent = ($('#exp').text() - 6000) / 3500 * 100
   }
-  if ($('#exp').text() <= '14000') {
+  if (Number($('#exp').text()) <= 14000) {
     expPercent = ($('#exp').text() - 9500) / 4500 * 100
   }
-  if ($('#exp').text() <= '20000') {
+  if (Number($('#exp').text()) <= 20000) {
     expPercent = ($('#exp').text() - 14000) / 6000 * 100
   }
 

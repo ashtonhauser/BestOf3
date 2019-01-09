@@ -4,9 +4,7 @@ var socket = io.connect('http://localhost:3000/snake')
 var username = Math.floor(Math.random() * Math.floor(500))
 var p1 = false;
 socket.emit('addUser', username)
-// socket.of('test').emit('hello', 'hi')
-// socket.of('n').emit('hello', 'isdjafbhbb')
-socket.join('test');
+
 // prevents arrow keys moving page
 window.addEventListener("keydown", function(e) {
   if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
@@ -258,8 +256,11 @@ var sketch = function(s) {
       gameOver = true;
       socket.emit('gameOver')
       if (user_id !== 'guest') {
-        socket.emit('l', user_id);
-        socket.emit('w', user_id);
+        if (p1) {
+          socket.emit('l', user_id);
+        } else {
+          socket.emit('w', user_id);
+        }
       }
       playerElemL.hide()
       playerElemR.hide()
@@ -287,8 +288,11 @@ var sketch = function(s) {
       gameOver = true;
       socket.emit('gameOver')
       if (user_id !== 'guest') {
-        socket.emit('w', user_id);
-        socket.emit('l', user_id);
+        if (p1) {
+          socket.emit('w', user_id);
+        } else {
+          socket.emit('l', user_id);
+        }
       }
       playerElemR.hide()
       playerElemL.hide()

@@ -24,38 +24,38 @@ block content
 
       div.exp
         - var userLevel = 1
-        - if (exp >= 50) {
+        - if (user.exp >= 50) {
         -  userLevel = 2
         - }
-        - if (exp >= 125) {
+        - if (user.exp >= 125) {
         -  userLevel = 3
         - }
-        - if (exp >= 310) {
+        - if (user.exp >= 310) {
         -  userLevel = 4
         - }
-        - if (exp >= 780) {
+        - if (user.exp >= 780) {
         -  userLevel = 5
         - }
-        - if (exp >= 2000) {
+        - if (user.exp >= 2000) {
         -  userLevel = 6
         - }
-        - if (exp >= 3500) {
+        - if (user.exp >= 3500) {
         -  userLevel = 7
         - }
-        - if (exp >= 6000) {
+        - if (user.exp >= 6000) {
         -  userLevel = 8
         - }
-        - if (exp >= 9500) {
+        - if (user.exp >= 9500) {
         -  userLevel = 9
         - }
-        - if (exp >= 14000) {
+        - if (user.exp >= 14000) {
         -  userLevel = 10
         - }
-        - if (exp >= 20000) {
+        - if (user.exp >= 20000) {
         -  userLevel = 2
         - }
         span.lvl Level: #{userLevel} || Exp: 
-        span.exp #{user.exp}
+        span#exp #{user.exp}
         div.progressBar
           div.progress
     -} else {
@@ -84,12 +84,17 @@ block content
     div.contain
       h1.sectTitle Single Player Games
       div.single
-        div.game.one
+        div.game
           a(href='/game/single/snake')
             img.static(src="/images/snake_static.png")
             img.gif(src="/images/snake.gif")
           h2.gameName Snake
-
+        div.game
+          a(href='/game/single/pong')
+            img.static(src="/images/pong_static.png")
+            img.gif(src="/images/pong.gif")
+          h2.gameName Pong
+          
     div.contain
       h1.sectTitle Local Multiplayer Games
       div.local
