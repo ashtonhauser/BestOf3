@@ -1,6 +1,7 @@
 .navbar{
-  height:75px;
+  min-height: 75px;
   background-color: #252839;
+  display: flex;
 }
 
 .home {
@@ -18,10 +19,12 @@ img{
   width: 130px;
   height: 70px;
 }
+
 #logout{
 margin-top: 10px;
 }
-#login, #logout, #register, #stats{
+
+#login, #logout, #register ,#stats{
   color: #B5B5B7;
   margin: 10px;
 }
@@ -37,9 +40,19 @@ span.exp, span.lvl, span.email{
 
 #stats{
   border: solid;
-  display: inline-block;
   border-color: white;
   background-color: black;
   padding: 3px 4px;
   border-radius: 4px;
+}
+
+@media only screen and (max-width: 750px) {
+  #navbar{
+    flex-direction: column;
+  }
+
+
+  .navlink, #stats{
+    margin-left: 0px;
+  }
 }

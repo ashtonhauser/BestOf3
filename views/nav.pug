@@ -1,5 +1,5 @@
 block content
-  nav.navbar
+  nav#navbar.navbar
     ul.nav
       li.float-left
         a.navbar-brand(href="/")
@@ -7,65 +7,65 @@ block content
       li.float-left
         a.home.navbar-brand(href='/') Home
     - if (user == undefined && !user_id && onRegister) {
-    div.nav
-      span.float-right
-        a#login(href="/")='Login'
+      div.nav
+        span.navlink.float-right
+          a#login(href="/")='Login'
     - } else if (user == undefined && !user_id && onLogin) {
-    div.nav
-      span.float-right
-        a#register(href="/register")='Register'
+      div.nav
+        span.navlink.float-right
+          a#register(href="/register")='Register'
     - } else if (user == undefined && !user_id) {
-    div.nav
-      span.float-right
-        a#login(href="/")='Login'
-      span.float-right
-        a#register(href="/register")='Register'
+      div.nav
+        span.navlink.float-right
+          a#login(href="/")='Login'
+        span.navlink.float-right
+          a#register(href="/register")='Register'
     - } else if (user_id == undefined && !user) {
-    div.nav
-      span.float-right
-        a#login(href="/user/login")='Login'
-      span.float-right
-        a#register(href="/register")='Register'
+      div.nav
+        span.navlink.float-right
+          a#login(href="/user/login")='Login'
+        span.navlink.float-right
+          a#register(href="/register")='Register'
     - } else {
-    div.nav
-      span.float-right
+      span.navlink.float-right
         a#logout(href="/logout")= 'Logout'
-      span#stats.float-right
-        a(href="/stats")
-          span.profileBadge.float-right
-            span.email #{user.email}
-            br
-            - var userLevel = 1
-            - if (user.exp >= 50) {
-            -  userLevel = 2
+      div.navlink
+        span.navlink#stats.float-right
+          a(href="/stats")
+            span.profileBadge.float-right
+              span.email #{user.email}
+              br
+              - var userLevel = 1
+              - if (user.exp >= 50) {
+              -  userLevel = 2
+              - }
+              - if (user.exp >= 125) {
+              -  userLevel = 3
+              - }
+              - if (user.exp >= 310) {
+              -  userLevel = 4
+              - }
+              - if (user.exp >= 780) {
+              -  userLevel = 5
+              - }
+              - if (user.exp >= 2000) {
+              -  userLevel = 6
+              - }
+              - if (user.exp >= 3500) {
+              -  userLevel = 7
+              - }
+              - if (user.exp >= 6000) {
+              -  userLevel = 8
+              - }
+              - if (user.exp >= 9500) {
+              -  userLevel = 9
+              - }
+              - if (user.exp >= 14000) {
+              -  userLevel = 10
+              - }
+              - if (user.exp >= 20000) {
+              -  userLevel = 11
+              - }
+              span.lvl Level: #{userLevel} || Exp:
+              span.exp #{user.exp}
             - }
-            - if (user.exp >= 125) {
-            -  userLevel = 3
-            - }
-            - if (user.exp >= 310) {
-            -  userLevel = 4
-            - }
-            - if (user.exp >= 780) {
-            -  userLevel = 5
-            - }
-            - if (user.exp >= 2000) {
-            -  userLevel = 6
-            - }
-            - if (user.exp >= 3500) {
-            -  userLevel = 7
-            - }
-            - if (user.exp >= 6000) {
-            -  userLevel = 8
-            - }
-            - if (user.exp >= 9500) {
-            -  userLevel = 9
-            - }
-            - if (user.exp >= 14000) {
-            -  userLevel = 10
-            - }
-            - if (user.exp >= 20000) {
-            -  userLevel = 11
-            - }
-            span.lvl Level: #{userLevel} || Exp:
-            span.exp #{user.exp}
-          - }
