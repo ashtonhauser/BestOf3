@@ -6,6 +6,8 @@ window.addEventListener("keydown", function(e) {
 
 var sketch = function(s) {
   var button;
+  var timer;
+  var gameOver;
 
   // LEFT
   var numSegmentsL;
@@ -30,29 +32,28 @@ var sketch = function(s) {
   s.setup = function() {
     s.createCanvas(1000, 500);
 
-    s.frameRate(35);
+    s.frameRate(30);
     s.stroke(255);
     s.strokeWeight(10);
 
-    scoreElemL = s.createDiv('p1').addClass('Lscore container');
-    scoreElemL.style('color', 'black');
-
-    scoreElemR = s.createDiv('p2').addClass('Rscore container');
-    scoreElemR.style('color', 'black');
-
-    button = s.createButton('Rematch?').addClass('rematch btn is-warning')
-    button.style('display', 'none')
+    playerElemL = s.createDiv().addClass('Lscore');
+    playerElemR = s.createDiv().addClass('Rscore');
 
     s.resetSketch()
   }
 
 
   s.resetSketch = function() {
+    playerElemL.html('Player 1')
+    playerElemR.html('Player 2')
+    $("#rematch").css('display', 'none');
+
+    timer = 4;
+    gameOver = true;
+
     // LEFT
     numSegmentsL = 1;
     directionL = 'right';
-    xStartL = 200;
-    yStartL = 250;
     diffL = 10;
     xCorL = [200];
     yCorL = [250];
@@ -60,24 +61,32 @@ var sketch = function(s) {
     // RIGHT
     numSegmentsR = 1;
     directionR = 'left';
-    xStartR = 800;
-    yStartR = 250;
     diffR = 10;
     xCorR = [800];
     yCorR = [250];
 
     s.draw()
     s.loop()
-    scoreElemR.html('p2')
-    scoreElemL.html('p1')
-    button.style('display', 'none')
   }
 
   s.draw = function() {
     s.background(37, 40, 57)
-    s.drawL()
-    s.drawR()
-    s.checkGameStatus();
+    s.textAlign(s.CENTER, s.CENTER);
+    s.textSize(100);
+    s.text(timer, s.width/2, s.height/2);
+
+    if (s.frameCount % 30 == 0 && timer > 0) {
+      timer --;
+    }
+    if (timer == 0) {
+      timer = ''
+      gameOver = false;
+    }
+    if(!gameOver) {
+      s.drawL()
+      s.drawR()
+      s.checkGameStatus();
+    }
   }
 
   s.drawL = function() {
@@ -144,7 +153,6 @@ var sketch = function(s) {
     }
   }
 
-  // user wins when other opponent is killed
   s.checkGameStatus = function() {
     if (xCorL[xCorL.length - 1] > s.width ||
         xCorL[xCorL.length - 1] < 0 ||
@@ -152,12 +160,12 @@ var sketch = function(s) {
         yCorL[yCorL.length - 1] < 0 ||
         s.checkSnakeCollisionL()) {
       s.noLoop();
-      scoreElemL.html('You lost!');
-      scoreElemR.html('You won!');
-      if (!s.button) {
-        button.style('display', 'block')
-        button.mousePressed(s.resetSketch);
-      }
+      gameOver = true;
+      playerElemR.html('Player 2 wins!');
+      $("#rematch").css('display', 'block');
+      $("#rematch").unbind().click(function() {
+        s.resetSketch()
+      })
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
         xCorR[xCorR.length - 1] < 0 ||
@@ -165,12 +173,12 @@ var sketch = function(s) {
         yCorR[yCorR.length - 1] < 0 ||
         s.checkSnakeCollisionR()) {
       s.noLoop();
-      scoreElemL.html('You won!');
-      scoreElemR.html('You lost!');
-      if (!s.button) {
-        button.style('display', 'block')
-        button.mousePressed(s.resetSketch);
-      }
+      gameOver = true;
+      playerElemL.html('Player 1 wins!');
+      $("#rematch").css('display', 'block');
+      $("#rematch").unbind().click(function() {
+        s.resetSketch()
+      })
     }
   }
 
@@ -249,6 +257,6 @@ var sketch = function(s) {
   }
 };
 
-var snakeGame = new p5(sketch, 'snakeContainer')
+var tronGame = new p5(sketch, 'bigContainer')
 
 

@@ -58,24 +58,20 @@ var sketch = function(s) {
     }
   })
 
-  var button;
   var readyState;
-  var button;
   var waitingDiv;
   var text;
   var gameOver;
-  var diff;
+  var scoreElem
 
   // LEFT
   var xCorL;
   var yCorL;
-
   var playerElemL;
 
   // RIGHT
   var xCorR;
   var yCorR;
-
   var playerElemR;
 
   s.setup = function() {
@@ -95,8 +91,6 @@ var sketch = function(s) {
     clientState = 'NOT_READY'
     readyState = {'p1': p1, 'state': 'NOT_READY'}
     socket.emit('clientReady', readyState)
-    text = 'ready';
-    gameOver = false;
     playerElemL = s.createDiv('Player 1').addClass('Lscore');
     playerElemR = s.createDiv('Player 2').addClass('Rscore');
     if (p1) {
@@ -113,6 +107,9 @@ var sketch = function(s) {
     $(".PR").css("background", "#E54634")
     $(".PL").css("background", "#E54634")
 
+    text = 'waiting for oponent';
+    gameOver = false;
+
     // LEFT
     numSegmentsL = 1;
     xCorL = [200];
@@ -124,11 +121,8 @@ var sketch = function(s) {
     yCorR = [250];
 
     $(function() {
-      setTimeout(function() {
-        readyState = {'p1': p1, state: 'PLAYERS_READY'};
-        socket.emit('clientReady', readyState)
-        text = 'set'
-      }, 2500)
+      readyState = {'p1': p1, state: 'PLAYERS_READY'};
+      socket.emit('clientReady', readyState)
     })
 
     s.draw()
@@ -142,8 +136,13 @@ var sketch = function(s) {
     s.textSize(100);
     s.text(text, s.width/2, s.height/2);
 
+    socket.on('timer', function(num) {
+      text = num;
+    })
+
+
     if (clientState === 'PLAYERS_READY' && clientCount == 2) {
-      text = 'go'
+      text = ''
       s.drawL()
       s.drawR()
       if (p1) {
@@ -164,7 +163,6 @@ var sketch = function(s) {
   }
 
   s.drawL = function() {
-    console.log("drew")
     s.stroke(229,70,52)
     for (var i = 0; i < numSegmentsL - 1; i++) {
       s.line(xCorL[i], yCorL[i], xCorL[i + 1], yCorL[i + 1]);
@@ -187,6 +185,8 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
+      socket.emit('gameOver')
+      //fix
       if (user_id !== 'guest') {
         socket.emit('l', user_id);
         socket.emit('w', user_id);
@@ -216,6 +216,7 @@ var sketch = function(s) {
         s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
+      socket.emit('gameOver')
       if (user_id !== 'guest') {
         socket.emit('w', user_id);
         socket.emit('l', user_id);
@@ -292,4 +293,4 @@ var sketch = function(s) {
   }
 };
 
-var snakeGame = new p5(sketch, 'bigContainer')
+var tronGame = new p5(sketch, 'bigContainer')

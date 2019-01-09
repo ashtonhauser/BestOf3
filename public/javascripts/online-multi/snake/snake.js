@@ -49,7 +49,6 @@ var sketch = function(s) {
   var readyState;
   var xFruit; // defined by server
   var yFruit; // defined by server
-  var button;
   var text;
   var gameOver;
   var scoreElem
@@ -253,6 +252,7 @@ var sketch = function(s) {
       s.noLoop();
       gameOver = true;
       socket.emit('gameOver')
+      // fix
       if (user_id !== 'guest') {
         socket.emit('l', user_id);
         socket.emit('w', user_id);
@@ -274,11 +274,12 @@ var sketch = function(s) {
           socket.emit('reset', username)
         })
       }
-    } else if ( xCorR[xCorR.length - 1] > s.width ||
-                xCorR[xCorR.length - 1] < 0 ||
-                yCorR[yCorR.length - 1] > s.height ||
-                yCorR[yCorR.length - 1] < 0 ||
-                s.checkSnakeCollisionR()) {
+    } else if (
+        xCorR[xCorR.length - 1] > s.width ||
+        xCorR[xCorR.length - 1] < 0 ||
+        yCorR[yCorR.length - 1] > s.height ||
+        yCorR[yCorR.length - 1] < 0 ||
+        s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
       socket.emit('gameOver')

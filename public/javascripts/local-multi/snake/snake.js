@@ -3,6 +3,7 @@ window.addEventListener("keydown", function(e) {
     e.preventDefault();
   }
 }, false);
+
 var sketch = function(s) {
   var xFruit;
   var yFruit;
@@ -63,14 +64,12 @@ var sketch = function(s) {
     xCorL = [];
     yCorL = [];
 
-
     // RIGHT
     numSegmentsR = 30;
     directionR = 'left';
     xStartR = 1000;
     yStartR = 250;
     diffR = 10;
-
     xCorR = [];
     yCorR = [];
 
@@ -175,7 +174,6 @@ var sketch = function(s) {
     }
   }
 
-  // user wins when other opponent is killed
   s.checkGameStatus = function() {
     if (xCorL[xCorL.length - 1] > s.width ||
         xCorL[xCorL.length - 1] < 0 ||

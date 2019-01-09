@@ -42,10 +42,7 @@ var tCordsRY = [250];
 var segmentsL = 1;
 var segmentsR = 1;
 var diff = 10;
-
-// pong variables
-let pongCounter = 0;
-let pongKeys = [];
+var tNum = 3;
 
 const tron = io.of('/tron')
 const snake = io.of('/snake');
@@ -133,9 +130,24 @@ tron.on('connection', function(socket) {
     } else if (!data.p1 && data.state == 'PLAYERS_READY') {
       tronP2R = true;
     }
+    if (data.p1 && data.state == 'NOT_READY') {
+      snakeP1R = false;
+    } else if (!data.p1 && data.state == 'NOT_READY') {
+      snakeP2R = false;
+    }
 
     if (tronP1R && tronP2R) {
-      tron.emit('clientState', 'PLAYERS_READY')
+      let timer = setInterval(tick, 1000);
+      function tick() {
+        if (tNum > 0) {
+         tron.emit('timer', tNum)
+         tNum--;
+        } else {
+          clearInterval(timer)
+          tron.emit('clientState', 'PLAYERS_READY')
+          tNum = 3;
+        }
+      }
     } else {
       tron.emit('clientState', 'NOT_READY')
     }
@@ -163,24 +175,30 @@ tron.on('connection', function(socket) {
   socket.on('reset', function(data) {
     if (tClients[data].player == 1) {
       tronP1Reset = true;
+      socket.broadcast.emit('sendReady')
     } else if (tClients[data].player == 2) {
       tronP2Reset = true;
+      socket.broadcast.emit('sendReady')
     }
     if (tronP1Reset && tronP2Reset) {
       tron.emit('clientState', 'RESET')
-      tronP1R = false;
-      tronP1Reset = false;
-      tronP2R = false;
-      tronP2Reset = false;
-      tDirectionL = 'right';
-      tDirectionR = 'left';
-      tCordsLX = [200];
-      tCordsLY = [250];
-      tCordsRX = [800];
-      tCordsRY = [250];
-      segmentsL = 1;
-      segmentsR = 1;
     }
+  })
+
+  socket.on('gameOver', function() {
+    tronP1R = false;
+    tronP1Reset = false;
+    tronP2R = false;
+    tronP2Reset = false;
+    tDirectionL = 'right';
+    tDirectionR = 'left';
+    tCordsLX = [200];
+    tCordsLY = [250];
+    tCordsRX = [800];
+    tCordsRY = [250];
+    segmentsL = 1;
+    segmentsR = 1;
+    tNum = 3;
   })
 
   socket.on('keypress', function(data) {
@@ -250,6 +268,7 @@ tron.on('connection', function(socket) {
         tCordsRY = [250];
         segmentsL = 1;
         segmentsR = 1;
+        tNum = 3;
       }
     }
     tron.emit('counter', {count: Object.keys(sClients).length});
@@ -265,7 +284,7 @@ var snakeP2R = false;
 var snakeP2Reset = false;
 var sDirectionL = 'right';
 var sDirectionR = 'left';
-var num = 3;
+var sNum = 3;
 
 // SNAKE HANDLING
 snake.on('connection', function(socket) {
@@ -308,17 +327,17 @@ snake.on('connection', function(socket) {
     } else if (!data.p1 && data.state == 'NOT_READY') {
       snakeP2R = false;
     }
-    console.log(snakeP1R, snakeP2R)
+
     if (snakeP1R && snakeP2R) {
-      var timer = setInterval(tick, 1000);
+      let timer = setInterval(tick, 1000);
       function tick() {
-        if (num > 0) {
-         snake.emit('timer', num)
-         num--;
+        if (sNum > 0) {
+         snake.emit('timer', sNum)
+         sNum--;
         } else {
           clearInterval(timer)
           snake.emit('clientState', 'PLAYERS_READY')
-          num = 3;
+          sNum = 3;
         }
       }
     } else {
@@ -337,10 +356,6 @@ snake.on('connection', function(socket) {
     }
     if (snakeP1Reset && snakeP2Reset) {
       snake.emit('clientState', 'RESET')
-      snakeP1Reset = false;
-      snakeP2Reset = false;
-      snakeP2R = false;
-      snakeP1R = false;
     }
   })
 
@@ -445,38 +460,6 @@ snake.on('connection', function(socket) {
 })
 
 
-
-// PONG HANDLING
-
-//connects to pong socket
-pong.on('connection', function(socket) {
-  console.log('pong socket connected');
-  pongCounter++;
-
-  //sends client counter to client
-  pong.emit('counter', {count: pongCounter});
-
-  pong.emit('pongKeys', {keys: pongKeys});
-
-  socket.on('keyup', function(data) {
-    pongKeys.push(data);
-    pong.emit('pongKeys', {keys: pongKeys});
-  });
-
-  socket.on('keydown', function(data) {
-    pongKeys.push(data);
-    pong.emit('pongKeys', {keys: pongKeys});
-  });
-
-  socket.on('disconnect', function() {
-    console.log('pong socket disconnected');
-    pongCounter--;
-    pong.emit('counter', {count: pongCounter});
-  });
-});
-
-
-
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -486,7 +469,7 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 /**
- * Normalize a port into a number, string, or false.
+ * Normalize a port into a sNumber, string, or false.
  */
 
 function normalizePort(val) {
