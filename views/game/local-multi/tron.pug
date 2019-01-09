@@ -1,7 +1,7 @@
 extends ../../layout
 
 block content
-  link(rel="stylesheet", href="/stylesheets/local-multi/snake.css")
+  link(rel="stylesheet", href="/stylesheets/games.css")
   script(src="/javascripts/local-multi/tron/tron.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
@@ -10,22 +10,28 @@ block content
   body
     include ../../nav.pug
 
-    div#snakeContainer
-    div.controlsCont  
+    div#bigContainer
+      button#rematch.btn.rematch Rematch
+
+    div.controlsCont
       h3 Controls
         h5 Player 1: W,A,S,D
         h5 Player 2: UP,LEFT,DOWN,RIGHT
-        h5 Goal: Outsurvive or kill your opponent
+        h5 Goal: Avoid any collision to win!
 
-    div.container
+    div.contain
       h1.title More Local Games
-      div.snake
-        a.link(href='/game/multi/local/snake')
-          img.static(src="/images/snake_static.png")
-          img.gif(src="/images/snake.gif")
-        h2.gameName Snake V Snake
-      div.pong
-        a.link(href='/game/multi/local/pong')
-          img.static(src="/images/pong_static.png")
-          img.gif(src="/images/pong.gif")
-        h2.gameName Pong
+      div.row
+        div.col
+          div.snake
+            a.link(href='/game/multi/local/snake')
+              img.static(src="/images/snake_static.png")
+              img.gif(src="/images/snake.gif")
+            h2.gameName Snake V Snake
+        div.col
+          div.pong
+            a.link(href='/game/multi/local/pong')
+              img.static(src="/images/pong_static.png")
+              img.gif(src="/images/pong.gif")
+            h2.gameName Pong
+

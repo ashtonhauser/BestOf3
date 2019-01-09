@@ -2,6 +2,7 @@ extends ../../layout
 
 block content
   link(rel="stylesheet", href="/stylesheets/local-multi/pong.css")
+  link(rel="stylesheet", href="/stylesheets/games.css")
   script(src="/javascripts/local-multi/pong/pong.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
@@ -16,15 +17,18 @@ block content
         h5 Player 2: K,M
         h5 Goal: Dont let the puck pass your paddle
 
-    div.container
+    div.contain
       h1.title More Local Games
-      div.tron
-        a.link(href='/game/multi/local/tron')
-          img.static(src="/images/tron_static.png")
-          img.gif(src="/images/tron.gif")
-        h2.gameName Tron
-      div.snake
-        a.link(href='/game/multi/local/snake')
-          img.static(src="/images/snake_static.png")
-          img.gif(src="/images/snake.gif")
-        h2.gameName Snake
+      div.row
+        div.col
+          div.tron
+            a.link(href='/game/multi/local/tron')
+              img.static(src="/images/tron_static.png")
+              img.gif(src="/images/tron.gif")
+            h2.gameName Tron
+        div.col
+          div.snake
+            a.link(href='/game/multi/local/snake')
+              img.static(src="/images/snake_static.png")
+              img.gif(src="/images/snake.gif")
+            h2.gameName Snake

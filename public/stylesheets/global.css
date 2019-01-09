@@ -1,6 +1,9 @@
 body{
   font-family: 'Press Start 2P', sans-serif;
-  background-color: #F2B632;
+  background: -moz-linear-gradient(top, #F2B632 5%, #EF4937 100%);
+  background: -webkit-linear-gradient(top, #F2B632 5%,#EF4937 100%);
+  background: linear-gradient(to bottom, #F2B632 5%,#EF4937 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#424b54', endColorstr='#fff9f7',GradientType=0 );
 }
 @font-face {
     font-family: "alienS";

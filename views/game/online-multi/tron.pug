@@ -3,22 +3,27 @@ extends ../../layout
 block content
   include ../../nav.pug
   link(href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet")
-  link(rel="stylesheet", href="/stylesheets/online-multi/tron.css")
+  link(rel="stylesheet", href="/stylesheets/games.css")
 
   body
     script.
       if("#{user_id}") { user_id="#{user_id}" } else {user_id='guest'}
-    div#snakeContainer
-    div#countContainer
-      h2.count User count:
-        span#counter
-    div.controlsCont  
+    div#bigContainer
+      button#rematchL.btn.rematch Rematch
+      button#rematchR.btn.rematch Rematch
+      div.progress-bar.PL
+      svg.checkL(x="0px" y="0px" viewBox="0 0 25 30" style="enable-background:new 0 0 25 30;")
+        path.check.st0(d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2")
+      div.progress-bar.PR
+      svg.checkR(x="0px" y="0px" viewBox="0 0 25 30" style="enable-background:new 0 0 25 30;")
+        path.check.st0(d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2")
+    div.controlsCont
       h3 Controls
         h5 Player 1: W,A,S,D
         h5 Player 2: UP,LEFT,DOWN,RIGHT
         h5 Goal: Outsurvive or kill your opponent
 
-    div.container
+    div.contain
       h1.title More Online Games
       div.snake
         a.link(href='/game/multi/online/snake')

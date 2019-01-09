@@ -7,6 +7,11 @@
   height: 575px;
 }
 
+#scorecontainer{
+  margin-top: 30px;
+  text-align: center;
+}
+
 .Lscore{
   position: absolute;
   bottom: 15px;
@@ -26,6 +31,19 @@
   margin: 9px auto;
   font-size: 20px;
   width: 250px;
+}
+
+#rematch{
+  bottom: 0;
+  left: 40%;
+  position: absolute;
+  display: none;
+  margin: 9px;
+  width:175px;
+  height:58px;
+  color:#f5f5f5;
+  background: #272A3A;
+  font-size:20px;
 }
 
 #rematchR{
@@ -56,46 +74,6 @@
 
 #rematchL:hover, #rematchR:hover {
   background: #2F3347;
-}
-
-.tron, .snake, .pong{
-  float: left;
-  text-align: center;
-}
-
-h2.gameName{
-  margin: 10px auto;
-  color: #343641;
-  width: 200px
-}
-
-img.static{
-  margin: 25px;
-  position: absolute;
-  height: 250px;
-  width: 250px;
-  z-index: 2;
-}
-
-img.gif{
-  margin: 25px;
-  height: 250px;
-  width: 250px;
-  z-index: 1;
-}
-
-img.static:hover{
-  opacity: 0;
-}
-
-.controlsCont{
-  display: block;
-  text-align: center;
-  border: solid;
-  width: 50%;
-  margin: 5px auto;
-  border-radius: 5px;
-  padding: 5px;
 }
 
 .PL{
@@ -144,3 +122,59 @@ svg {
   stroke-linejoin: round;
 }
 
+/* Below game */
+.controlsCont{
+  display: block;
+  text-align: center;
+  border: solid;
+  width: 50%;
+  margin: 5px auto;
+  border-radius: 5px;
+  padding: 5px;
+}
+.col {
+  padding: 0;
+}
+
+div.contain{
+  overflow: hidden;
+  background-color: #677077;
+  border-style: solid;
+  border-width: 5px;
+  border-radius: 4px;
+  margin: 75px auto 0;
+  color: #212529;
+  padding-bottom: 20px;
+}
+
+.title{
+  padding-top: 15px;
+  text-align: center;
+}
+
+.tron, .snake, .pong{
+  text-align: center;
+  margin: 20px;
+}
+
+h2.gameName{
+  margin: 5px auto;
+  width: 200px
+}
+
+img.static{
+  position: absolute;
+  height: 200px;
+  width: 200px;
+  z-index: 2;
+}
+
+img.gif{
+  height: 200px;
+  width: 200px;
+  z-index: 1;
+}
+
+img.static:hover{
+  opacity: 0;
+}
