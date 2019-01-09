@@ -7,24 +7,6 @@
   height: 575px;
 }
 
-.Lscore{
-  float: left;
-  margin-top: 12px;
-  margin-left: 25px;
-  display: inline-block;
-  width: auto;
-  font-size: 1.5em;
-}
-
-.Rscore{
-  float: right;
-  margin-top: 12px;
-  margin-right: 25px;
-  display: inline-block;
-  width: auto;
-  font-size: 1.5em;
-}
-
 button.rematch {
   margin: 7px auto;
   text-align: center;
@@ -37,39 +19,4 @@ button.rematch {
 
 button.rematch:hover {
   background: #F2B632;
-}
-
-h2.gameName{
-  margin: 10px auto;
-  color: #343641;
-  width: 200px
-}
-
-img.static{
-  margin: 25px;
-  position: absolute;
-  height: 250px;
-  width: 250px;
-  z-index: 2;
-}
-
-img.gif{
-  margin: 25px;
-  height: 250px;
-  width: 250px;
-  z-index: 1;
-}
-
-img.static:hover{
-  opacity: 0;
-}
-
-.controlsCont{
-  display: block;
-  text-align: center;
-  border: solid;
-  width: 50%;
-  margin: 5px auto;
-  border-radius: 5px;
-  padding: 5px;
 }
