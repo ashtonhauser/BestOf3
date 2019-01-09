@@ -39,11 +39,6 @@ button.rematch:hover {
   background: #F2B632;
 }
 
-.tron, .snake, .pong{
-  float: left;
-  text-align: center;
-}
-
 h2.gameName{
   margin: 10px auto;
   color: #343641;

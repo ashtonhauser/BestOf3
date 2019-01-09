@@ -3,7 +3,8 @@ extends ../../layout
 block content
   include ../../nav.pug
   link(href="https://fonts.googleapis.com/css?family=Fira+Sans" rel="stylesheet")
-  link(rel="stylesheet", href="/stylesheets/online-multi/snake.css")
+  link(rel="stylesheet", href="/stylesheets/games.css")
+
 
   body
     script.
@@ -25,12 +26,14 @@ block content
         h5 Goal: Avoid colliding with other snakes and walls in order to survive and win!
 
     div.contain
-      h1.title More Online Games
-      div.tron
-        a.link(href='/game/multi/online/tron')
-          img.static(src="/images/tron_static.png")
-          img.gif(src="/images/tron.gif")
-        h2.gameName Tron
+      h1.title More Local Games
+      div.row
+        div.col
+          div.tron
+            a.link(href='/game/multi/online/tron')
+              img.static(src="/images/tron_static.png")
+              img.gif(src="/images/tron.gif")
+            h2.gameName Tron
 
     script(src="/javascripts/online-multi/snake/snake.js")
     script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")

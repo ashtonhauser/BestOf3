@@ -8,7 +8,7 @@ socket.emit('addUser', username)
 // prevents arrow keys scrolling
 window.addEventListener("keydown", function(e) {
   if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-      e.preventDefault();
+    e.preventDefault();
   }
 }, false);
 
@@ -23,9 +23,18 @@ socket.on('playerNum', function(data) {
 
 // user count
 socket.on('counter', function (data) {
-  $("#counter").text(data.count);
   clientCount = data.count;
 });
+
+socket.on('sendReady', function() {
+  if (p1) {
+    $(".PR").css("background", "#72dfbe")
+    $(".checkR").css("display", "block")
+  } else {
+    $(".PL").css("background", "#72dfbe")
+    $(".checkL").css("display", "block")
+  }
+})
 
 var sketch = function(s) {
   socket.on('cord', function(data) {
@@ -61,13 +70,13 @@ var sketch = function(s) {
   var xCorL;
   var yCorL;
 
-  var scoreElemL;
+  var playerElemL;
 
   // RIGHT
   var xCorR;
   var yCorR;
 
-  var scoreElemR;
+  var playerElemR;
 
   s.setup = function() {
     s.createCanvas(1000, 500);
@@ -76,14 +85,7 @@ var sketch = function(s) {
     s.stroke(255);
     s.strokeWeight(10);
 
-    scoreElemL = s.createDiv('p1').addClass('Lscore container');
-    scoreElemL.style('color', 'black');
-
-    scoreElemR = s.createDiv('p2').addClass('Rscore container');
-    scoreElemR.style('color', 'black');
-
-    button = s.createButton('Rematch?').addClass('rematch btn is-warning')
-    button.style('display', 'none')
+    scoreElem = s.createDiv().addClass('score')
 
     s.resetSketch()
   }
@@ -95,6 +97,21 @@ var sketch = function(s) {
     socket.emit('clientReady', readyState)
     text = 'ready';
     gameOver = false;
+    playerElemL = s.createDiv('Player 1').addClass('Lscore');
+    playerElemR = s.createDiv('Player 2').addClass('Rscore');
+    if (p1) {
+      scoreElem.html('Goodluck Player 1!')
+    } else {
+      scoreElem.html('Goodluck Player 2!')
+    }
+    $("#rematchL").css('display', 'none');
+    $("#rematchR").css('display', 'none');
+    $(".PR").css("display", "none")
+    $(".PL").css("display", "none")
+    $(".checkR").css("display", "none")
+    $(".checkL").css("display", "none")
+    $(".PR").css("background", "#E54634")
+    $(".PL").css("background", "#E54634")
 
     // LEFT
     numSegmentsL = 1;
@@ -116,9 +133,6 @@ var sketch = function(s) {
 
     s.draw()
     s.loop()
-    scoreElemR.html('p2')
-    scoreElemL.html('p1')
-    button.style('display', 'none')
   }
 
 
@@ -173,22 +187,27 @@ var sketch = function(s) {
         s.checkSnakeCollisionL()) {
       s.noLoop();
       gameOver = true;
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('l', user_id);
-        }
+      if (user_id !== 'guest') {
+        socket.emit('l', user_id);
+        socket.emit('w', user_id);
       }
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('w', user_id);
-        }
+      playerElemL.hide()
+      playerElemR.hide()
+      if (p1) {
+        scoreElem.html('you lose')
+        $(".PR").css("display", "block")
+        $("#rematchL").css('display', 'block');
+        $("#rematchL").unbind().click(function() {
+          socket.emit('reset', username)
+        })
+      } else {
+        scoreElem.html('you win')
+        $(".PL").css("display", "block")
+        $("#rematchR").css('display', 'block')
+        $("#rematchR").unbind().click(function() {
+          socket.emit('reset', username)
+        })
       }
-      scoreElemL.html('Player 1 lost!');
-      scoreElemR.html('Player 2 wins!');
-      button.style('display', 'block')
-      $(".rematch").unbind().click(function() {
-        socket.emit('reset', username)
-      })
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
         xCorR[xCorR.length - 1] < 0 ||
@@ -197,22 +216,27 @@ var sketch = function(s) {
         s.checkSnakeCollisionR()) {
       s.noLoop();
       gameOver = true;
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('w', user_id);
-        }
+      if (user_id !== 'guest') {
+        socket.emit('w', user_id);
+        socket.emit('l', user_id);
       }
-      if (true) {
-        if (user_id !== 'guest') {
-          socket.emit('l', user_id);
-        }
+      playerElemR.hide()
+      playerElemL.hide()
+      if (p1) {
+        $(".PR").css("display", "block")
+        scoreElem.html('you win')
+        $("#rematchL").css('display', 'block')
+        $("#rematchL").unbind().click(function() {
+          socket.emit('reset', username)
+        })
+      } else {
+        $(".PL").css("display", "block")
+        scoreElem.html('you lose')
+        $("#rematchR").css('display', 'block')
+        $("#rematchR").unbind().click(function() {
+          socket.emit('reset', username)
+        })
       }
-      scoreElemL.html('Player 1 wins!');
-      scoreElemR.html('Player 2 lost!');
-      button.style('display', 'block')
-      $(".rematch").unbind().click(function() {
-        socket.emit('reset', username)
-      })
     }
   }
 
@@ -268,4 +292,4 @@ var sketch = function(s) {
   }
 };
 
-var snakeGame = new p5(sketch, 'snakeContainer')
+var snakeGame = new p5(sketch, 'bigContainer')

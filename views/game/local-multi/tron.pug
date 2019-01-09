@@ -2,6 +2,7 @@ extends ../../layout
 
 block content
   link(rel="stylesheet", href="/stylesheets/local-multi/snake.css")
+  link(rel="stylesheet", href="/stylesheets/games.css")
   script(src="/javascripts/local-multi/tron/tron.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
   script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
@@ -11,7 +12,7 @@ block content
     include ../../nav.pug
 
     div#snakeContainer
-    div.controlsCont  
+    div.controlsCont
       h3 Controls
         h5 Player 1: W,A,S,D
         h5 Player 2: UP,LEFT,DOWN,RIGHT
