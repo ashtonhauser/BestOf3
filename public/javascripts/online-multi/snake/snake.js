@@ -50,7 +50,6 @@ var sketch = function(s) {
   var xFruit; // defined by server
   var yFruit; // defined by server
   var button;
-  var waitingDiv;
   var text;
   var gameOver;
   var scoreElem
@@ -108,7 +107,6 @@ var sketch = function(s) {
     xFruit= 0;
     yFruit = 0;
     gameOver = false;
-    startTimer = false;
     text = 'waiting for oponent';
 
     // LEFT
