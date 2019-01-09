@@ -9,7 +9,7 @@ block content
     - if (user == undefined && !user_id && onRegister) {
     div.nav
       span.float-right
-        a#login(href="/")='Login'
+        a#login(href="/user/login")='Login'
     - } else if (user == undefined && !user_id && onLogin) {
     div.nav
       span.float-right
@@ -17,7 +17,7 @@ block content
     - } else if (user == undefined && !user_id) {
     div.nav
       span.float-right
-        a#login(href="/")='Login'
+        a#login(href="/user/login")='Login'
       span.float-right
         a#register(href="/register")='Register'
     - } else if (user_id == undefined && !user) {
