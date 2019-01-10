@@ -180,6 +180,7 @@ var snake = function(s) {
       $("#rematch").css('display', 'block');
       $("#rematch").unbind().click(function() {
         s.remove()
+        startNewGame()
         $("#rematch").css('display', 'none');
       })
     } else if (
@@ -194,6 +195,7 @@ var snake = function(s) {
       $("#rematch").css('display', 'block');
       $("#rematch").unbind().click(function() {
         s.remove()
+        startNewGame()
         $("#rematch").css('display', 'none');
       })
     }

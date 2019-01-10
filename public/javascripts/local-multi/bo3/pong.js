@@ -1,6 +1,5 @@
 var pong = function(p){
   p.setup = function(){
-    // $("#rematch").css('display', 'none');
     p.keyArray = [];
     p.createCanvas(500, 500);
     p.xspeedval = Math.round(Math.random());

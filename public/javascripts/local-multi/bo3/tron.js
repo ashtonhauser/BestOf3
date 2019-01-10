@@ -42,7 +42,7 @@ var tron = function(s) {
     playerElemR.html('Player 2')
     $("#rematch").css('display', 'none');
 
-    timer = 4;
+    timer = 3;
     gameOver = true;
 
     // LEFT
