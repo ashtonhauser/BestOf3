@@ -3,16 +3,26 @@ extends ../../layout
 block content
   link(rel="stylesheet", href="/stylesheets/games.css")
   link(rel="stylesheet", href="/stylesheets/bo3.css")
-  script(src="/javascripts/local-multi/bo3/tron.js")
-  script(src="/javascripts/local-multi/bo3/snake.js")
-  script(src="/javascripts/local-multi/bo3/pong.js")
-  script(src="/javascripts/local-multi/bo3/bo3.js")
-  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
-  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
-  script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")
 
   body
     include ../../nav.pug
 
     div#bigContainer
-      button#rematch.btn.rematch Next Round
+      div#Lwin
+      div#Rwin
+      div#score
+      div.lowerContain
+        button#replay.btn.rematch Rematch?
+        button#start.btn.rematch Start Game
+        button#nextRound.btn.rematch Next Round
+        div.Rscore 0
+        div.Lscore 0
+
+    script(src="/javascripts/local-multi/bo3/variables.js")
+    script(src="/javascripts/local-multi/bo3/tron.js")
+    script(src="/javascripts/local-multi/bo3/snake.js")
+    script(src="/javascripts/local-multi/bo3/pong.js")
+    script(src="/javascripts/local-multi/bo3/bo3.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.dom.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.sound.js")
+    script(language="javascript" type="text/javascript" src="../../../../vendors/p5.play.js")

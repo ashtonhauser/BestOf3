@@ -13,7 +13,7 @@ var snake = function(s) {
   var diffL;
   var xCorL;
   var yCorL;
-  var playerElemL;
+
 
   // RIGHT
   var numSegmentsR;
@@ -23,31 +23,34 @@ var snake = function(s) {
   var diffR;
   var xCorR;
   var yCorR;
-  var playerElemR;
+  var start;
+  var runCountL;
+  var runCountR;
 
   s.setup = function() {
+    console.log(runCounter, "snake")
+    runCounter++
     s.createCanvas(1000, 500);
 
     s.frameRate(20);
     s.stroke(255);
     s.strokeWeight(10);
 
-    playerElemL = s.createDiv().addClass('Lscore');
-    playerElemR = s.createDiv().addClass('Rscore');
-
     s.resetSketch()
+
   }
 
 
   s.resetSketch = function() {
-    playerElemL.html('Player 1')
-    playerElemR.html('Player 2')
-    $("#rematch").css('display', 'none');
+    $("#nextRound").css('display', 'none');
 
-    timer = 4;
+    timer = 3;
     xFruit= 0;
     yFruit = 0;
     gameOver = true;
+    start = false;
+    runCountL = 0;
+    runCountR = 0;
 
     // LEFT
     numSegmentsL = 30;
@@ -86,13 +89,20 @@ var snake = function(s) {
     s.textSize(100);
     s.text(timer, s.width/2, s.height/2);
 
-    if (s.frameCount % 15 == 0 && timer > 0) {
+    $("#start").unbind().click(function() {
+      start = true
+      $("#start").css('display', 'none')
+    })
+
+    if (s.frameCount % 15 == 0 && timer > 0 && start) {
       timer --;
     }
+
     if (timer == 0) {
       timer = ''
       gameOver = false;
     }
+
     if(!gameOver) {
       s.drawL()
       s.drawR()
@@ -175,14 +185,24 @@ var snake = function(s) {
         yCorL[yCorL.length - 1] < 0 ||
         s.checkSnakeCollisionL()) {
       s.noLoop();
+      runCountL++
       gameOver = true;
-      playerElemR.html('Player 2 wins!');
-      $("#rematch").css('display', 'block');
-      $("#rematch").unbind().click(function() {
+      $(".Rscore").html((Number($(".Rscore").text()) + 1))
+      $("#nextRound").css('display', 'block');
+      if (runCounter == 3) {
+        console.log(runCounter, "run chek")
+        runCheck()
+        $("#nextRound").css('display', 'none');
+        s.remove()
+      }
+      $("#nextRound").unbind().click(function() {
         s.remove()
         startNewGame()
-        $("#rematch").css('display', 'none');
+        $("#nextRound").css('display', 'none');
       })
+      if (runCountL >= 2) {
+        $(".Rscore").html((Number($(".Rscore").text()) - 1))
+      }
     } else if (
         xCorR[xCorR.length - 1] > s.width ||
         xCorR[xCorR.length - 1] < 0 ||
@@ -190,14 +210,24 @@ var snake = function(s) {
         yCorR[yCorR.length - 1] < 0 ||
         s.checkSnakeCollisionR()) {
       s.noLoop();
+      runCountR++
       gameOver = true;
-      playerElemL.html('Player 1 wins!');
-      $("#rematch").css('display', 'block');
-      $("#rematch").unbind().click(function() {
+      $(".Lscore").html((Number($(".Lscore").text()) + 1))
+      $("#nextRound").css('display', 'block');
+      if (runCounter == 3) {
+        console.log(runCounter, "run chek")
+        $("#nextRound").css('display', 'none');
+        runCheck()
+        s.remove()
+      }
+      $("#nextRound").unbind().click(function() {
         s.remove()
         startNewGame()
-        $("#rematch").css('display', 'none');
+        $("#nextRound").css('display', 'none');
       })
+      if (runCountR >= 2) {
+        $(".Lscore").html((Number($(".Lscore").text()) - 1))
+      }
     }
   }
 

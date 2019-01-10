@@ -1,5 +1,11 @@
 var pong = function(p){
   p.setup = function(){
+    console.log(runCounter, "pong")
+    p.noLoop()
+    $("#start").unbind().click(function() {
+      p.loop()
+      $("#start").css('display', 'none')
+    })
     p.keyArray = [];
     p.createCanvas(500, 500);
     p.xspeedval = Math.round(Math.random());
@@ -123,27 +129,44 @@ var pong = function(p){
       }
     };
 
+    p.checkGameStatus = function() {
+      if (p.Puck.gameover === 'leftwin') {
+        p.noLoop()
+        runCounter++;
+        $(".Lscore").html((Number($(".Lscore").text()) + 1))
+        $("#nextRound").css('display', 'block');
+        if (runCounter == 3) {
+          $("#nextRound").css('display', 'none');
+          p.remove()
+        }
+        $("#nextRound").unbind().click(function() {
+          p.remove()
+          $("#nextRound").css('display', 'none');
+          startNewGame()
+        })
+      } else if (p.Puck.gameover === 'rightwin') {
+        p.noLoop()
+        runCounter++;
+        $(".Rscore").html((Number($(".Rscore").text()) + 1))
+        $("#nextRound").css('display', 'block');
+        if (runCounter == 3) {
+          $("#nextRound").css('display', 'none');
+          p.remove()
+        }
+        $("#nextRound").unbind().click(function() {
+          p.remove()
+          $("#nextRound").css('display', 'none');
+          startNewGame()
+        })
+      }
+    }
+
     p.draw = function(){
       p.background(37, 40, 57);
       p.left = p.PaddleLeft;
       p.right = p.PaddleRight;
-      if (p.Puck.gameover === 'leftwin') {
-        $("#rematch").css('display', 'block');
-        $("#rematch").unbind().click(function() {
-          p.remove()
-          $("#rematch").css('display', 'none');
-          startNewGame()
-        })
-        return;
-      } else if (p.Puck.gameover === 'rightwin') {
-        $("#rematch").css('display', 'block');
-        $("#rematch").unbind().click(function() {
-          p.remove()
-          $("#rematch").css('display', 'none');
-          startNewGame()
-        })
-        return;
-      }
+      p.checkGameStatus()
+
       p.left.createPaddle(true);
       p.right.createPaddle(false);
       p.left.show();
