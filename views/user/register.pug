@@ -5,6 +5,12 @@ block content
 
   body
     include ../nav.pug
+    
+    - if (loginDidntWork) {
+    div.loginErrorCont
+      div.loginErrorMsg
+       h2 Register Unsuccessful  
+    - }
 
     div.contain
       h1#title REGISTER

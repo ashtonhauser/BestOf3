@@ -25,7 +25,10 @@ router.get('/register', function(req, res) {
 router.post('/register', function(req, res) {
   dbUtils.grabUserByEmail(req.body.email
   ).then((response) => {
-    if (response.length < 1 && req.body.password) {
+    console.log(response)
+    console.log(response.length == 0)
+    console.log(req.body.password.length > 0)
+    if (response.length == 0 && req.body.password.length > 0) {
       dbUtils.setEmailandPassword(
         req.body.email,
         bcrypt.hashSync(req.body.password, salt)
@@ -37,16 +40,16 @@ router.post('/register', function(req, res) {
             user.id
           ).then(res.redirect('/'));
         } else {
-          res.render('user/register');
+          res.render('user/register', {loginDidntWork:true});
         }
       });
     } else {
-      res.render('user/register')
+      res.render('user/register', {loginDidntWork:true});
     }
   });
 });
 
-router.get('/user/login', function(req, res) {
+router.get('/login', function(req, res) {
   if (req.currentUser) return res.redirect('/');
   res.render('user/login', {onLogin: true});
 });
@@ -59,10 +62,10 @@ router.post('/login', function(req, res) {
         req.session.userId = user.id;
         res.redirect('/')
       } else {
-        res.redirect('/')
+        res.render('user/login', {loginDidntWork:true})
       }
     } else {
-      res.redirect('/')
+      res.render('user/login', {loginDidntWork:true})
     }
   });
 });
