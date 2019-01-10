@@ -30,7 +30,6 @@ var tron = function(s) {
   var runCountR;
 
   s.setup = function() {
-    console.log(runCounter, "tron")
     runCounter++;
     s.createCanvas(1000, 500);
 
@@ -171,7 +170,6 @@ var tron = function(s) {
       $(".Rscore").html((Number($(".Rscore").text()) + 1))
       $("#nextRound").css('display', 'block');
       if (runCounter == 3) {
-        console.log(runCounter, "run chek")
         runCheck()
         $("#nextRound").css('display', 'none');
         s.remove()
@@ -197,7 +195,6 @@ var tron = function(s) {
       $("#nextRound").css('display', 'block');
       if (runCounter == 3) {
         runCheck()
-        console.log(runCounter, "run chek")
         $("#nextRound").css('display', 'none');
         s.remove()
       }

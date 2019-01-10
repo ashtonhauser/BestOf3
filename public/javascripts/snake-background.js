@@ -98,7 +98,6 @@ var sketch = function(bs) {
         group4Dir = 'up';
         break;
     }
-    console.log(group1Dir)
   } , 2000)
 
 

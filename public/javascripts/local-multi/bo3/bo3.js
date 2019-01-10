@@ -30,7 +30,6 @@ function runCheck() {
 function startNewGame() {
   $("#start").css('display', 'block')
   let index = Math.floor(Math.random() * 2) + 0
-  console.log(runCounter, "ansdfjasn")
 
   if (games[index] == 'snake') {
     return new p5(snake, 'bigContainer')

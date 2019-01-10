@@ -28,7 +28,6 @@ var snake = function(s) {
   var runCountR;
 
   s.setup = function() {
-    console.log(runCounter, "snake")
     runCounter++
     s.createCanvas(1000, 500);
 
@@ -190,7 +189,6 @@ var snake = function(s) {
       $(".Rscore").html((Number($(".Rscore").text()) + 1))
       $("#nextRound").css('display', 'block');
       if (runCounter == 3) {
-        console.log(runCounter, "run chek")
         runCheck()
         $("#nextRound").css('display', 'none');
         s.remove()
@@ -215,7 +213,6 @@ var snake = function(s) {
       $(".Lscore").html((Number($(".Lscore").text()) + 1))
       $("#nextRound").css('display', 'block');
       if (runCounter == 3) {
-        console.log(runCounter, "run chek")
         $("#nextRound").css('display', 'none');
         runCheck()
         s.remove()

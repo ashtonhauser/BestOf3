@@ -1,6 +1,5 @@
 var pong = function(p){
   p.setup = function(){
-    console.log(runCounter, "pong")
     p.noLoop()
     $("#start").unbind().click(function() {
       p.loop()
