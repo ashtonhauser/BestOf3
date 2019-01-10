@@ -3,13 +3,6 @@ var sketch = function(bs) {
   bs.xCor = [];
   bs.yCor = [];
 
-
-  bs.snake1 = {xi: 50, yi: 150, xf: 150, yf:150}
-  for (var o = 0; o < bs.numSegments; o++) {
-   bs.xCor.push(bs.snake1.xi - (o * 10));
-   bs.yCor.push(bs.snake1.xi);
- }
-
   const Snake = class {
     constructor(x, y, dir) {
       this.startX = x;
@@ -37,6 +30,18 @@ var sketch = function(bs) {
       }
       for (var i = 0; i < this.length - 1; i++) {
         bs.line(this.x[i], this.y[i], this.x[i + 1], this.y[i + 1]);
+        if (this.x[i + 1] > $(window).width() && this.x[i] > $(window).width()) {
+          this.direction = 'left';
+        }
+        if (this.x[i + 1] < 0 && this.x[i] < 0) {
+          this.direction = 'right';
+        }
+        if (this.y[i + 1] > $('html').height() && this.y[i] > $('html').height()) {
+          this.direction = 'up';
+        }
+        if (this.y[i + 1] < 0 && this.y[i] < 0) {
+          this.direction = 'down';
+        }
       }
 
       switch (this.direction) {
