@@ -33,7 +33,7 @@ var sketch = function(s) {
   }
 
   s.draw = function() {
-    s.background(66, 75, 84);
+    s.background(37, 40, 57);
     for (var i = 0; i < s.numSegments - 1; i++) {
       s.line(s.xCor[i], s.yCor[i], s.xCor[i + 1], s.yCor[i + 1]);
     }
@@ -134,7 +134,3 @@ var sketch = function(s) {
 }
 
 var snake = new p5(sketch)
-
-
-
-

@@ -26,6 +26,7 @@ body{
   margin-bottom: 100px;
   position: relative;
   z-index: 2;
+  min-width: 565px;
 }
 
 .logo{

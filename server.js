@@ -27,6 +27,10 @@ const server = http.createServer(app);
 
 var io = socket(server);
 
+const tron = io.of('/tron')
+const snake = io.of('/snake');
+const pong = io.of('/pong');
+
 // tron variables
 var tClients = {};
 var tronP1R = false;
@@ -42,11 +46,8 @@ var tCordsRY = [250];
 var segmentsL = 1;
 var segmentsR = 1;
 var diff = 10;
-var tNum = 3;
-
-const tron = io.of('/tron')
-const snake = io.of('/snake');
-const pong = io.of('/pong');
+var tNum;
+var tronTimer;
 
 // TRON HANDLING
 function cordsR() {
@@ -124,6 +125,7 @@ tron.on('connection', function(socket) {
 
   socket.on('clientReady', function(data) {
     console.log(`recieved ready status from client ${data.p1}, ${data.state}`)
+    tNum = 3;
 
     if (data.p1 && data.state == 'PLAYERS_READY') {
       tronP1R = true;
@@ -131,23 +133,21 @@ tron.on('connection', function(socket) {
       tronP2R = true;
     }
     if (data.p1 && data.state == 'NOT_READY') {
-      snakeP1R = false;
+      tronP1R = false;
     } else if (!data.p1 && data.state == 'NOT_READY') {
-      snakeP2R = false;
+      tronP2R = false;
     }
 
     if (tronP1R && tronP2R) {
-      let timer = setInterval(tick, 1000);
-      function tick() {
+      tronTimer = setInterval(function() {
         if (tNum > 0) {
          tron.emit('timer', tNum)
          tNum--;
-        } else {
-          clearInterval(timer)
+        } else if (tNum == 0) {
+          clearInterval(tronTimer)
           tron.emit('clientState', 'PLAYERS_READY')
-          tNum = 3;
         }
-      }
+      }, 1000);
     } else {
       tron.emit('clientState', 'NOT_READY')
     }
@@ -198,7 +198,6 @@ tron.on('connection', function(socket) {
     tCordsRY = [250];
     segmentsL = 1;
     segmentsR = 1;
-    tNum = 3;
   })
 
   socket.on('keypress', function(data) {
@@ -268,7 +267,7 @@ tron.on('connection', function(socket) {
         tCordsRY = [250];
         segmentsL = 1;
         segmentsR = 1;
-        tNum = 3;
+        clearInterval(tronTimer);
       }
     }
     tron.emit('counter', {count: Object.keys(sClients).length});
@@ -284,25 +283,18 @@ var snakeP2R = false;
 var snakeP2Reset = false;
 var sDirectionL = 'right';
 var sDirectionR = 'left';
-var sNum = 3;
+var sNum;
+var snakeTimer;
 
 // SNAKE HANDLING
 snake.on('connection', function(socket) {
-  var unfilledRoom;
-  var amntUsers;
-  socket.join('test');
-
   console.log("client attempting connection to snake")
   // Kicks user if 2 connected already
   if (Object.keys(sClients).length >= 2) {
-    socket.join('second');
-    socket.disconnect();
+    socket.disconnect()
     console.log("booted client, max reached")
   }
 
-  socket.on('hello', function(data) {
-    console.log(data);
-  })
   // adds username to client
   socket.on('addUser', function(data) {
     if (Object.keys(sClients).length > 0) {
@@ -324,6 +316,7 @@ snake.on('connection', function(socket) {
   // Checks if both players ready
   socket.on('clientReady', function(data) {
     console.log(`recieved ready status from client ${data.p1}, ${data.state}`)
+    sNum = 3;
 
     if (data.p1 && data.state == 'PLAYERS_READY') {
       snakeP1R = true;
@@ -337,17 +330,16 @@ snake.on('connection', function(socket) {
     }
 
     if (snakeP1R && snakeP2R) {
-      let timer = setInterval(tick, 1000);
-      function tick() {
+      snakeTimer = setInterval(function() {
+        console.log(sNum)
         if (sNum > 0) {
          snake.emit('timer', sNum)
          sNum--;
-        } else {
-          clearInterval(timer)
+        } else if (sNum == 0) {
+          clearInterval(snakeTimer)
           snake.emit('clientState', 'PLAYERS_READY')
-          sNum = 3;
         }
-      }
+      }, 1000);
     } else {
       snake.emit('clientState', 'NOT_READY')
     }
@@ -459,10 +451,17 @@ snake.on('connection', function(socket) {
       if (socket.id == sClients[key].socket) {
         delete sClients[key];
         snake.emit('clientState', 'PLAYER_LEFT')
+
+        snakeP1R = false;
+        snakeP1Reset = false;
+        snakeP2R = false;
+        snakeP2Reset = false;
+        sDirectionL = 'right';
+        sDirectionR = 'left';
         sDirectionR = 'left'
         sDirectionL = 'right'
+        clearInterval(snakeTimer);
       }
-      socket.leave('test');
     }
     snake.emit('counter', {count: Object.keys(sClients).length});
   })

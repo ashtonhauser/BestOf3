@@ -129,7 +129,6 @@ var sketch = function(s) {
     s.loop()
   }
 
-
   s.draw = function() {
     s.background(37, 40, 57)
     s.textAlign(s.CENTER, s.CENTER);
@@ -139,7 +138,6 @@ var sketch = function(s) {
     socket.on('timer', function(num) {
       text = num;
     })
-
 
     if (clientState === 'PLAYERS_READY' && clientCount == 2) {
       text = ''
