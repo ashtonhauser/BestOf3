@@ -52,6 +52,15 @@ body{
   -moz-box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.63);
   box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.63);
 }
+#bo3 {
+  margin: 20px;
+  border-radius: 5px;
+  width: 220px;
+  height: 65px;
+  font-size: 24px;
+  color: #343641;
+  background-color: #F2B632;
+}
 
 .prev {
   position:absolute;
@@ -98,6 +107,7 @@ div{
 }
 
 .contain{
+  text-align: center;
   max-width: 1000px;
   margin: 50px auto;
   border-style: solid;
