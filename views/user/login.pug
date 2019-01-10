@@ -5,14 +5,14 @@ block content
 
   body
     include ../nav.pug
-    
+
     - if (loginDidntWork) {
     div.loginErrorCont
       div.loginErrorMsg
-       h2.lem Login Unsuccessful  
+       h2.lem Login Unsuccessful
     - }
 
-    div.contain
+    div.contan
       h1#title LOGIN
       form(action="/login" method="POST")
         label(for="email") Email:
