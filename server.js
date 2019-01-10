@@ -288,21 +288,13 @@ var snakeTimer;
 
 // SNAKE HANDLING
 snake.on('connection', function(socket) {
-  var unfilledRoom;
-  var amntUsers;
-  socket.join('test');
-
   console.log("client attempting connection to snake")
   // Kicks user if 2 connected already
   if (Object.keys(sClients).length >= 2) {
-    socket.join('second');
-    socket.disconnect();
+    socket.disconnect()
     console.log("booted client, max reached")
   }
 
-  socket.on('hello', function(data) {
-    console.log(data);
-  })
   // adds username to client
   socket.on('addUser', function(data) {
     if (Object.keys(sClients).length > 0) {
@@ -470,7 +462,6 @@ snake.on('connection', function(socket) {
         sDirectionL = 'right'
         clearInterval(snakeTimer);
       }
-      socket.leave('test');
     }
     snake.emit('counter', {count: Object.keys(sClients).length});
   })

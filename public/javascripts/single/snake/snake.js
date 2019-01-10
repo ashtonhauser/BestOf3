@@ -134,7 +134,3 @@ var sketch = function(s) {
 }
 
 var snake = new p5(sketch)
-
-
-
-

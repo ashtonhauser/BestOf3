@@ -258,5 +258,3 @@ var sketch = function(s) {
 };
 
 var tronGame = new p5(sketch, 'bigContainer')
-
-

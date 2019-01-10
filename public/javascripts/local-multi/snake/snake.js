@@ -309,5 +309,3 @@ var sketch = function(s) {
 };
 
 var snakeGame = new p5(sketch, 'bigContainer')
-
-

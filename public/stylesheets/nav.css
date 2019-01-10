@@ -1,5 +1,5 @@
 .navbar{
-  min-height: 75px;
+  height: 75px;
   background-color: #252839;
   display: flex;
 }
@@ -21,7 +21,7 @@ img{
 }
 
 #logout{
-margin-top: 10px;
+  margin-top: 10px;
 }
 
 #login, #logout, #register ,#stats{
