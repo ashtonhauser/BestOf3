@@ -25,7 +25,10 @@ router.get('/register', function(req, res) {
 router.post('/register', function(req, res) {
   dbUtils.grabUserByEmail(req.body.email
   ).then((response) => {
-    if (response.length < 1 && req.body.password > 0) {
+    console.log(response)
+    console.log(response.length == 0)
+    console.log(req.body.password.length > 0)
+    if (response.length == 0 && req.body.password.length > 0) {
       dbUtils.setEmailandPassword(
         req.body.email,
         bcrypt.hashSync(req.body.password, salt)

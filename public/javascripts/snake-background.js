@@ -104,7 +104,7 @@ var sketch = function(bs) {
 
   var one =  new Snake(0, 150, group1Dir)
   var two =  new Snake($(window).width(), 400, group2Dir)
-  var three =  new Snake(0, 800, group1Dir)
+  var three =  new Snake(0, 1200, group1Dir)
   var four =  new Snake($(window).width()*1.7, 600, group2Dir)
   var five =  new Snake(175, 300, group4Dir)
   var six =  new Snake($(window).width(), 800, group2Dir)

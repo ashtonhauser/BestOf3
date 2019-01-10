@@ -284,7 +284,9 @@ input::-moz-focus-inner {
 .email, .exp{
   color: white;
 }
-.profilecontainer{
+div.profilecontainer{
+  background-color: #C9C9CA;
+  position: relative;
   z-index: 2;
 }
 .profilecontainer, .onlineStats{
