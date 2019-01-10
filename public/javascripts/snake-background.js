@@ -105,12 +105,14 @@ var sketch = function(bs) {
   var one =  new Snake(0, 150, group1Dir)
   var two =  new Snake($(window).width(), 400, group2Dir)
   var three =  new Snake(0, 800, group1Dir)
-  var four =  new Snake($(window).width() + 500, 1400, group2Dir)
+  var four =  new Snake($(window).width()*1.7, 600, group2Dir)
   var five =  new Snake(175, 300, group4Dir)
   var six =  new Snake($(window).width(), 800, group2Dir)
-  var seven =  new Snake(0, 800, group1Dir)
-  var eight =  new Snake(0, 800, group1Dir)
-  var nine =  new Snake(1475, 1800, group3Dir)
+  var seven =  new Snake(0, 1600, group1Dir)
+  var eight =  new Snake(0, 1000, group1Dir)
+  var nine =  new Snake(200, 1800, group3Dir)
+  var ten = new Snake(600, 2200, group3Dir)
+  var eleven = new Snake(1400, 300, group3Dir)
 
   bs.setup = function() {
     bs.cnv = bs.createCanvas($(window).width(), $('html').height()-154);
@@ -130,6 +132,8 @@ var sketch = function(bs) {
     seven.setup()
     eight.setup()
     nine.setup()
+    ten.setup()
+    eleven.setup()
     bs.clear()
     one.draw()
     two.draw()
@@ -140,6 +144,8 @@ var sketch = function(bs) {
     seven.draw()
     eight.draw()
     nine.draw()
+    ten.draw()
+    eleven.draw()
   }
 
   bs.windowResized = function() {
