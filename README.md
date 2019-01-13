@@ -3,25 +3,22 @@
 
 ## Features
 - Play Online Games against your Friends
-- User Authentication (and Experience Points * )
-- Browse a Selection of Single Player games each with configurable Computer AIs to face off against
+- User Authentication and experience levels gained during online gameplay
+- Browse a Selection of Single Player games
 
 ## Game Lists
 
 ### Single
 - Snake
 - Pong
-- Asteroid *
-- Space Invaders *
+- Pong
+- Tron
 
 ### Local Multiplayer
 - Snake
 - Pong
-- Asteroid *
-- Space Invaders *
+- Tron
 
 ### Online
 - Snake
-- Pong *
-- Asteroid *
-- Space Invaders *
+- Tron
