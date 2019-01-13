@@ -11,7 +11,6 @@
 ### Single
 - Snake
 - Pong
-- Pong
 - Tron
 
 ### Local Multiplayer
